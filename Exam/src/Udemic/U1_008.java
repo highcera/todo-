@@ -2,7 +2,7 @@ package Udemic;
 
 class MarksOutOfBoundsException extends IndexOutOfBoundsException { }
   
-public class U1_080 {
+public class U1_008 {
     void verify(int marks) throws IndexOutOfBoundsException {
       if (marks > 100) {
         throw new MarksOutOfBoundsException();
@@ -17,7 +17,7 @@ public class U1_080 {
     // int marks = Integer.parseInt(args[2]);
     int marks = 104;
     try {
-      U1_080 grade = new U1_080();
+      U1_008 grade = new U1_008();
       grade.verify(marks);
     } catch (Exception e) {
       System.out.print(e.getClass());
