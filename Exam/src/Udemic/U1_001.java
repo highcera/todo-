@@ -1,3 +1,5 @@
+package Udemic;
+
 import java.util.Arrays;
 public class U1_001 {
     public static void main(String[] args) {
