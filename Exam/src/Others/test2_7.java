@@ -1,3 +1,4 @@
+package Others;
 public class test2_7 {
     protected void finalize() {
        System.out.println("Employee fired!");
