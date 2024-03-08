@@ -1,6 +1,6 @@
 package Udemic;
 
-public class U1_60 {
+public class U1_060 {
     static void m(int i) {
         i += 7;
         System.out.println(i);  // 19
