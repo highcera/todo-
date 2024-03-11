@@ -1,2 +1,12 @@
-#48 #66
-70~ / 191
+Skip understanding
+#48 #66 #70
+
+Just Memorize 
+#73
+Java methods must start with a letter, $, _ : O
+hashtag #, \, % : X
+
+be included in a method name.
+
+Progress
+82~ / 191
