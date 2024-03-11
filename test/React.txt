@@ -1,0 +1,1017 @@
+https://www.hrd.go.kr/hrdp/ma/pmmao/newIndexRenewal.do
+국민내일배움카드
+
+
+[ZeroCho]
+□ 리액트 무료 강좌(웹게임)
+https://www.youtube.com/watch?v=aYwSrzeyUOk&list=PLcqDmjxt30RtqbStQqk-eYMK8N-1SYIFn&index=2
+react 18 renewal
+
+[리액트 무료 강좌 1-3]첫 리액트 컴포넌트(아직은 Class)
+개발용 → 실무 배포용으로 변경 필요 but webpaxk, babel 사용 script 사용할 일은 없음 / version 16 → 18 버젼 강의 중
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+<script>에 React와 ReactDOM 사용 가능
+
+'use strict'; 사용 안해도 됨
+
+class LikeButton extends React.Component {'
+
+}  // 최근 거의 안씀 1% ErrorBoundary
+
+대부분 function 사용
+const LikeButton = () => {};
+function LikeButton() {}
+
+class / function - Component > Data (state) 와 화면 (render의 return 부분) 을 하나로 묶어두는 덩어리 
+React가 해결하고자 하는 것 : data와 화면의 일치 > data가 바뀌면 화면은 자동으로 바뀜
+
+화면상의 바뀔 부분을 state로 만들어 두면 됨
+
+[리액트 무료강좌 1-4]가독성을 위한 JSX(XML임!)
+React : Javascript + XML → JSX 사용
+
+Babel이 JSX 코드를 변환
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+[리액트 무료 강좌 1-5]클래스 컴포넌트의 형태와 리액트 데브툴즈
+class LikeButton extends React.Component {
+
+}  // 최근 거의 안씀 1% ErrorBoundary
+
+대부분 function 사용
+const LikeButton = () => {};
+function LikeButton() {}
+
+[리액트 무료강좌 1-4]가독성을 위한 JSX(XML임!)
+▶ React 주요 규칙
+class 안 JSX (XLM) 문법 엄격
+1. 직접 만든 component 이름 대문자 
+    기존 html tag : 소문자 / 대문자 vs 리액트 기존 component  : 소문자
+2. input 닫는 tag 반드시 사용
+   <input type="text" /> 
+3. 문자열 "", javascript code 부분 {} 사용, tag 사이 문자열 ""X
+    obj={{a: 'b', c : 'd'}}
+
+if 문 / for 문 - 삼항연산자 / Array map
+ - if 대신 삼항연산자 자주 사용
+   {this.state.liked ? 'Liked' : 'Like!'}
+ - for문 대신 배열 map 자주 사용
+   {[1, 2, 3].map((i) => {
+       return <div>i</div>;
+   })}
+
+return 에서는 tag 병렬 X
+<> // fragment 가능
+    <>
+    <>
+</>
+ 
+return 여러 줄 - () 사용
+
+[리액트 무료 강좌 1-5]클래스 컴포넌트의 형태와 리액트 데브툴즈
+
+
+3. state : 불변성 - 객체를 마음대로 바꾸지 말라 복사해라
+pop, push, shift, unshift, splice : 배열을 직접적으로 수정
+concat, slice : 새로운 배열을 만들어 냄 (react에서 이것들을 사용해야 함)
+
+array, 함수도 객체
+const array = [];
+array.b = 'c';
+function a() {}
+a.d = 'e';
+
+※ this.state.liked = true; X → this.setState({liked : true}) O
+
+devtool 설치
+사용자 도구 > devtool > component : 'Data가 바귀면 화면이 바뀐다'를 한 화면에서 확인 가능
+
+onClick 함수를 render() 바깥쪽으로 빼면 작동 안함
+constructor에 this.onClickButton = this.onClickButton.bind(this); 필요
+
+잘 안됨 (?) → 화살표 함수를 사용하면 됨
+최종적으로 constructor를 사용 안하고 아래와 같이 ...
+------------------------------------------------------------------
+state = {liked: true};
+
+onClickButton = () => {
+     this.setState({liked: true});
+}
+
+<button onClick={this.onClickButton}>
+------------------------------------------------------------------
+
+24.03.09
+[리액트 무료 강좌 1-6]함수 컴포넌트(함수형 아님)
+코드가 짧아서 선호, this 안써도 됨
+
+function LikeButton() {
+// const LikeButton = () => {
+        const [Liked, setLiked] = React.useState(false);
+
+        if (liked) {
+          return 'You liked this.';
+        }
+        retrun (
+          <button>Like</button>
+        );
+}
+
+웹앱에서 state 찾기 -> 바뀌는 것을 찾아라
+마우스 올리면 바뀌는 것, 탭 선택, 테두리 변화, highlight...
+const [new, setNews] = React.useState(['뉴스1', '뉴스2', '뉴스3', '뉴스4', '뉴스5'])
+const [category, setCategory] = React.useState(['스포츠', '연예', '경제', '시사', '정치'])
+
+if (category === '뉴스') {
+    return '뉴스화면';
+}
+
+결과물만 봐도 React useState를 재구성할 줄 알아야 함
+
+
+[리액트 무료 강좌 1-7]구구단 리액트로 만들기
+tag 간 {}에는 자바스크립트를 사용할 수 있음
+
+JSX (XML) 엄격 : single tag는 닫는 tag로 넣어 주어야 함
+
+JSX와 javascript 분리 할 것
+tag만 남기고, javascript는 class의 method로 만듬
+
+return 에서는 tag 병렬 X 쓸데없는 <div></div> 존재
+빈 tag 사용 → Babel이 처리를 못함. Babel tool을 설치해야 함
+<></>
+<React.Fragment></React.Fragment> 사용
+
+<Form></Form> 의 경우 onSubmit
+아닌 경우 onClick 사용
+
+method 적용할 경우 화살표 함수 대신 function 사용 X (this가 달라짐)
+construct 삭제하고 state 바로 사용 가능
+
+직접 만든 함수는 화살표 함수를 써야 함
+      onChange = (e) => {
+          this.setState({ value: e.target.value});
+        };
+
+      onChange = function (e) {
+          this.setState({ value: e.target.value});
+        }; X
+
+실무에서는 constructor 사용 안하고 state만 선언해주는 방식을 훨씬 많이 씀
+
+
+[리액트 무료 강좌 1-10]함수형 setState
+현재와 미래 state가 공존
+this.setState({
+              result: '정답 :'+ this.state.value,
+              first: Math.ceil(Math.random() * 9),
+              second: Math.ceil(Math.random() * 9),
+              value: '',
+            });
+
+ this.setState((prevState) => {
+              return {
+                result: '정답 :'+ prevState.value,
+                first: Math.ceil(Math.random() * 9),
+                second: Math.ceil(Math.random() * 9),
+                value: '',
+              };
+            });
+
+this.setState 사용 시 함수 사용
+
+input에 자동으로 focus를 주고 싶을 경우
+input;
+<input ref={(c) => { this.input = c; }} type="number" value={this.state.value} onChange={this.onChange} />
+
+onSubmit 끝단에 아래 사용
+this.input.focus();
+
+state 변할 때 일어나는 일 확인 
+render() { 
+   console.log('랜더링');
+한글자 입력시 마다 랜더링
+state 바꿀 때마다 속도 저하 this.setStatus 사용
+
+method를 render 밖으로 빼내는 이유 : 랜더링할 때마다 함수 새로 생성
+input;
+onRefInput = (c => { this.input = c; })
+<input ref={this.onRefInput} type=~~/>
+
+
+[React 기본 강좌 2-1] React Hooks 사용하기
+setState나 ref를 사용하지 않는 경우 함수 component 사용 했었음
+
+const GuGuDan = () => {
+  return <div>Hello, Hooks</div>
+}
+
+함수에서도 setState ref 사용 가능하도록 개선 → react hooks
+함수 사용 시 간결, 리액트도 hook 사용 장려
+
+const GuGuDan = () => {
+    const [first, setFirst] = React.useState(Math.ceil(Math.random() * 9));
+    ...
+
+[React 기본 강좌 2-2] Class와 Hooks 비교하기
+
+GuGuDan component 안에 넣어야 함
+
+event listner는 class가 없어서 class method는 못쓰고 함수로 만들면 됨
+
+input;
+onRefInput = (c => { this.input = c; })
+<input ref={this.onRefInput} type=~~/>
+
+const inputRef = React.useRef(null);
+inputRef.current.focus();
+useRef.current로 DOM에 접근
+
+hooks 함수사용 시 return 밖에 있는 함수 다시 실행 class retrurn 밖으로 함수 빼낸 경우에 비해 느려질 수 있음
+
+react 에서는 id, class 의 class 대신 className 사용
+label에 사용하는 for도 htmlFor 사용
+
+setState에 함수 사용 : 옛날 state 값을 새 state 값에 반영할 경우
+setResult((prevResult) => {
+    return '정답: ' + value
+});
+
+[React 기본 강좌 2-3] 웹팩 설치하기
+실무에서는 다수의 component 사용
+component별로 script를 만들 경우 - 유지보수 어려움...
+fasebook component 2만개
+ - src에서 다른 jsx 화일 가져오기 → 중복 발생
+
+실무 시 수백~수천개의 javascript 함수를 하나의 화일로 합쳐주는 기술 webpack babel → 적용 가능
+node (javascript 실행기) 를 알아야 함
+
+npm init 
+package name 입력 나머지는 그냥 넘어감
+author, licence 적당히 입력
+yes
+=> package.json 생성
+
+terminal 창 
+npm i react react-dom
+npm i -D (개발) webpack webpack-cli
+
+실제 서비스에 쓰이는 것 : Dependencies
+개발에만 쓰이는 것 : devDependencies
+webpack.config.jsx
+module.exports = {
+};
+
+client.jsx
+const React = require('react');               // react 불러옴, 
+const ReactDom = require('react-dom'); // react-DOM 불러옴, 
+
+html의 <head> script 제거 가능
+
+//const WordRelay = require('./WordRelay');
+
+//ReactDom.render(<WordRelay />, document.querySelector('#root'));
+
+
+[React 기본 강좌 2-4] 모듈 시스템과 웹팩 설정
+
+
+
+
+[React 기본 강좌 2-5] 웹팩으로 build 하기
+파일을 쪼갤 때 불러와야 함
+const React = require('react');
+const { Component } = React;
+
+웹팩은 webpack.config.js로 모든 것이 다 돌아감
+
+const path = require('path');
+
+module.exports = {
+name: 'wordrelay-setting',  // 용도 설명
+mode: 'development'.  // 실서비스 : production 
+devtoos: 'eval', //빠름?
+resolve: {
+  extensions: ['.js', '.jsx']
+},
+
+entry: {
+  app: ['./client'],  // 이미 불러오는 화일은 적어 줄 필요 없음. './WordRelay.jsx', 확장자 생략 가능-resolve extensions
+}, // 입력
+output: {
+  path: path.join(__dirname, 'dist'), //node 지식이 있어야 함, __dirname : 현재폴더
+  filename: 'app.js'
+} // 출력
+ 이 가장 중요 (목적 : 다수개의 화일을 app.js 하나로 만들어서 html이 실행될 수 있도록 하는 것)
+
+강의를 위해 일부러 복잡하게 app.js의 path를 하위 폴더로 만듬
+
+
+[React 기본 강좌 2-5] 웹팩으로 빌드하기
+https://www.youtube.com/watch?v=PTz9z_n_UpY&list=PLcqDmjxt30RtqbStQqk-eYMK8N-1SYIFn&index=17
+
+command line > webpack 입력 시 에러... > 명령어 등록 
+or package.json > script에 "dev": "webpack" 
+  : npm run dev
+
+or npx webpack (옛날 문법 지원) 
+
+웹팩에도 바벨을 셋팅 해 주어야 함. 바벨에서 JSX 설정 필요
+npm i -D @babel/core   @babel/preset-env @babel/preset-react babel-loader
+npm i -D @babel/core              기본적인 것들 
+npm i -D @babel/preset-env      브라우저에 맞게 (최신 문법을) 이전 문법을 지원하도록 변환
+npm i -D @babel/preset-react     JSX 지원에 필요
+npm i -D babel-loader   바벨-웹팩 연결
+ 
+[React 기본 강좌 2-6] 구구단으로 웹팩으로 빌드하기
+
+
+===================================================================
+[애플코딩]
+
+----- 24년 4월 25일 ------
+
+□ Firebase로 당근마켓 만들기 2시간 컷
+▶ 서버지식없이 당근마켓 만드는 법 (Firebase로 만드는 당근마켓 2시간컷)
+
+웹서버개발하면 느끼는 점 : 코드가 다 똑같음, 다른 웹서비스라도 코드의 차이가 별로 없다.
+2010년초 백앤드개발 자동으로 해주는 서비스 needs → firebase 탄생 (구글 인수) 상상하는 거의 모든 서비스 심지어 모바일앱, 게임까지 서버개발 없이 제작가능
+유저 (댓글) - 서버역할 컴퓨터 - 데이터보관소
+개발1. 버튼 누르면 댓글 서버로 전송하는 코드 → 버튼 누르면 댓글 DB에 저장해 주세요.
+개발2. 댓글 받으면 Database에 저장하는 코드 (서버대신 Firebase) 
+HTML CSS JS만 알아도 full 웹 service 작성 가능
+보안문제 서버측 작성했던 내용 FS 규칙에 반영 (서버가 하던 여러가지 검증도...)
+Fire base 기능 (사용량 어느 정도까지는 무료
+(DB : 1GB, 읽기/쓰기 : 15만회 / 6만회/월, 하드용량 : 5GB, 하드 다운로드 트래픽 1GB/일, 호스팅용량 10GB, 호스팅 트래픽 10GB/월)
+Authentication : 회원 인증 기능
+Database : NoSQL
+Storage : Image, 영상 저장
+Functions : server side 기능 
+
+Firebase 쓰는 이유
+1. HTML, CSS, JS만 알아도 서비스 제작 가능
+2. Database 콘솔 다루기 쉬움
+3. 프로젝트 커지면 서버/DB 스케일업 자동 반영
+4. DB 데이터 알아서 리얼타임으로 싱크
+단점 : 비쌈 (AWS + 20%)
+
+당근마켓 : 상품진열화면 / 상품상세페이지 / 글작성기능 / 채팅기능
+
+▶ Firebase로 당근마켓 만들기 1 : Firebase 설치 개쉬움
+
+JS + jquery : HTML에 javascript 복붙
+React, Vue 개발환경 : npm install firebase
+
+
+node js / vs code
+firebase console 검색
+: 데이터베이스 만들기 northeast3 (서울?)
+: Storage - 이미지 저장
+
+npm install -g firebase-toos@9.12.1
+terminal - firebase login / firebase init - firebase 프로젝트 생성 
+preceed?y feature 선택 Firestore, Hosting, Storage
+existing project - 선택
+rules? - firebase.rules
+indexs - firebases.indexes.json
+single-page app - react 경우 y, js/jquery n
+github -  no
+storage rules? - storage.rules
+
+
+▶ Firebase로 당근마켓 만들기 2 : DB에서 게시물 무단으로 가져오기
+
+index.html 새로작성, 
+firebase 8.X 4줄 사용 (9.X 모듈식으로 용량 줄일 수 있음 but 검색시 자료 적음)
+
+<script>
+   프로젝트 설정코드 필요 <- firebase console 설정, 프로젝트 앱 -> sdk 추가 <script> 복붙
+</script>
+
+terminal> firebase server
+
+Bootstrap : css는 head tag 안에, js는 body tag 안에 복붙
+jquery cdn : JQuery 3.X minified버젼 js -> HTML에 복붙
+
+Navbar 넣기 : bootstrap (5버젼) navbar 복불
+
+carrot-web-test > firebase database > 컬렉션(폴더) 시작 >
+   Collection, 폴더개념 (Product) - Document, 화일개념 (product) -  object 자료형
+
+const db = firebase.firestore();
+      
+      db.collection('product').get().then((결과)=>{
+        결과.forEach((doc)=>{
+          console.log(doc)
+permission error 권한 부여 필요 : Cloud Firestore > 규칙 if false -> true로 변경
+
+
+▶ Firebase로 당근마켓 만들기 3 : 상품 업로드한거 DB에 저장 ㄱㄱ
+문자${변수}문자
+
+▶ Firebase로 당근마켓 만들기 4 : 
+
+▶ Firebase로 당근마켓 만들기 5 : 
+
+
+□ 리액트 기초 : 블로그 프로젝트 만들기
+https://www.youtube.com/playlist?list=PLfLgtT94nNq1e6tr4sm2eH6ZZC2jcqGOy
+
+[React 기초 0강] : 리액트왜 쓰는지 알려줌 (+ 수강시 필요 사전지식)
+모바일 App 처럼 새로고침없이 스무스하게 동작하는 웹, 메이저 SNS → Web-app → React > Angular/Vue
+그대로 App으로 발행 가능, 빠르다는 느낌, 구매 전환력↑ React 개발자 선호
+리액트 문법 특 어려움 → 쉽게 설명, 혼자 짤 수 있는 커리큘럼, 실전 프로젝트
+
+javascript 문법 필요, HTML/CSS 지식
+
+▶ React 기초 1강 : 리액트 설치와 셋팅법 (2022+ 스타일)
+nodejs 최신 설치 → VS code 설치 → 작업폴더 생성 → VS code terminal  npx create-react-app blog
+create-react-app : 리액트 셋팅 다된 boilerplate 생성 라이브러리
+→ 생성된 폴더를 VS code 에서 → open folder npm start
+
+
+nodejs 최신 설치 이유  create-react-app 설치 위해 npx npm 
+
+
+public index.html
+App.js ↑
+index.js로 
+ 
+public : static 화일 보관
+
+package.json : 설치한 library 버젼 정리
+
+function App() {
+  return (
+    <div className="App">
+       코드 작성
+    </div>
+  );
+}
+
+▶ React 기초 2강 : 리액트에선 HTML대신 JSX 써야함 (JSX 사용법)
+블로그 navbar 만들기
+App.css 
+JSX 문법
+
+1. 태그에 class    <div className="클래스명">
+2. 리액트가 생 HTML 코딩보다 편리한 이유 - 데이터 바인딩이 쉬움
+    서버 data javascript 변수에 저장 후 html에 박아넣어 보여줌 
+    document.getElementById().innerHTML = ''? ...
+    vs. 중괄호 {변수명, 함수명} 써서 간단히 HTML 동적으로 만들어 냄
+    import한 이미지명도 속성안에 변수명 중괄호에 포함 <img src={ logo } /> 
+    class 명에도 중괄호 사용 가능 → 상상하는 모든 것을 중괄호에 넣을 수 있음!
+3. JSX에서 style 속성 집어넣을 때 object 형태로 넣어야 함
+   style={ object 자료형으로 만든 스타일}
+   → style={ { color : 'blue'} }, font-sizeX → fontSize
+
+▶ React 기초 3강 : 리액트에선 변수말고 state 만들어 쓰랬죠 (useState)
+3. usestate
+   데이터는 1) 변수에 넣거나 2) state에 넣거나
+    2)의 경우 ① {useState} 상단에 첨부 ② useState(데이터)
+
+   ES6 destructuring 문법 : array, object에 있던 자료를 변수에 쉽게 담고 싶을 때
+   var [a, b] = [10, 100]; 
+
+   state : 1) 변수 대신 쓰는 데이터 저장공간, 2) useState()를 이용해 만들어야 함, 3) 문자, 숫자, array, object 다 저장가능
+   state에 데이터를 저장해 놓는 이유 :  웹이 app처럼 동작하게 만들고 싶어서... ※ HTML이 자동 재랜더링!
+                                                     제목수정, 정렬 시 새로고침없이 HTML 재랜더링 
+                                                     → 자주 변경되는 중요한 데이터를 변수대신 stat에 저장
+
+[참고] 테미널에 뜨는 warning - eslint가 잡아주는 문법체크사항
+맨 위에 /* eslint-disable */
+
+▶ React 기초 4강 : 리액트에서 버튼에 이벤트 리스너 (핸들러) 장착하는 법
+4. Event
+이벤트 리스너 
+onClick={ 클릭될 때 실행할 JS }, onClick={ () => { 실행할 내용 } } callback 함수 사용 가능, arrow 함수
+좋아요 클릭수 증가
+state 사용 → state 변경방법 함수사용 state 함수(대체할 데이터)
+
+▶ React 기초 5강 : state 맘대로 변경하는 법 (setState는 넘 옛날이고염)
+Q. 버튼을 누르면 첫째 제목이 '여자코트 추천'으로 변경
+수정된 [데이터]를 만듬. state 복사본(deep copy) 만들어서 수정
+원본 state 수정 X (특히 state가 Aarray, Object 자료형이면
+deep copy : 값공유 (주소 참조, 값은 메모리 위치?) X 서로 독립적인 값을 가지는 복사 (주소 다른 다른 메모리 위치)  [...글제목] spread operator
+리액트 대원칙 : immutable data
+  
+<Aarray, Object state 데이터 수정 방법>
+- 변경함수 사용
+- 변경함수(데체할 데이터)
+- state는 직접 건들이지 않고 deep copy 후 사본 사용
+
+Q. 버튼을 누르면 제목들을 글자순 정렬
+- 기존 state 복사본(deep copy) 만들고 카피본에 수정사항 반영 → 변경함수()에 집어 넣기
+
+▶ React 기초 6강 : Component로 HTML 깔끔하게 줄이는 법
+- 페이지 구분은 라우터 사용 필요 - 여기서는 다루지 않음 → 모달창 사용
+
+Modal UI 디자인하기
+return 속에 1개의 html tag만 시작하고 끝, 병렬X
+HTML을 한 단어로 줄여서 쓸 수 있는 방법 : 리액트의 Component 문법
+
+Component 만드는 법
+1) 함수 만들고 이름 짓기, 2) 축약을 원하는 HTML 넣고, 3) 원하는 곳에 <함수명 />
+
+Component 작성 시 유의점
+1) 이름은 대괄호, 2) return() 안에 있는 건 태그 하나로 묶어야 함
+div 대신 fragment <> </> 사용 가능
+
+function App() (얘도 component) 과 나란히 배치 
+HTML을 덩어리째 관리 가능 Component 안에 Component도 가능
+
+Component 사용 기준
+- 반복 출현하는 HTML 덩어리들
+- 자주 변경되는 HTML UI들
+- 다른 페이지 만들어도 컴포넌트로 만듦
+
+Component 많이 만들면 단점:
+- state 쓸 때 복잡해짐 (상위 componet 에서 만든 state를 쓰려면 props 문법 이용 해야함)
+
+----- 24년 4월 25일 ------
+
+
+
+□ MS가 몰래 심어둔 쓰레X 옵션.. 당장 끄세요! (100% 빨라집니다)
+https://www.youtube.com/watch?v=7WGXVmTgGro
+
+서비스 
+
+
+
+□ React JS 부트스트랩 네비게이션 & 커브 헤더 컴포넌트 만들어보기! - 코딩지영
+
+□ 아직도 개인 블로그 없이 티스토리 블로그 쓰는데 개발자 되겠다고?!! - 코딩지영
+https://www.youtube.com/watch?v=N4q-kVRHs0Q&list=PLRtgL54fRxE0j5a8DH_BnChxLLUR6DFjn&index=4
+
+
+footer - https://www.devwares.com/
+
+Free download background png
+
+https://pngtree.com/back/down?id=MTQ1MTg3OA==&type=1&time=1708691220&token=N2RhMGE0MzA4OTU0MzE0NDgyZjE0MzhmNDBmYjQ5MzU=&t=0
+
+□ [React + Firebase] 왕초보 40분 완성 - 체크리스트 (Todo list) 만들기 - 프론트 + 백엔드 + 유저 로그인
+https://www.youtube.com/watch?v=Y2qlUkRlGyU
+
+□ Step By Step Guide: Todo List
+https://docs.google.com/document/u/0/d/1wkJLct-nTvNGoOGexvG_v8y-vdNzEPXTPi_y04OAFPM/mobilebasic
+
+Deploy complete!
+
+Project Console: https://console.firebase.google.com/project/todo-list-app-demo-be6a4/overview
+Hosting URL: https://todo-list-app-demo-be6a4.web.app
+
+
+vscode 세로 여러줄 동시 선택
+Ctrl + Alt + (↑, ↓) 
+Shift + Alt + 마우스 드래그 
+
+firebase
+Use an existing project 선택 시
+Error: Failed to list Firebase projects. See firebase-debug.log for more info.
+위와 같은 에러가 발생했다면
+저의 경우 firebase login --reauth 를 통해 해결할 수 있었습니다.
+
+
+
+
+
+
+
+
+https://ndb796.tistory.com/232
+
+□ React UI 라이브러리 - MUI (Material-ui), 생활코딩
+https://www.youtube.com/watch?v=or3np70c7zU
+https://stackblitz.com/~/github.com/highcera/React_MUI_StackBlitz
+
+□ React 관련 폴더
+1. C:\TEMP111\temp111 - react function 사용, 애플코딩
+    npm start 구동
+
+2. C:\MY REACT TUTORIAL - react babel class 사용, ?
+    ?
+
+3. C:\React Project Tutorial\management\client - react class 사용, https://milugarcito.tistory.com/316
+    npm start 구동
+
+
+□ React와 Node.js를 활용한 고객 관리 시스템 개발 강의 - 동빈나
+1강. Create React App으로 리액트 프로젝트 시작하기
+2강. Visual Studio Code를 이용한 소스코드 작성
+3강. 깃허브를 이용해 소스코드 관리하기
+4강. 고객 컴포넌트 만들기
+Nodejs 설치 → 명령프롬프트 node -v
+npm install -g create-react-app (g : global package 설치, 다른 poject에도 적용 가능
+create-react-app management (프로젝트 이름)  
+management 폴더로 이동 → yarn start
+npm install -g yarn
+
+5강. 고객 컴포넌트 구조화하기
+
+6강. Material UI를 적용하여 고객 테이블 디자인하기
+https://material-ui.com/getting-started/installation/
+
+npm install @material-ui/core
+yarn add @material-ui/core
+
+npm install @material-ui/core --legacy-peer-deps
+npm install @mui/icons-material --legacy-peer-deps
+
+yarn start
+
+https://material-ui.com/demo/tables/
+
+
+7강. Node.js Express 서버 개발환경 구축하기
+- Web server 구현 : Node.js express (web server frame work 중 하나, java script 언어 기반 → 선택 ↑
+현재까지 작성한 Web front end (client) program과 서로 data를 주고 받을 수 있는 API(?) 역활을 수행 node.js 구축
+client 폴더 생성 → 모두 이동
+node.js express 설치 전 환경 설정 - package.json - server와 client를 동시에 실행할 수 있도록 설정
+package.json 화일 생성
+vs code 에서 편집
+{
+    "name" : "management",
+    "version" : "1.0.0",
+    "scripts" : {
+        "client" : "cd client && yarn start",
+        "server" : "nodemon server.js",
+        "dev" : "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+    },
+    "dependencies" : {
+        "body-parser" : "^1.18.3",
+        "express" : "^4.16.4"
+    },
+    "devDependencies" : {
+        "conurrently" : "^4.0.1"
+    }
+}
+
+client의 gitignore 복사 server에 paste 
+npm install express --save (동영상에서는 생략되어 재현 문제 있었음)
+npm install -g nodemon
+
+body-parser를 찾을 수 없다는 error가 나올 때
+npm install --save body-parser  
+
+node server.js 
+
+8강 - Node.js Express에서 REST API 구축하기
+Rest API 구현 - web protocol 기반 / json 형식
+json 형식 이상없는지 확인 → https://jsonlint.com/
+
+client package.json "proxy" : "http://localhost:5000/"
+
+9강. 리액트의 라이프 사이클 이해 및 API 로딩 처리 구현하기
+리액트의 component life cycle을 가지고 있다. 
+1) constructor() 
+2) componentWillMount()
+3) render()
+4) componentDidMount()
+
+// props or state => 변경되는 경우에는 shouldComponentUpdate()함수가 사용되어서 
+실질적으로 다시 render 함수 불러와서 뷰 갱신한다. 
+
+circular progress
+
+10강. AWS RDS 서비스를 이용하여 MySQL DB 구축하기
+아마존 웹 서비스
+
+HeidiSQL
+접속불가로 mysql로 시도
+
+11강. 고객(Customer) DB 테이블 구축 및 Express와 연동하기
+npm install --save mysql
+
+12강. 고객 추가 양식(Form) 구현 및 이벤트 핸들링
+X:\React Project Tutorial\management\client>npm install --save axios
+save : dependecy에 항목 저장 npm5 부터 자동 항목 추가 
+
+form tag를 통해 추가하겠다고 data를 보냄
+yarn add axios
+
+13강.
+14강.
+15강.
+16강.
+17강.
+18강.
+
+
+
+
+
+
+
+
+
+□ 생활코당! React 리액트 프로그래밍
+https://www.youtube.com/watch?v=_yEH9mczm3g&list=PLRx0vPvlEmdD1pSqKZiTihy5rplxecNpz&index=2
+
+(//vscode terminal 에서 설치하기
+debugger; [Console] e 객체 확인 가능)
+
+
+React 코드 - JSX(Javascript XML, 페이스북)
+Create React App 자바스크립트 코드로 변환
+ex) { }
+
+props 리액트 속성값 키워드
+
+reactjs.org =spec.
+어떤 주제 학습을 위한 중요한 도구
+1. 설명서를 볼 줄 아는 것
+2. 현재 상태를 측정하고 분석하는 것
+시간이 많이 걸리고 인내심이 필요. 촉매는 질문하는 것과 검색하는 것
+React Developer Tools [Components] 탭 → 작성한 앱의 컴포넌트를 보여주는 도구
+
+컴포넌트를 별도의 화일로 분리
+
+#Content.js
+import React, { Component } from 'react';
+
+class TOC extends Component {
+  render() {
+    return (
+       <nav>
+	  <ul>
+              <li><a href="1. html">HTML</a></li>
+	      <li><a href="2. html">CSS</a></li>
+	      <li><a href="3. html">JavaScript</a></li>
+	  </ul>
+        </nav>
+     );
+  }
+}
+
+export default TOC;
+
+# App.js
+import react, { Component } from 'react';
+import TOC from './components/TOC';
+import './App.css'
+
+class App extends Component {
+  render () {
+    return (
+      <div className="App">
+         <Subject ...></Subject>
+         <TOC></TOC>
+         <Content ...></Content>
+      </div>
+    )
+  };
+} 
+
+export default App;
+
+컴포넌트가 실행될 때 reder 함수보다 먼저 실행되면서 해당 컴포넌트를 초기화하고 싶은코드는 constructor에 작성
+
+
+□ Event state props와 render 함수
+이벤트는 props, state, event 3자가 서로 상호작용을 하면서 애플리케이션의 역동성 부여
+
+
+state 값을 올바르게 변경하기 위해
+1. 함수 뒤에 .bind(this) 추가
+2. this.setState 함수 호출, state 값 변경
+
+
+
+
+
+
+
+
+
+
+
+□ [React + Firebase] 왕초보 40분 완성 - 체크리스트 (Todo list) 만들기 - 프론트 + 백엔드 + 유저 로그인
+https://www.youtube.com/watch?v=Y2qlUkRlGyU
+
+□ Step By Step Guide: Todo List
+https://docs.google.com/document/u/0/d/1wkJLct-nTvNGoOGexvG_v8y-vdNzEPXTPi_y04OAFPM/mobilebasic
+
+Deploy complete!
+
+Project Console: https://console.firebase.google.com/project/todo-list-app-demo-be6a4/overview
+Hosting URL: https://todo-list-app-demo-be6a4.web.app
+
+
+vscode 세로 여러줄 동시 선택
+Ctrl + Alt + (↑, ↓) 
+Shift + Alt + 마우스 드래그 
+
+firebase
+Use an existing project 선택 시
+Error: Failed to list Firebase projects. See firebase-debug.log for more info.
+위와 같은 에러가 발생했다면
+저의 경우 firebase login --reauth 를 통해 해결할 수 있었습니다.
+
+
+
+
+
+
+
+
+https://ndb796.tistory.com/232
+
+□ React UI 라이브러리 - MUI (Material-ui), 생활코딩
+https://www.youtube.com/watch?v=or3np70c7zU
+https://stackblitz.com/~/github.com/highcera/React_MUI_StackBlitz
+
+□ React 관련 폴더
+1. C:\TEMP111\temp111 - react function 사용, 애플코딩
+    npm start 구동
+
+2. C:\MY REACT TUTORIAL - react babel class 사용, ?
+    ?
+
+3. C:\React Project Tutorial\management\client - react class 사용, https://milugarcito.tistory.com/316
+    npm start 구동
+
+
+□ React와 Node.js를 활용한 고객 관리 시스템 개발 강의 - 동빈나
+1강. Create React App으로 리액트 프로젝트 시작하기
+2강. Visual Studio Code를 이용한 소스코드 작성
+3강. 깃허브를 이용해 소스코드 관리하기
+4강. 고객 컴포넌트 만들기
+Nodejs 설치 → 명령프롬프트 node -v
+npm install -g create-react-app (g : global package 설치, 다른 poject에도 적용 가능
+create-react-app management (프로젝트 이름)  
+management 폴더로 이동 → yarn start
+npm install -g yarn
+
+5강. 고객 컴포넌트 구조화하기
+
+6강. Material UI를 적용하여 고객 테이블 디자인하기
+https://material-ui.com/getting-started/installation/
+
+npm install @material-ui/core
+yarn add @material-ui/core
+
+npm install @material-ui/core --legacy-peer-deps
+npm install @mui/icons-material --legacy-peer-deps
+
+yarn start
+
+https://material-ui.com/demo/tables/
+
+
+7강. Node.js Express 서버 개발환경 구축하기
+- Web server 구현 : Node.js express (web server frame work 중 하나, java script 언어 기반 → 선택 ↑
+현재까지 작성한 Web front end (client) program과 서로 data를 주고 받을 수 있는 API(?) 역활을 수행 node.js 구축
+client 폴더 생성 → 모두 이동
+node.js express 설치 전 환경 설정 - package.json - server와 client를 동시에 실행할 수 있도록 설정
+package.json 화일 생성
+vs code 에서 편집
+{
+    "name" : "management",
+    "version" : "1.0.0",
+    "scripts" : {
+        "client" : "cd client && yarn start",
+        "server" : "nodemon server.js",
+        "dev" : "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+    },
+    "dependencies" : {
+        "body-parser" : "^1.18.3",
+        "express" : "^4.16.4"
+    },
+    "devDependencies" : {
+        "conurrently" : "^4.0.1"
+    }
+}
+
+client의 gitignore 복사 server에 paste 
+npm install express --save (동영상에서는 생략되어 재현 문제 있었음)
+npm install -g nodemon
+
+body-parser를 찾을 수 없다는 error가 나올 때
+npm install --save body-parser  
+
+node server.js 
+
+8강 - Node.js Express에서 REST API 구축하기
+Rest API 구현 - web protocol 기반 / json 형식
+json 형식 이상없는지 확인 → https://jsonlint.com/
+
+client package.json "proxy" : "http://localhost:5000/"
+
+9강. 리액트의 라이프 사이클 이해 및 API 로딩 처리 구현하기
+리액트의 component life cycle을 가지고 있다. 
+1) constructor() 
+2) componentWillMount()
+3) render()
+4) componentDidMount()
+
+// props or state => 변경되는 경우에는 shouldComponentUpdate()함수가 사용되어서 
+실질적으로 다시 render 함수 불러와서 뷰 갱신한다. 
+
+circular progress
+
+10강. AWS RDS 서비스를 이용하여 MySQL DB 구축하기
+아마존 웹 서비스
+
+HeidiSQL
+접속불가로 mysql로 시도
+
+11강. 고객(Customer) DB 테이블 구축 및 Express와 연동하기
+npm install --save mysql
+
+12강. 고객 추가 양식(Form) 구현 및 이벤트 핸들링
+X:\React Project Tutorial\management\client>npm install --save axios
+save : dependecy에 항목 저장 npm5 부터 자동 항목 추가 
+
+form tag를 통해 추가하겠다고 data를 보냄
+yarn add axios
+
+13강.
+14강.
+15강.
+16강.
+17강.
+18강.
+
+
+
+
+
+
+
+
+
+□ 생활코당! React 리액트 프로그래밍
+https://www.youtube.com/watch?v=_yEH9mczm3g&list=PLRx0vPvlEmdD1pSqKZiTihy5rplxecNpz&index=2
+
+(//vscode terminal 에서 설치하기
+debugger; [Console] e 객체 확인 가능)
+
+
+React 코드 - JSX(Javascript XML, 페이스북)
+Create React App 자바스크립트 코드로 변환
+ex) { }
+
+props 리액트 속성값 키워드
+
+reactjs.org =spec.
+어떤 주제 학습을 위한 중요한 도구
+1. 설명서를 볼 줄 아는 것
+2. 현재 상태를 측정하고 분석하는 것
+시간이 많이 걸리고 인내심이 필요. 촉매는 질문하는 것과 검색하는 것
+React Developer Tools [Components] 탭 → 작성한 앱의 컴포넌트를 보여주는 도구
+
+컴포넌트를 별도의 화일로 분리
+
+#Content.js
+import React, { Component } from 'react';
+
+class TOC extends Component {
+  render() {
+    return (
+       <nav>
+	  <ul>
+              <li><a href="1. html">HTML</a></li>
+	      <li><a href="2. html">CSS</a></li>
+	      <li><a href="3. html">JavaScript</a></li>
+	  </ul>
+        </nav>
+     );
+  }
+}
+
+export default TOC;
+
+# App.js
+import react, { Component } from 'react';
+import TOC from './components/TOC';
+import './App.css'
+
+class App extends Component {
+  render () {
+    return (
+      <div className="App">
+         <Subject ...></Subject>
+         <TOC></TOC>
+         <Content ...></Content>
+      </div>
+    )
+  };
+} 
+
+export default App;
+
+컴포넌트가 실행될 때 reder 함수보다 먼저 실행되면서 해당 컴포넌트를 초기화하고 싶은코드는 constructor에 작성
+
+
+□ Event state props와 render 함수
+이벤트는 props, state, event 3자가 서로 상호작용을 하면서 애플리케이션의 역동성 부여
+
+
+state 값을 올바르게 변경하기 위해
+1. 함수 뒤에 .bind(this) 추가
+2. this.setState 함수 호출, state 값 변경
+
