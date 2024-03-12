@@ -1,7 +1,18 @@
 https://www.hrd.go.kr/hrdp/ma/pmmao/newIndexRenewal.do
 국민내일배움카드
 
+1)  proxy 서버 주소확인
+- 인터넷 옵션 > 연결 탭 > LAN 설정 버튼 클릭 > "자동 구성 스크립트 사용" 부분의  주소값 확인- cmd 실행 후, netstat -ban 명령어 입력  . proxy server 주소 확인 
+http://166.79.1.50:8080/proxy.pac
 
+ 
+2) 아래의 명령어 실행을 하면 npm 명령어를 정상적으로 실행할 수 있다.
+   npm config set proxy http://xx.xx.xx.xx:8080
+   npm config set https-proxy http://xx.xx.xx.xx:8080
+   npm config set strict-ssl false
+
+ 
+출처: https://gregor77.tistory.com/entry/proxy-서버-환경에서-npm-사용하는-방법 [북북이와 렛츠기릿:티스토리]
 [ZeroCho]
 □ 리액트 무료 강좌(웹게임)
 https://www.youtube.com/watch?v=aYwSrzeyUOk&list=PLcqDmjxt30RtqbStQqk-eYMK8N-1SYIFn&index=2
@@ -239,10 +250,12 @@ setResult((prevResult) => {
     return '정답: ' + value
 });
 
+===========================================================================
+
 [React 기본 강좌 2-3] 웹팩 설치하기
 실무에서는 다수의 component 사용
 component별로 script를 만들 경우 - 유지보수 어려움...
-fasebook component 2만개
+facebook component 2만개
  - src에서 다른 jsx 화일 가져오기 → 중복 발생
 
 실무 시 수백~수천개의 javascript 함수를 하나의 화일로 합쳐주는 기술 webpack babel → 적용 가능
@@ -277,7 +290,7 @@ html의 <head> script 제거 가능
 
 [React 기본 강좌 2-4] 모듈 시스템과 웹팩 설정
 
-
+=============================================================================
 
 
 [React 기본 강좌 2-5] 웹팩으로 build 하기
