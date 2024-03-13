@@ -10,3 +10,22 @@ be included in a method name.
 
 Progress
 82~ / 191
+
+#83
+1. sc = asc ; object를 슈퍼클래스의 참조 유형을 갖는 변수에 할당할 수 있음
+2. asc = sc; object를 하위 클래스의 참조 유형을 갖는 변수에 할당할 수 없음
+3. asc = (Object) sc; SampleClass를 AnotherSampleClass로 변환할 수 없습니다.
+                      sc를 Object로 캐스팅할 수 있지만  
+                      이전과 같이 하위 클래스의 참조 유형을 갖는 변수에 객체를 할당할 수 없음
+4. asc = sc.clone(); clone() 메서드는 SampleClass에서 구현되지 않음
+                      객체를 AnotherSampleClass로 변환할 수 없습니다.
+                      clone() 메서드는 SampleClass에서 구현되지 않습니다.
+                      그리고 여전히 개체를 하위 클래스의 참조 유형을 갖는 변수에 할당할 수 없습니다.
+
+#92
+Interface variables are assumed to be public static final
+Interface variables must be public
+because interfaces are implemented by classes,
+not inherited by interfaces.
+Variables can never be abstract
+
