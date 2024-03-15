@@ -1,3 +1,15 @@
+Knowledge areas
+Java Basics (18 questions)
+Data Types (20 questions)
+Operators & Decision Constructs (20 questions)
+Arrays (14 questions)
+Loops (21 questions)
+Methods & Encapsulation (26 questions)
+Inheritance (24 questions)
+Exceptions (20 questions)
+Java API (27 questions)
+
+
 Skip understanding
 #48 #66 #70
 
