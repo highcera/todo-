@@ -11,7 +11,9 @@ Java API (27 questions)
 
 
 Skip understanding
-#48 #66 #70
+#48 #66 #70 
+#127 string constructor, String.equalsIgnoreCase(), string comparison
+String.toLowerCase(), String.replace()
 
 Just Memorize 
 #73
@@ -40,4 +42,9 @@ Interface variables must be public
 because interfaces are implemented by classes,
 not inherited by interfaces.
 Variables can never be abstract
+
+#121
+All exceptions in Java inherit from Throwable
+Note that Error and Exception extend Throwable
+and RuntimeException extends Exception
 
