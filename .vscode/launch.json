@@ -1,0 +1,778 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Skillcert",
+            "request": "launch",
+            "mainClass": "Others.Skillcert",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "Skillcertlab",
+            "request": "launch",
+            "mainClass": "Others.Skillcertlab",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "test2",
+            "request": "launch",
+            "mainClass": "Others.test2",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "test2_1",
+            "request": "launch",
+            "mainClass": "Others.test2_1",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "test2_3",
+            "request": "launch",
+            "mainClass": "Others.test2_3",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "test2_4",
+            "request": "launch",
+            "mainClass": "Others.test2_4",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "test2_7",
+            "request": "launch",
+            "mainClass": "Others.test2_7",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "test2_8",
+            "request": "launch",
+            "mainClass": "Others.test2_8",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "test3",
+            "request": "launch",
+            "mainClass": "Others.test3",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "test3_1",
+            "request": "launch",
+            "mainClass": "Others.test3_1",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "test3_2",
+            "request": "launch",
+            "mainClass": "Others.test3_2",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "test3_3",
+            "request": "launch",
+            "mainClass": "Others.test3_3",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "test4",
+            "request": "launch",
+            "mainClass": "Others.test4",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "test4_1",
+            "request": "launch",
+            "mainClass": "Others.test4_1",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "test4_3",
+            "request": "launch",
+            "mainClass": "Others.test4_3",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "test5_1",
+            "request": "launch",
+            "mainClass": "Others.test5_1",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "test7",
+            "request": "launch",
+            "mainClass": "Others.test7",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "test8",
+            "request": "launch",
+            "mainClass": "Others.test8",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_001",
+            "request": "launch",
+            "mainClass": "Udemic.U1_001",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_005",
+            "request": "launch",
+            "mainClass": "Udemic.U1_005",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_006",
+            "request": "launch",
+            "mainClass": "Udemic.U1_006",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_007",
+            "request": "launch",
+            "mainClass": "Udemic.U1_007",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_008",
+            "request": "launch",
+            "mainClass": "Udemic.U1_008",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_009",
+            "request": "launch",
+            "mainClass": "Udemic.U1_009",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_010",
+            "request": "launch",
+            "mainClass": "Udemic.U1_010",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_013",
+            "request": "launch",
+            "mainClass": "Udemic.U1_013",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_014",
+            "request": "launch",
+            "mainClass": "Udemic.U1_014",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_015",
+            "request": "launch",
+            "mainClass": "Udemic.U1_015",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_016$Spider",
+            "request": "launch",
+            "mainClass": "Udemic.U1_016$Spider",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_018",
+            "request": "launch",
+            "mainClass": "Udemic.U1_018",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_021",
+            "request": "launch",
+            "mainClass": "Udemic.U1_021",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_023",
+            "request": "launch",
+            "mainClass": "Udemic.U1_023",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_024",
+            "request": "launch",
+            "mainClass": "Udemic.U1_024",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_025",
+            "request": "launch",
+            "mainClass": "Udemic.U1_025",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_026",
+            "request": "launch",
+            "mainClass": "Udemic.U1_026",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_029",
+            "request": "launch",
+            "mainClass": "Udemic.U1_029",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_030",
+            "request": "launch",
+            "mainClass": "Udemic.U1_030",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_031",
+            "request": "launch",
+            "mainClass": "Udemic.U1_031",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_032",
+            "request": "launch",
+            "mainClass": "Udemic.U1_032",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_033$Test",
+            "request": "launch",
+            "mainClass": "Udemic.U1_033$Test",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_034",
+            "request": "launch",
+            "mainClass": "Udemic.U1_034",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_035",
+            "request": "launch",
+            "mainClass": "Udemic.U1_035",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_036",
+            "request": "launch",
+            "mainClass": "Udemic.U1_036",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_037",
+            "request": "launch",
+            "mainClass": "Udemic.U1_037",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_038",
+            "request": "launch",
+            "mainClass": "Udemic.U1_038",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_039",
+            "request": "launch",
+            "mainClass": "Udemic.U1_039",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_040",
+            "request": "launch",
+            "mainClass": "Udemic.U1_040",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_042",
+            "request": "launch",
+            "mainClass": "Udemic.U1_042",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_043",
+            "request": "launch",
+            "mainClass": "Udemic.U1_043",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_044",
+            "request": "launch",
+            "mainClass": "Udemic.U1_044",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_045",
+            "request": "launch",
+            "mainClass": "Udemic.U1_045",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_046",
+            "request": "launch",
+            "mainClass": "Udemic.U1_046",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_047",
+            "request": "launch",
+            "mainClass": "Udemic.U1_047",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_049",
+            "request": "launch",
+            "mainClass": "Udemic.U1_049",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_050",
+            "request": "launch",
+            "mainClass": "Udemic.U1_050",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_052",
+            "request": "launch",
+            "mainClass": "Udemic.U1_052",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_053",
+            "request": "launch",
+            "mainClass": "Udemic.U1_053",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_054",
+            "request": "launch",
+            "mainClass": "Udemic.U1_054",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_058",
+            "request": "launch",
+            "mainClass": "Udemic.U1_058",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_059",
+            "request": "launch",
+            "mainClass": "Udemic.U1_059",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_060",
+            "request": "launch",
+            "mainClass": "Udemic.U1_060",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_061",
+            "request": "launch",
+            "mainClass": "Udemic.U1_061",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_063",
+            "request": "launch",
+            "mainClass": "Udemic.U1_063",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_067",
+            "request": "launch",
+            "mainClass": "Udemic.U1_067",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_068",
+            "request": "launch",
+            "mainClass": "Udemic.U1_068",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_071",
+            "request": "launch",
+            "mainClass": "Udemic.U1_071",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_074",
+            "request": "launch",
+            "mainClass": "Udemic.U1_074",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_075",
+            "request": "launch",
+            "mainClass": "Udemic.U1_075",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_076",
+            "request": "launch",
+            "mainClass": "Udemic.U1_076",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_077",
+            "request": "launch",
+            "mainClass": "Udemic.U1_077",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_078",
+            "request": "launch",
+            "mainClass": "Udemic.U1_078",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_079",
+            "request": "launch",
+            "mainClass": "Udemic.U1_079",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_080",
+            "request": "launch",
+            "mainClass": "Udemic.U1_080",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_081",
+            "request": "launch",
+            "mainClass": "Udemic.U1_081",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_089",
+            "request": "launch",
+            "mainClass": "Udemic.U1_089",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_090",
+            "request": "launch",
+            "mainClass": "Udemic.U1_090",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_091",
+            "request": "launch",
+            "mainClass": "Udemic.U1_091",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_093",
+            "request": "launch",
+            "mainClass": "Udemic.U1_093",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_097",
+            "request": "launch",
+            "mainClass": "Udemic.U1_097",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_098",
+            "request": "launch",
+            "mainClass": "Udemic.U1_098",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_100",
+            "request": "launch",
+            "mainClass": "Udemic.U1_100",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_104",
+            "request": "launch",
+            "mainClass": "Udemic.U1_104",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_110",
+            "request": "launch",
+            "mainClass": "Udemic.U1_110",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_111",
+            "request": "launch",
+            "mainClass": "Udemic.U1_111",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_114",
+            "request": "launch",
+            "mainClass": "Udemic.U1_114",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U1_115",
+            "request": "launch",
+            "mainClass": "Udemic.U1_115",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U3_001",
+            "request": "launch",
+            "mainClass": "Udemic.U3_001",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U3_002",
+            "request": "launch",
+            "mainClass": "Udemic.U3_002",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U3_003",
+            "request": "launch",
+            "mainClass": "Udemic.U3_003",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U3_005",
+            "request": "launch",
+            "mainClass": "Udemic.U3_005",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U3_006",
+            "request": "launch",
+            "mainClass": "Udemic.U3_006",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U3_008",
+            "request": "launch",
+            "mainClass": "Udemic.U3_008",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U3_009",
+            "request": "launch",
+            "mainClass": "Udemic.U3_009",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U3_010",
+            "request": "launch",
+            "mainClass": "Udemic.U3_010",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U3_011",
+            "request": "launch",
+            "mainClass": "Udemic.U3_011",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U3_012",
+            "request": "launch",
+            "mainClass": "Udemic.U3_012",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U3_013",
+            "request": "launch",
+            "mainClass": "Udemic.U3_013",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U3_014",
+            "request": "launch",
+            "mainClass": "Udemic.U3_014",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U3_016",
+            "request": "launch",
+            "mainClass": "Udemic.U3_016",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U3_017",
+            "request": "launch",
+            "mainClass": "Udemic.U3_017",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U3_018",
+            "request": "launch",
+            "mainClass": "Udemic.U3_018",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U3_019",
+            "request": "launch",
+            "mainClass": "Udemic.U3_019",
+            "projectName": "todo-_9a6abc4b"
+            "args": ["1+2","2*3", "4-3", "5+1"]
+        },
+        {
+            "type": "java",
+            "name": "U3_020",
+            "request": "launch",
+            "mainClass": "Udemic.U3_020",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U3_021",
+            "request": "launch",
+            "mainClass": "Udemic.U3_021",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U3_022",
+            "request": "launch",
+            "mainClass": "Udemic.U3_022",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U3_023",
+            "request": "launch",
+            "mainClass": "Udemic.U3_023",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U3_024",
+            "request": "launch",
+            "mainClass": "Udemic.U3_024",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "U3_028",
+            "request": "launch",
+            "mainClass": "Udemic.U3_028",
+            "projectName": "todo-_9a6abc4b"
+        },
+        {
+            "type": "java",
+            "name": "u1_102",
+            "request": "launch",
+            "mainClass": "Udemic.u1_102",
+            "projectName": "todo-_9a6abc4b"
+        }
+    ]
+}

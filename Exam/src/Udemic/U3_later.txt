@@ -1,0 +1,15 @@
+Skip understanding
+#49 predication
+#55 inplement
+
+
+String : immutable. concat(), replace() and trim() 후 결과를 다른 변수에 할당 필요
+StringBuilder : delete(), insert(), append(), length(), capacity() / remove() X
+
+[ String 클래스와 동일 메소드 ]
+charAt() - 특정 인덱스 위치의 문자 반환
+indexOf() / lastIndexOf() - 문자열 검색해서 위치 반환
+length() - 문자열 길이 반환
+replace() - 검색된 문자열 교체
+substring() - 특정 인덱스 범위 내 문자열을 복사해서 새로 생성된 인스턴스 반환
+toString() - 문자열 출력
