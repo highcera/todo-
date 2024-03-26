@@ -773,6 +773,14 @@
             "request": "launch",
             "mainClass": "Udemic.u1_102",
             "projectName": "todo-_9a6abc4b"
-        }
+        },
+        {
+            "type": "java",
+            "name": "U1_186",
+            "request": "launch",
+            "mainClass": "Udemic.U1_186",
+            "projectName": "todo-_9a6abc4b"
+            "args": ["Java","Duke"]
+        },
     ]
 }

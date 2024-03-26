@@ -1,0 +1,22 @@
+■ Knowledge areas
+Java Basics (18 questions)
+Data Types (22 questions)
+Operators & Decision Constructs (19 questions)
+Arrays (13 questions)
+Loops (22 questions)
+Methods & Encapsulation (25 questions)
+Inheritance (24 questions)
+Exceptions (20 questions)
+Java API (28 questions)
+
+■ Need further study
+#2 
+
+■ 주요 내용 정리
+접근 제한자
+public > protected > default > private
+접근 제한	     적용 대상	              접근할 수 없는 클래스
+public	   클래스, 필드, 생성자, 메소드	       없음
+protected	필드, 생성자, 메소드	      자식 클래스가 아닌 다른 패키지에 소속된 클래스
+default	   클래스, 필드, 생성자, 메소드	   다른 패키지에 소속된 클래스
+private	    필드, 생성자, 메소드	       모든 외부 클래스
