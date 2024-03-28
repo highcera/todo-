@@ -143,5 +143,13 @@
             "mainClass": "U3_019",
             "projectName": "Exam_65ca52bb",
             "args": ["1+2","2*3", "4-3", "5+1"]
+        },
+        {
+            "type": "java",
+            "name": "U3_072",
+            "request": "launch",
+            "mainClass": "U3_072",
+            "projectName": "Exam_65ca52bb",
+            "args": ["10","20", "30"]
         }
 }

@@ -1,6 +1,11 @@
 Skip understanding
 #49 predication
 #55 inplement
+#57
+#60
+#68 Exception
+#82 class methods instance methods
+
 
 
 String : immutable. concat(), replace() and trim() 후 결과를 다른 변수에 할당 필요
