@@ -1,4 +1,4 @@
-Skip understanding
+■ Skip understanding
 #49 predication
 #55 inplement
 #57

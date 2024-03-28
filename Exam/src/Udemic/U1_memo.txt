@@ -1,4 +1,4 @@
-Knowledge areas
+■ Knowledge areas
 Java Basics (18 questions)
 Data Types (20 questions)
 Operators & Decision Constructs (20 questions)
@@ -10,20 +10,20 @@ Exceptions (20 questions)
 Java API (27 questions)
 
 
-Skip understanding
+■ Skip understanding
 #48 #66 #70 
 #127 string constructor, String.equalsIgnoreCase(), string comparison
 String.toLowerCase(), String.replace()
+#172, #180 Exception
 
-Just Memorize 
+
+■ Just Memorize 
 #73
 Java methods must start with a letter, $, _ : O
 hashtag #, \, % : X
 
 be included in a method name.
 
-Progress
-82~ / 191
 
 #83
 1. sc = asc ; object를 슈퍼클래스의 참조 유형을 갖는 변수에 할당할 수 있음
