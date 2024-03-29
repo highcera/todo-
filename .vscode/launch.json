@@ -781,14 +781,6 @@
             "request": "launch",
             "mainClass": "Udemic.u1_102",
             "projectName": "todo-_9a6abc4b"
-        },
-        {
-            "type": "java",
-            "name": "U3_072",
-            "request": "launch",
-            "mainClass": "U3_072",
-            "projectName": "todo-_9a6abc4b",
-            "args": ["10","20", "30"]
         }
     ]
 }
