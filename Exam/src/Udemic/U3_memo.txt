@@ -20,7 +20,8 @@ substring() - 특정 인덱스 범위 내 문자열을 복사해서 새로 생�
 toString() - 문자열 출력
 
 stringBuilder - delete(), length() 
-StringBuilder bucket = new StringBuilder("Empty me!"); bucket.delete(0, bucket.length());
+StringBuilder bucket = new StringBuilder("Empty me!"); 
+bucket.delete(0, bucket.length());
 
 Predicate  boolean test(T t).
 
