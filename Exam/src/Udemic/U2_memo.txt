@@ -9,11 +9,15 @@ Inheritance (24 questions)
 Exceptions (20 questions)
 Java API (28 questions)
 
-■ Need further study
+■ Skip - Need for further study
 #2 
 #8 this(), super()
 #14
 #98
+#132 exception
+#154
+
+
 
 ■ 주요 내용 정리
 접근 제한자

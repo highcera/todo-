@@ -1,0 +1,23 @@
+U6
+
+~46
+
+47~80
+76. Checked exceptions must be handled or declared or the program will not compile,
+     while unchecked exceptions can be optionally handled. 
+     On the other hand, java.lang.Error should never be handled by the application
+     because it often indicates an unrecoverable state in the JVM,
+
+such as running out of memory.
+81~
+84
+javaBean get, set, is
+91
+103
+109
+
+127
+protected and public methods may be overridden, not hidden.
+private methods are always hidden in a subclass.
+static methods cannot be overridden, only hidden.
+Variables may only be hidden, regardless of the access modifier.
