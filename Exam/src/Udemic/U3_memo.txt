@@ -19,4 +19,11 @@ replace() - 검색된 문자열 교체
 substring() - 특정 인덱스 범위 내 문자열을 복사해서 새로 생성된 인스턴스 반환
 toString() - 문자열 출력
 
+stringBuilder - delete(), length() 
+StringBuilder bucket = new StringBuilder("Empty me!"); 
+bucket.delete(0, bucket.length());
+
 Predicate  boolean test(T t).
+
+Skip
+#123, 124, 125
