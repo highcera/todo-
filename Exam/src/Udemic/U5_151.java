@@ -10,6 +10,7 @@ public class U5_151 {  // StringBuilders
         StringBuilder s1 = new StringBuilder("s1");
         StringBuilder s2 = new StringBuilder("s2");
         StringBuilder s3 = work(s1, s2);
+        System.out.println(work(s1, s2));
         System.out.println("s1 = " + s1);  // s1 = s1
         System.out.println("s2 = " + s2);  // s2 = s2b
         System.out.println("s3 = " + s3);  // s3 = a
