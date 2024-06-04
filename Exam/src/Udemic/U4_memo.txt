@@ -1,0 +1,2 @@
+String[][] names = {{"Andre", "Mike"}, null, {"Pedro"}};
+            System.out.println(Arrays.deepToString(names));
