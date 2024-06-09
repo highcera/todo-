@@ -1,7 +1,5 @@
 package Udemic;
 
-import Base.U3_115_1;
-
 public class U3_115 extends U3_115_1 { // Derived
     public static void main(String[] args) {
         U3_115_1 obj = new U3_115();
