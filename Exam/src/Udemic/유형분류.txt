@@ -1,0 +1,22 @@
+■ Java API
+Prdicate
+Q1175 
+
+
+■ Loops
+Q1079
+
+■ Data Types
+
+object
+Q1020
+
+g.c finalize()
+Q1031
+
+■ inheritance
+Q1142
+
+■ Java Basics
+scope
+Q1008

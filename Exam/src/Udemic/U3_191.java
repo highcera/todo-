@@ -8,3 +8,4 @@ public class U3_191 {
         System.out.print(leaders + followers < 10 ? "Too few" : "Too many");
     }
 }
+
