@@ -1,8 +1,14 @@
 String[][] names = {{"Andre", "Mike"}, null, {"Pedro"}};
             System.out.println(Arrays.deepToString(names));
 
+<<<<<<< HEAD
+            s1.getClass()
+
+            
+=======
 
 boolean b1 = (str1 == str3);
 System.out.println(System.identityHashCode(str1));
 System.out.println(System.identityHashCode(str3));
         
+>>>>>>> 0cbe5bb0b958e50d632cb3b17e6ea6ba29f0b152
