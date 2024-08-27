@@ -1,0 +1,29 @@
+Q5132 virtual method
+In Java, only non-static, non-final, and non-private methods are considered virtual and capable of being overridden in a subclass.
+
+Q5145 Q5153
+The code does not compile because the catch blocks are used in the wrong order.
+(unreachable code)
+
+Q5164
+private String category = "procedural";
+public static void main(String[] args) {
+   Lang obj1 = new Lang();
+   Lang obj2 = new Lang();
+   obj1.category == obj2.category true!!
+
+Q5178
+LocalDate xmas = LocalDate.of(2016, 12, 25);
+    // xmas.setYear(2017);
+       System.out.println(xmas.getYear());  // 2016
+
+classes are immutable.
+This means they do not contain setter methods and the code does not compile.
+
+Q5119
+All interface methods are implicitly public.
+Interface methods may be declared as static or default but are never implicitly added.
+
+Prior to Java 8 all interface methods would be assumed to be abstract.
+Since Java 8 now includes default and static methods and they are never abstract,
+you cannot assume the abstract modifier will be implicitly applied to all methods by the compiler.
