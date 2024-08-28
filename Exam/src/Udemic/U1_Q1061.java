@@ -1,6 +1,6 @@
 package Udemic;
 
-public class U1_187 {
+public class U1_Q1061 {
     public static void main(String[] args) {
         String[] cartoons = {"tom", "jerry", "micky", "tom"};
         int counter = 0;

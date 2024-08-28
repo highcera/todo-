@@ -1,3 +1,353 @@
+▶ 1차 - 53% (102/191) 6/22
+Inheritance (24 questions) - 33 / 63 / 4
+Data Types (20 questions) - 40 / 60
+Methods & Encapsulation (26 questions) - 46 / 54
+Exceptions (20 questions) - 55 / 45
+Java API (27 questions) - 56 / 44
+
+▷ 2차 - 74% (142/191) 7/20
+Inheritance (24 questions) - 58 / 42 (10)
+Exceptions (20 questions) - 60 / 40
+Java API (27 questions) - 63 / 37
+(Methods & Encapsulation (26 questions) - 73 / 27)
+
+-----------------------------------------------------------------------------------------------
+출처: https://inpa.tistory.com/entry/JAVA-☕-업캐스팅-다운캐스팅-한방-이해하기 [Inpa Dev 👨‍💻:티스토리]
+
+□ 업캐스팅(UpCasting)
+
+업캐스팅은 자식 클래스가 부모 클래스 타입으로 캐스팅 되는 것이다.
+업캐스팅은 캐스팅 연산자 괄호를 생략할 수 있다
+단, 부모 클래스로 캐스팅 된다는 것은 멤버의 갯수 감소를 의미한다. 
+이는 곧 자식 클래스에서만 있는 속성과 메서드는 실행하지 못한다는 뜻이다.
+업캐스팅을 하고 메소드를 실행할때, 만일 자식 클래스에서 오버라이딩한 메서드가 있을 경우,
+부모 클래스의 메서드가 아닌 오버라이딩 된 메서드가 실행되게 된다.
+
+다음과 같이 부모 클래스 Unit을 상속하는 Zealot 자식 클래스가 있다. 
+Zealot 클래스는 Unit 클래스를 상속하기 때문에 따지고 보면 Unit 클래스가 상위 요소라고 볼 수 있다. 
+(부모는 자식보다 상위니까) 따라서 객체 zealot을 객체 unit_up에 할당하는 것을 업캐스팅이라 한다.
+
+
+class Unit {
+    public void attack() {
+        System.out.println("유닛 공격");
+    }
+}
+
+class Zealot extends Unit {
+    public void attack() {
+        System.out.println("찌르기");
+    }
+
+    public void teleportation() {
+        System.out.println("프로토스 워프");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Unit unit_up;
+        Zealot zealot = new Zealot();
+        
+        // * 업캐스팅(upcasting)
+        unit_up = (Unit) zealot;
+        unit_up = zealot; // 업캐스팅은 형변환 괄호 생략 가능
+
+        // Unit unit_up = zealot; // 변수 업캐스팅(upcasting)
+    }
+}
+
+정리하자면 업캐스팅을 다루는데 있어 조심해야 할점은 크게 두가지로 요약할 수 있게 된다.
+1. 업캐스팅 하면 멤버 갯수가 제한되어 자식 클래스에만 있는 멤버는 사용할 수 없게 된다
+2. 업캐스팅 했지만 오버라이딩 된 메서드는 자식 클래스의 메서드로 실행이 된다
+
+□ 업캐스팅 하는 이유
+공통적으로 할 수 있는 부분을 만들어 간단하게 다루기 위해서이다. 
+상속 관계에서 상속 받은 서브 클래스가 몇 개이든 하나의 인스턴스로 묶어서 관리할 수 있기 때문이다.
+ 
+예를들어 다음과 같이 부모 클래스 Shape에 각각 자식 클래스 Rectangle, Triangle, Circle가 상속 관계를 맺었다고 하자.
+본래라면 Rectangle, Triangle, Circle 클래스는 서로 다른 타입이니 각각 타입을 정의해서 사용해야 한다.
+
+Rectangle[] r = new Rectangle[];
+r[0] = new Rectangle();
+r[1] = new Rectangle();
+
+Triangle[] t = new Triangle[];
+t[0] = new Triangle();
+t[1] = new Triangle();
+
+Circle[] c = new Circle[];
+c[0] = new Circle();
+c[1] = new Circle();
+
+하지만 상속 관계를 맺어 부모 클래스로 업캐스팅이 가능하다면, 다음과 같이 하나의 타입으로 묶어 배열을 구성할 수 있게 된다.
+Shape[] s = new Shape[];
+s[0] = new Rectangle();
+s[1] = new Rectangle();
+s[2] = new Triangle();
+s[3] = new Triangle();
+s[4] = new Circle();
+s[5] = new Circle();
+
+하나의 자료형으로 관리하니 코드량도 훨씬 줄어들고 가독성도 좋아지며 유지보수성도 좋아짐을 알 수 있다. 
+그런데 위에서 언급했던 것처럼 자식 클래스에만 있는 고유한 메서드를 실행하려면 어떻게 해야 할까?
+오버라이딩 한 메서드가 아닌 이상 업캐스팅한 부모 클래스 타입에서 자식 클래스의 고유 메소드를 실행할 수 없다. 
+따라서 업캐스팅한 객체를 다시 자식 클래스 타입으로 되돌리는 다운 캐스팅(down casting)이 필요한 것이다.
+
+
+□ 다운 캐스팅(DownCasting)
+
+다운캐스팅은 거꾸로 부모 클래스가 자식 클래스 타입으로 캐스팅 되는 것이다.
+다운캐스팅은 캐스팅 연산자 괄호를 생략할 수 없다
+다운캐스팅의 목적은 업캐스팅한 객체를 다시 자식 클래스 타입의 객체로 되돌리는데 목적을 둔다. (복구)
+
+다운 캐스팅은 부모 클래스를 자식클래스로 캐스팅하는 단순히 업캐스팅의 반대 개념이 아니다.
+다운 캐스팅의 진정한 의미는 부모 클래스로 업 캐스팅된 자식 클래스를 복구하여, 
+본인의 필드와 기능을 회복하기 위해 있는 것이다. 
+즉, 원래 있던 기능을 회복하기 위해 다운캐스팅을 하는 것이다. 
+
+public class Main {
+    public static void main(String[] args) {
+
+        Unit unit_up;
+        Zealot zealot = new Zealot();
+
+        unit_up = zealot; // 업캐스팅
+        
+        // * 다운캐스팅(downcasting) - 자식 전용 멤버를 이용하기위해, 이미 업캐스팅한 객체를 되돌릴때 사용
+        Zealot unit_down = (Zealot) unit_up; // 캐스팅 연산자는 생략 불가능. 반드시 기재
+        unit_down.attack(); // "찌르기"
+        unit_down.teleportation(); // "프로토스 워프"
+    }
+}
+
+만일 메서드를 한번 만 실행 할 것이라 따로 변수에 저장해둘 필요성이 없다면, 
+아래와 같이 다운 캐스팅을 한줄로 표현할 수도 있다.
+((Zealot) unit_up).teleportation(); // "프로토스 워프"
+
+다운 캐스팅 주의점
+앞서 다운 캐스팅의 목적은 업캐스팅한 객체를 되돌리는데 있다고 했다. 그래서 다음과 같이 업캐스팅 되지 않는 생 부모 객체 unit 일 경우, 이를 그대로 (Zealot) unit 다운캐스팅 하면 오류(ClassCastException)가 발생하게 된다.
+
+Unit unit = new Unit();
+
+// * 다운캐스팅(downcasting) 예외 - 다운캐스팅은 업스캐팅한 객체를 되돌릴때 적용 되는것이지, 오리지날 부모 객체를 자식 객체로 강제 형변환은 불가능
+Zealot unit_down2 = (Zealot) unit; //! RUNTIME ERROR - Unit cannot be cast to Zealot
+unit_down2.attack(); //! RUNTIME ERROR
+unit_down2.teleportation(); //! RUNTIME ERROR
+
+
+이러한 다운 캐스팅 특성은 원래 참조 다형성에서도 불가능 했기 때문에 발생하는 
+Zealot unit_down = new Unit(); // 참조 다형성 위배
+
+위와 같은 다운 캐스팅 특성에 대해 주의해야 할 이유는 에디터에서 컴파일 에러가 발생하기 않고 런타임 에러가 발생하는 위험성이 있기 때문이다.
+예를들어 기본형 캐스팅은 값의 손실만 있을 뿐 프로그램이 작동하는데는 문제없다. (3.16 → 3)
+하지만 다운 캐스팅은 에디터에서는 빨간줄이 없는데 코드를 실행 도중에 갑자기 에러가 터져 프로그램이 죽어버릴 수 있다.
+
+추가로 위에서 잠깐 소개한 적이 있는데, 아무리 같은 부모 클래스를 상속하고 있더라도 형제 클래스 끼리는 서로 캐스팅이 불가능하다는 것이다. 이는 잘못 판단하면 컴파일 에러와 런타임 에러 둘다 생길 수 있는 가능성이 있으니 매우 조심해야 한다.
+
+class Unit {
+    public void attack() {
+        System.out.println("유닛 공격");
+    }
+}
+
+class Zealot extends Unit {
+    public void attack() {
+        System.out.println("찌르기");
+    }
+
+    public void teleportation() {
+        System.out.println("프로토스 워프");
+    }
+}
+
+class Marine extends Unit {
+    public void attack() {
+        System.out.println("총쏘기");
+    }
+
+    public void stimpack() {
+        System.out.println("스팀 팩");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        Unit unit = new Unit();
+        Zealot zealot = new Zealot();
+
+        // * 다운캐스팅(downcasting) 예외 - 같은 상속 자식 클래스라도 구성이 같아도 타입이 다르니 불가능
+        Marine marine = new Marine(); // 마린 클래스
+        
+        Unit unit_m = marine; // 업캐스팅
+        
+        Zealot zealot_marine = (Zealot) unit_m; // 다른 자식클래스 질럿으로 다운캐스팅
+        zealot_marine.attack(); //! RUNTIME ERRPR - Marine cannot be cast to Zealot
+        zealot_marine.stimpack(); //! COMPILE ERRPR - Zealot 클래스에 없는 메소드이니 에러
+    }
+}
+
+이 처럼 무분별한 다운캐스팅은 컴파일 시점에는 오류가 발생하지 않아도 런타임 오류를 발생시킬 가능성이 있다. 따라서 다운 캐스팅을 다룰때에는 다운 캐스팅 할 객체가 오리지날 부모 객체인지, 업캐스팅된 부모 객체인지 항상 머릿속에서 가능한지 생각해 볼 필요성이 있다.
+다행인 점은 이렇게 혼동되는 객체를 구별하기 위해 도움을 주는 연산자를 자바에서 지원해준다.
+
+
+instanceof 연산자
+참조 캐스팅을 잘못했다가 런타임 환경에서 에러가 나 프로그램이 종료 되버리면 서비스에 크나큰 차질이 생기게 된다.
+따라서 코드 디버깅을 많이 하여 미리 예방하는 것이 베스트이지만, 이마저도 부족하면 직접 업캐스팅 / 다운캐스팅 유무를 확인하여 참조 캐스팅 동작을 결정하면 된다.
+이때 사용되는 것이 instanceof 연산자인데, 이 연산자는 어느 객체 변수가 어느 클래스 타입인지 판별해 true/false를 반환해준다. 사용시 주의할 점은 instanceof 연산자는 객체에 대한 클래스(참조형) 타입에만 사용할 수 있다는 점이다. (int, double 같은 primitive 타입에는 사용 불가능)
+출처: https://inpa.tistory.com/entry/JAVA-☕-업캐스팅-다운캐스팅-한방-이해하기 [Inpa Dev 👨‍💻:티스토리]
+
+class Unit {
+    // ...
+}
+
+class Zealot extends Unit {
+    // ...
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        // * 업캐스팅 유무
+        Zealot zealot = new Zealot();
+
+        if (zealot instanceof Unit) {
+            System.out.println("업캐스팅 가능"); // 실행
+            Unit u = zealot; // 업캐스팅
+        } else {
+            System.out.println("업캐스팅 불가능");
+        }
+        
+        // * 다운스캐팅 유무
+        Unit unit = new Unit();
+        Unit unit2 = new Zealot();
+
+        if (unit instanceof Zealot) {
+            System.out.println("다운캐스팅 가능");
+        } else {
+            System.out.println("다운캐스팅 불가능"); // 실행
+        }
+
+        if (unit2 instanceof Zealot) {
+            System.out.println("다운캐스팅 가능"); // 실행
+            Zealot z = (Zealot) unit2; // 다운캐스팅
+        } else {
+            System.out.println("다운캐스팅 불가능");
+        }
+    }
+}
+
+참고 : https://github.com/Songwonseok/CS-Study/blob/main/Language/Java/Casting.md
+-----------------------------------------------------------------------------------------------
+
+
+Inheritance (10)
+
+Q1123 - What is the expected output of the following code?
+class X {
+    public void mX() {
+        System.out.println("Xm1");
+    }
+}
+ 
+class Y extends X {
+    public void mX() {
+        System.out.println("Xm2");
+    }
+    public void mY() {
+        System.out.println("Ym");
+    }
+}
+ 
+public class Test {
+    public static void main(String[] args) {
+        X xRef = new Y();
+        Y yRef = (Y) xRef;
+        yRef.mY();  // Ym
+        xRef.mX();  // Xm2
+    }
+}
+
+Q1139 - abstract로 두던지, interface 2개 모두 구현 필요, 2개 → 1개만 씀!!
+Q1130 - Which statement about the reference variables is not true?
+Q1140 - abstract class B4 extends A implements I {}
+abstract class B5 extends A implements I { public void doStuff_B() {} }
+// class B3 extends A implements I { public void doStuff() {} } 
+interface 구현뿐아니라 abstract class의 abstract method도 override 필요!!
+Q1124 - DoInterface doi = new DoClass(100); DoInterface doesn't work as reference type, 
+because it doesn't have the method method2()
+ // private void method2 (int p1) { } 
+Q1141 - down cast를 안하기 위해서는 superclass로 정의 필요
+
+Which of the following statements can be inserted in the blank line so that the code will compile successfully?
+
+interface CanSwim {}
+class Amphibian implements CanSwim {}
+class Tadpole extends Amphibian {}
+public class FindAllTadPole {
+  public static void main(String[] args) {
+    List<Tadpole> tadpoles = new ArrayList<Tadpole>();
+    for(Amphibian amphibian : tadpoles) {
+      ___________ tadpole = amphibian;
+} } }
+
+(Choose three)
+Amphibian
+Object
+Long
+Tadpole
+CanSwim
+
+import java.util.ArrayList;
+import java.util.List;
+interface CanSwim {}
+class Amphibian implements CanSwim {}
+class Tadpole extends Amphibian {}
+public class FindAllTadPole {
+    public static void main(String[] args) {
+        List<Tadpole> tadpoles = new ArrayList<Tadpole>();
+        for(Amphibian amphibian : tadpoles) {
+            CanSwim tadpole1 = amphibian;
+            Amphibian tadpole2 = amphibian;
+            Object tadpole3 = amphibian;
+ 
+            // Long tadpole4 = amphibian;     // incompatible types
+            // Tadpole tadpole5 = amphibian;  // incompatible types
+        }
+    }
+}
+
+The for-each loop automatically casts each Tadpole object to an Amphibian reference,
+which does not require an explicit cast because Tadpole is a subclass of Amphibian
+From there, any parent class or interface that Amphibian inherits from is permitted without an explicit cast.
+This includes CanSwim the interface Amphibian implements, and Object which all classes extend from.
+Amphibian is also correct since the reference is being cast to the same type, so no explicit cast is required.
+Long is incorrect, since Long is not a parent of Amphibian Tadpole is incorrect as well,
+although an explicit cast to Tadpole on the right-hand side of the expression would be required to allow the code to compile.
+
+
+Q1144 - Object는 superclass, null type에 상관없이 object value로 pass!!
+public class Snake {}
+public class Cobra extends Snake {}
+public class GardenSnake {}
+
+public class SnakeHandler {
+ private Snake snake;
+ public void setSnake(Snake snake) { this.snake = snake; }
+ public static void main(String[] args) {
+    new SnakeHandler().setSnake(__________);
+  }
+}
+null 포함 Snake 및 subclass : new Snake(), new Cobra(), null;
+
+Q1138 - 
+Q1134
+
+Q1129 - System.out.print(super.getWeight() + "," + super.height);
+public int getWeight() { return weight; } vs. private height!!
+
+
 ■ Knowledge areas
 Java Basics (18 questions)
 Data Types (20 questions)

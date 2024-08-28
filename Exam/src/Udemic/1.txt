@@ -1,0 +1,196 @@
+
+Q4126 inheritance, polymorphism? 
+
+Ref. parent & obj type Child 경우 전반적으로 정리 필요
+class Phone {
+    String keyboard = "in-built";
+    // boolean playMovie;
+}
+class Tablet extends Phone {
+    boolean playMovie = false;
+}
+class College {
+    public static void main(String[] args) {
+        Phone phone = new Tablet();
+        System.out.println(phone.keyboard + ":" + phone.playMovie);
+    }
+}
+
+
+
+
+
+Q6127  28
+How many changes need to be made to the classes below to properly override the watch() method?
+
+package entertainment;
+class Television {
+  protected final void watch() {}
+}
+public class LCD extends Television {
+  Object watch() {}
+}
+
+Overall explanation
+
+package entertainment;
+class Television {
+    // protected final void watch() {}  // Cannot be final to be overridden
+    protected void watch() {}
+}
+public class LCD extends Television {
+    // Object watch() {}  // Needs the same return value (or a subclass)
+    // void watch() {}    // Cannot be less open
+    protected void watch() {}
+}
+
+Explanation:
+There are three problems with this method override.
+First, the watch() method is marked final in the Television class.
+The final modifier would have to be removed from the method definition in the Television class
+in order for the method to compile in the LCD class.
+
+Second, the return types void and Object are not covariant.
+One of them would have to be changed for the override to be compatible.
+
+Finally, the access modifier in the child class must be the same or broader than in the parent class.
+Since package-private is narrower than protected, the code will not compile.
+
+For these reasons, Three is the correct answer.
+
+
+
+Q1181
+
+Try it yourself:
+
+public class App {
+    public static void main(String[] args) {
+        String str1 = "null";
+        String str2 = new String("NULL");
+        System.out.println(str1.equalsIgnoreCase(str2.toLowerCase()));
+        // true
+        System.out.println(str2 == str2.replace('L','l').toLowerCase());
+        // false
+        System.out.println(str1 == str1.replace('L','l').toLowerCase());
+        // true
+    }
+}
+
+
+Explanation:
+Both objects are strings and therefore immutable.
+Whereas str1 is a member of the common string pool str2 isn’t.
+
+System.out.println(str1.equalsIgnoreCase(str2.toLowerCase()));
+str2.toLowerCase() returns "null" and equalsIgnoreCase()
+compares it with str1’s "null"
+That returns true
+
+System.out.println(str2 == str2.replace('L','l').toLowerCase());
+uses == which compares references only.
+str2.replace('L', 'l') returns a completely new object
+on which toLowerCase() is then invoked resulting in yet another object.
+All in all, on both sides of == sit different objects
+so it’s no wonder this line outputs false
+
+System.out.println(str1 == str1.replace('L','l').toLowerCase());
+str1 is made up of letters in lowercase from the very beginning,
+replace() (finding not a single match)
+returns reference to the same object.
+
+Then toLowerCase() also doesn't change the object
+and returns the same object.
+In the end, on either palm of == sits the same object.
+That returns true
+
+Q5131
+166
+Only interfaces and abstract classes
+can include abstract methods.
+
+Question 169
+Incorrect
+Q5142
+
+
+
+Which statements are true for both abstract classes and interfaces?
+
+
+
+(Choose four)
+
+
+
+Your selection is incorrect
+Both inherit java.lang.Object
+
+Your selection is correct
+Neither can be instantiated directly.
+
+Correct selection
+Both can contain static methods.
+
+Both can contain default methods.
+
+Your selection is correct
+Both can contain public static final variables.
+
+Your selection is correct
+Both can be extended using the extends keyword.
+
+All methods within them are assumed to be abstract.
+
+Overall explanation
+Topics: inheritance method modifiers Object class
+
+
+
+Explanation:
+
+An abstract class may contain concrete methods.
+
+Since Java 8, interfaces may also contain concrete methods
+
+in form of static or default methods.
+
+Although all variables in interfaces
+
+are assumed to be public static final,
+
+abstract classes may contain them as well.
+
+Both abstract classes and interfaces
+
+can be extended with the extends keyword.
+
+Only interfaces can contain default methods.
+
+Both abstract classes and interfaces can contain static methods.
+
+Both structures require a concrete subclass to be instantiated.
+
+Finally, though an instance of an object
+
+that implements an interface inherits java.lang.
+
+Object, the interface itself doesn’t.
+
+Otherwise, Java would support multiple inheritance
+
+for objects, which it doesn’t.
+
+
+Question 176
+Incorrect
+Q5062
+Arrays use the length variable to determine
+
+the number of elements.
+
+For an ArrayList
+
+size() would have been the answer.
+
+length() is used by String and StringBuilder.

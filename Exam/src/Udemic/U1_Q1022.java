@@ -1,10 +1,18 @@
 package Udemic;
 
 public class U1_Q1022 {
+    public static String doMsg(char x) {
+        return "Good Day!";
+    }
+    public static String doMsg(int y) {
+        return "Good Luck!";
+    }
     public static void main(String[] args) {
-        int num1 = 999;
-        int num2 = 9_9_9;
-        // int num3 = _9_99; underline 맨앞, 맨뒤 안됨
-        System.out.printf("%d \t %d",num1 , num2);
+        char x = 8;
+        System.out.println(x);         // Backspace character
+        int z = '8';
+        System.out.println(z);         // 56
+        System.out.println(doMsg(x));  // Good Day!
+        System.out.println(doMsg(z));  // Good Luck!
     }
 }

@@ -7,7 +7,7 @@ interface CanSwim {}
 class Amphibian implements CanSwim {}
 class Tadpole extends Amphibian {}
 
-public class U1_165 {
+public class U1_Q1141 {
     public static void main(String[] args) {
         List<Tadpole> tadpoles = new ArrayList<Tadpole>();
         for(Amphibian amphibian : tadpoles) {
