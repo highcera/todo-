@@ -1,7 +1,4 @@
 package Udemic;
-package Udemic;
-c
-
 
 final class U2_035 { // Home
     String name;
