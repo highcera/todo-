@@ -27,3 +27,161 @@ Predicate  boolean test(T t).
 
 Skip
 #123, 124, 125
+
+Attempt 3 - Incorrect
+Java API -11
+
+Q3181
+StringBuilder sb = new StringBuilder("The");
+ sb.insert(" Reloaded", sb.length());            // → sb.insert(sb.length(), " Reloaded");
+
+Q3174
+public static void secret(   mystery) {
+  mystery = mystery.replace("1", "8");  // String / Sb (3인자)
+  mystery.startsWith("paper");            // String 
+  String s = mystery.toString();          // all Java object
+}
+
+Q3175
+String builder = "54321";
+builder = builder.substring(4);           // 인자 1개 : 끝까지, builder ="1"
+System.out.println(builder.charAt(2));   // StringIndexOutOfBounds 
+
+Q3182
+public static void main(String[] args) {
+    String str = "String Beans Forever!";
+    // Line XXX: only a single line of code goes in here!
+} 
+
+System.out.println(str.delete(6,11));
+str = str.delete(6,11); System.out.println(str);         // Str delete, insert X, concat(), replace(), trim() O
+str.replace(" Bean",""); System.out.println(str);         // Str immutable
+System.out.println(new StringBuilder(str).remove(" Bean").toString());  // Sb remove() X  
+
+How many Lines of code, when inserted independently at Line XXX will make the code print Strings Forever!? // 0
+
+
+Q3191 output
+LocalDateTime d = LocalDateTime.of(2015, 5, 10, 11, 22, 33);
+Period p = Period.of(1, 2, 3);
+d = d.minus(p);
+DateTimeFormatter f = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);   // Even though d has both date and time, the formatter only outputs time.
+System.out.println(d.format(f));  // 11:22 AM
+
+
+Q3172
+public static void secret(   mystery) {
+  mystery.add("metal");          // Sb X 
+  String str = mystery.get(0);   // Sb X
+  int num = mystery.length();   // ArrayList X
+}
+ 
+ArrayList<String>, None of the above., ArrayList, StringBuilder
+
+StringBuilder needs append() and substring()
+ArrayList needs size()
+The add() and get() methods are available on ArrayList.
+However, ArrayList uses size rather than length to get the number of elements.
+If length was changed to size, ArrayList<String> would compile if put in the blank.
+ArrayList still wouldn’t compile in the blank because a cast would be needed to store the value in str.
+
+
+Q3187
+String s1 = "java";
+StringBuilder s2 = new StringBuilder("java");
+if (s1 == s2)                   // incomparable types: Java does not allow you to compare String and StringBuilder using ==
+  System.out.print("1");
+if (s1.equals(s2))
+  System.out.print("2");
+
+Q3185
+Let sb refer to a StringBuilder object. Which of the following fail(s) compilation? Choose two. 반대로 생각 착각
+
+sb -> sb.toString()
+StringBuilder sb -> sb.toString()
+
+Correct selection
+(StringBuilder sb) -> return sb.length();
+
+Your selection is incorrect
+(StringBuilder sb) -> { return sb.length(); }
+
+
+Q3188
+What is the result of the following code?
+
+int total = 0;
+StringBuilder letters = new StringBuilder("abcdefg");
+total += letters.substring(1, 2).length();            // 1
+total += letters.substring(6, 6).length();            // 0
+total += letters.substring(6, 5).length();            // StringIndexOutOfBoundsException
+System.out.println(total);
+
+The code does not compile.
+3
+1
+An exception is thrown.     // O
+7
+2
+
+Q3186
+Which of the following print out a date representing April 1, 2015?
+(Choose two)
+
+System.out.println(new LocalDate(2015, 3, 1));                 // X   
+System.out.println(LocalDate.of(2015, 3, 1));                    // X
+System.out.println(LocalDate.of(2015, Calendar.APRIL, 1));   // X
+System.out.println(new LocalDate(2015, 4, 1));                 // X
+System.out.println(LocalDate.of(2015, 4, 1));                    // O
+System.out.println(LocalDate.of(2015, Month.APRIL, 1));      // O
+
+
+Q3189
+Which of the following are true?
+(Choose two)
+
+If you call remove(0) using an empty ArrayList object, it will run successfully.
+If you call remove(0) using an empty ArrayList object, it will compile successfully.
+Two ArrayLists with the same content are equal.
+None of the above.
+Your selection is incorrect
+Two arrays with the same content are equal.
+
+
+========================================================================
+https://hujas.tistory.com/46
+
+Date api는 멀티스레드 환경에서 안전하지않다.
+LocalDateTime을 이용하자.
+
+LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));		//한국시간
+System.out.println(now);	//2021-02-23T11:23:45.889
+ 
+//시간을 -> yyyyMMddHHmmss로  format할 수 있음.
+DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss"); 
+System.out.println(now.format(dtf));	//20210223115035
+ 
+//문자를 -> date로 파싱하기
+LocalDateTime parse = LocalDateTime.parse("20210223114621",dtf);
+System.out.println("parse   : "+ parse);	//parse   : 2021-02-23T11:46:21
+ 
+//날짜 연산 (minus 동일)
+//새로운 객체를 반환해서 사용해야한다. now 객체가 바뀌는게 아님
+LocalDateTime plusSecond = now.plusSeconds(10);
+System.out.println("초 연산 : "+plusSecond);
+ 
+LocalDateTime plusMinutes = now.plusMinutes(10);
+System.out.println("분 연산 : "+plusMinutes);
+ 
+LocalDateTime plusHours = now.plusHours(10);
+System.out.println("시간 연산: "+plusMinutes);
+ 
+LocalDateTime plusDay = now.plusDays(20);
+System.out.println("day 연산: "+plusDay);
+ 
+LocalDateTime plusMonth = now.plusMonths(11);
+System.out.println("Month 연산: "+plusMonth);
+ 
+LocalDateTime plusYear = now.plusYears(3);
+System.out.println("Year 연산: "+plusYear);
+

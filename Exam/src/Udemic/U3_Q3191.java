@@ -11,8 +11,10 @@ public class U3_Q3191 {
             LocalDateTime.of(2015, 5, 10, 11, 22, 33);
         Period p = Period.of(1, 2, 3);
         d = d.minus(p);
-        DateTimeFormatter f =
-            DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
+        DateTimeFormatter f = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
         System.out.println(d.format(f));  // 11:22 AM
+        DateTimeFormatter g = DateTimeFormatter.ofPattern("yyyymmddhhmmss");
+            // ofLocalizedTime(FormatStyle.SHORT);
+        // System.out.println(d.format(g));  // 20142207112233 ?
     }
 }
