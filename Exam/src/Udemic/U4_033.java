@@ -6,7 +6,7 @@ class Parent{
         this.a = a;
     }
 }
-class U4_033 extends Parent {  // Child
+class U4_033 extends U2_Q2114_Parent {  // Child
     public static void main(String[] args) {}
     int b;
     public U4_033(int a, int b) {
