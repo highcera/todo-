@@ -314,9 +314,6 @@ googling : jquery hide show -> w3schools
 </body>
 
 
-
-
-
 [10차시] JavaScript 기초와 활용2: API 개념과 활용, 카카오 책 검색 API 만들기
 기존 정리 --------------------------------------------------------------------------------------------------------------
 ■ 10차시 JavaScript 기초와 활용2: API 개념과 활용, 카카오 책 검색 API 만들기
@@ -331,7 +328,79 @@ REST API 키	dedc734b4a4a204e98a9106efbb0c6af
 JavaScript 키	2ed11b5d69799b1c1e2d83bc7f32204f
 Admin 키	edeb42c00bcdd347f70a311539552c2d
 --------------------------------------------------------------------------------------------------------------
+API 가이드
 
+1. 요청 (request)
+1) 주소: https://dapi.kakao.com/v3/search/book
+2) 전송방식: GET
+3) 보낼 것
+    query 검색어 (필수)
+    sort 정렬 방식 (선택)
+    target 검색 대상 (선택) 
+    …
+
+2. 응답 (response)
+1) 형식: JSON
+2) 응답 의미 설명
+   title          도서 제목
+   contents    도서 소개
+   thumbnail 도서 표지 썸네일 URL
+
+jQuery AJAX 사용
+STEP1. HTLM 파일 생성하기
+vs code !+tab
+
+STEP2. jQuery CDN 가져오기
+body tag 위에 복사
+
+ctrl + K +F : 코드 자동정렬
+
+STEP4. 오픈 API 키 발급 받기
+kakao delvelopers
+앱만들기 내애플리케이션 API 발급
+
+
+STEP5. API 가이드 참고하여 코드 작성하기
+REST API > 책 검색
+requests  / respond 정보
+
+STEP6. console 창에 원하는 정보 표시하기
+alert
+
+console.log();
+F12
+
+< Javascript 기초와 활용 #2- 오픈 API 활용하기 >
+JSON 데이터 JavaScript 접근 방법
+
+1. 홍길동을 가져오려면?                      값을 가져오는 방법
+data.이름 => 홍길동                           =>.키이름
+
+data = 1 { 
+           2   "이름":"홍길동",
+           3   "나이": 25,
+           4   "성별": "여",
+           5   "주소": "서울특별시 양천구 목동",
+            6  "특기": ["농구", "도술"],
+            7  "가족관계": {"#": 2, "아버지": "홍판서", "어머니": "춘섬"},
+            8  "회사": "경기 수원시 팔달구 우만동"
+            9  }
+
+Store as Gobal Variable => 응답 받은 JSON을 console 창에서 다루기 위해 따로 저장해 두는 것
+
+STEP7. 내 아이트에 정보 표시하기
+jquery add html 구글링
+
+ .done(function (msg) {
+        console.log(msg.document[0]].title));
+        console.log(msg.document[0]].thumbnail)); 
+        $( "p" ).append( "<strong>" +msg.documents[0].title+"</strong>");
+        $( "p" ).append( "<image src='" +msg.documents[0].thumnail+"'/> );;
+      });
+
+지도와 같이 SDK => Software Development Kit 제공
+
+ 
 <body>
   <h1>내 사이트임 ㅎㅇ</h1>
   <script src="https://code.jquery.com/jquery-3.7.1.js" 
@@ -350,8 +419,28 @@ Admin 키	edeb42c00bcdd347f70a311539552c2d
   </script>
 </body>
 
+< Javascript 기초와 활용 #2- 오픈 API 활용하기 >
 
+      내 사이트                                얼굴 인식 API
+node      HTML                                               DB
+           Front-End                            Back-End     
+             (Client)                                (Server)
 
+HTML 파일에서 AJAX 요청을 보내게 되면 API key 공개되는 등 각종 보안적 위험 요소 있음 > 원천적으로 차단
+우회 자체적으로 Front-end용 서버를 하나 만들어서 여기에서 요청
+어떠한 서버는 보안상 이러한 서버를 필요로 하기도 함
+
+요약 정리
+
+API
+1) API
+   사용 규칙을 제공하는 것
+   Open API를 사용하면 편리하게 기능 구현 가능
+   API 가이드 요청, 응답 부분을 참고하여 이용
+
+2. Json
+   데이터의 형식
+   {키:값}으로 구성됨
 
 
 
@@ -378,65 +467,228 @@ M (Model : 데이터 담당), V (View : 화면을 담당), C (Controller : 전�
 ① http://jocoding.com/board 입력 router는 게시판 접근 인지 controller 전달 > controll 게시판이 해야할 일 저장 중, ② board에서 해야 할 일 수행 
 > controller 모델을 통해 DB에서 게시글 정보 가져옴 (③ 게시글 DB정보 가져옴) > 가져온 정보를 view를 통해 HTML, CSS 요소를 첨가 > 화면으로 전달 (④ board.html 전송)  
 
-Goormide 사용 > Rails 선택
-controller 생성 rails g controller 이름(lotto)
+Step1. 개발환경 설정하기 (구름IDE)
+ide.groom.io > 대시보드 > 새 컨테이너 생성
+Goormide 사용 > Rails 선택 > 지역, 공개범위, 소프트웨어 스택 선택 (rails) > 생성하기
+
+Step2. Controller 만들기
+rails g controller 이름(lotto)
  (app>controller>lotto_controller.rb / views>lotto 폴더 생성 확인) 
+
+Step3. View 만들기
 views>lotto 폴더> 파일생성 (index.html.erb), <h1> hihi </h1>
 lotto_controller에 view 이름 함수 추가 def index / end
-router 만들기 : config>routers.rb -> router 규칙 작성 -> get(/post) '/gogo', to: 'lotto#index'
+
+Step4. Router 설정하기 : config>routers.rb -> router 규칙 작성 -> get(/post) '/gogo', to: 'lotto#index'
 실행
+
+Stept5. 로또 번호 추천 알고리즘 만들기 (Controller)
+googling
+: ruby array of numbers → [*1..10]
+: ruby choose number in array → myArray.sample(x)
+: ruby sort arry → .sort
+
+Step 6. 화면 꾸며주기 (View)
+https://dhlottery.co.kr/gameResult.do?method=byWin&wiselog=C_A_1_1
+Alt + Shift + P
+F12 network / 새로고침 → CSS > common.css 모두 copy
+app > assets > stylesheets >application.css 에 paste
+
 
 https://ide.goorm.io/
 http://guides.rubyonrails.org/routing.html
 
+[조코딩의 요약정리]  <MVC 패턴 학습 및 로또 번호 추천 사이트 만들기>
+1. 프레임워크(Framework) - 편리한 개발을 위한 틀
+   구조, 사용 언어에 따라 정말 다양하게 있고 각자의 장단점이 있음
 
+2. MVC 패턴 - 백엔드에 쓰이는 일반적인 패턴
+    Model, View, Controller가 상호작용하여 백엔드를 구성함
+< 백엔드 프레임워크 구조 이해하기 (MVC 패턴) >
+                                                                  ④ board.html 전송
+                                                                              View
 
-조코딩의 요약정리 <MVC 패턴 학습 및 로또 번호 추천 사이트 만들기>
-1) 프레이워크(Framework)
-
-2) MVC 패턴 - 백엔드에 쓰이는 일반적인 패턴
-   Model, View, Controller가 상호작용하여 백엔드를 구성함
-
-
-
-
-
-기존 정리 -----------------------------------------------------------------------------------------------------------
-12차시 - 백엔드의 기초와 활용1: 로또 번호 추천 사이트 만들기
-
-
-
-
-
-                                                                                                
-get '/patients/:id', to: 'patients#show'
-
-googling : ruby array of numbers
-[*1..10]
-
-
-
---------------------------------------------------------------------------------------------------------
-
-백엔드 framework rubi on rails
-MVC
-구름 IDE
-rails g controller lotto
-rails g model post
-
-
+Front-End       ① http://jocoding.com/board     ② board에서 해야 할 일 수행                                        DB
+(Client Side)        →            Router            →              Controller                     Model                    (Database)
+                                                                                                               ③ 게시글 DB정보 가져옴
+                                                                                                     Back-End
+                                                                                                   (Server Side)
+                                                                                              
 
 [13차시] 백엔드의 기초와 활용2: 데이터베이스의 개념과 CRUD 게시판 만들기
+관계형DB, RDB / No SQL
 
-rdb
+[조코딩의 요약정리] <MVC 패턴 학습2. DB, CRUD로 게시판 만들기>
+1. Database -데이터를 효율적으로 저장하는 공간
+    RDB, NoSQL로 나눌 수 있고 다양한 DBMS 존재함
+2. CRUD - Create, Read, Update,Delete의 약자
+   데이터베이스에서 공통적으로 쓰이는 개념
+
+< 백엔드 DB, CRUD 기초와 활용 >
+                                            Column
+   DB              Primary Key          Row
+(Database)                                Table
+
+Rails - MVC, DB, CRUD 실습 
+Step0. CRUD 한방에 만들기
 rails g scaffold Post title:string content:string
-14 차시  세상에서 가장 쉬운 인공지능1 AI 과일도감 제작
-15 차시  세상에서 가장 쉬운 인공지능2 AI헬스 트레이너 제작
-16 차시  5분만에 만드는 스마트폰 앱: 웹뷰앱
-17 차시  3분만에 React Native로 만드는 안드로이드/아이폰 앱
-18 차시  주요 앱 마켓별 특징 비교 및 구글 플레이스토어 앱 출시하기
 
 
+Step1. 개발환경 설정하기 (구름IDE)
+ide.groom.io > 대시보드 > 새 컨테이너 생성
+Goormide 사용 > Rails 선택 > 지역, 공개범위, 소프트웨어 스택 선택 (rails) > 생성하기
+
+Step2. Controller, View 만들기
+rails g controller board index
+ (app>controller>lotto_controller.rb / views>lotto 폴더 생성 확인) 
+
+Controller에 index 연결, router.rb / index.html.erb 자동 생성
+lotto_controller에 view 이름 함수 추가 def index / end
+실행
+
+routers.rb 
+  get 'board/index' →
+  get '/board', to: 'board#index' 로 수정  
+
+Step3. Model 만들기
+rails g model post
+
+models > post.rb 생성됨
+db > migrate > 201XXXXXXXXX_create_post.rb
+activerecord migration 검색
+t.string : name → title
+t.text : description → content
+
+rails 5 migration data tpes 검색
+primary key 자동생성
+rails db:migrate
+
+router.rb
+Rails.application.routes.draw do
+	get '/board', to: 'board#index'
+	post '/creat', to: 'board#create'
+end
+
+Step4. Create
+html form tag sample
+
+<form action="/action_page.php" method="get">
+  <label for="fname">First name:</label>
+  <input type="text" id="fname" name="fname"><br><br>
+  <label for="lname">Last name:</label>
+  <input type="text" id="lname" name="lname"><br><br>
+  <input type="submit" value="Submit">
+</form>
+
+/create, post, title/content
+
+<form action="/create" method="post">
+  <label for="fname">First name:</label>
+  <input type="text" id="fname" name="title"><br><br>
+  <label for="lname">Last name:</label>
+  <input type="text" id="lname" name="content"><br><br>
+  <input type="submit" value="Submit">
+</form>
+
+ActionController::InvalidAuthenticityToken in BoardController#create
+generate AuthenticityToken on rails 검색
+   <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+form tag 내에 추가   
+
+https goormide에서 제공 rails는 https 적용X s 제거 후 실행
+
+RubyGems
+rails_db > gem 'rails_db', '~> 2.4', '>= 2.4.4'
+
+vendor > Gemfile 추가
+bundle install
+다시 실행 후 ~~/rails/db   DB 선정 data 시각적으로 확인 가능
+
+Stept5. Read 만들기
+	def index
+		@posts = Post.all
+  	end 
+
+rails each record 검색
+User.all.each do |user|
+  #the code here is called once for each user
+  # user is accessible by 'user' variable
+
+  # WARNING: User.all performs poorly with large datasets
+end
+
+Step 6. Update
+rails find record
+
+view > board 파일 생성
+edit.html.erb
+
+Step 6. Delete
+
+[board_controller.rb]
+class BoardController < ApplicationController
+  	def index
+		@posts = Post.all
+  	end 
+	def create
+		title1 = params[:title]
+		content1 = params[:content]
+		Post.create(title: title1, content: content1)
+		redirect_to '/board'
+  	end
+	def edit
+		@post = Post.find(params[:id])
+	end
+	def update
+		@post = Post.find(params[:id])
+		@post.title1 = params[:title]
+		@post.content1 = params[:content]
+		@post.save
+		redirect_to '/board'
+  	end
+	def delete
+		@post = Post.find(params[:id])
+		@post.destroy
+		redirect_to '/board'
+	end
+end
+
+[edit.html.erb]
+<form action="/update" method="post">
+	<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden"><label for="fname">First name:</label>
+	<input name="id" value="<%= @post.id %>" type="hidden">
+	제목: <input type="text" name="title" value="<%= @post.title %"><br>
+	내용: <input type="text" name="content" value="<%= @post.content %"><br>														
+	<input type="submit" value="Submit">
+</form>
+
+
+[index.html.erb]
+<form action="/create" method="post">
+	<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden"><label for="fname">First name:</label>
+	<input type="text" id="fname" name="title"><br><br>
+	<label for="lname">Last name:</label>
+	<input type="text" id="lname" name="content"><br><br>
+	<input type="submit" value="Submit">
+</form>
+<% @posts.each do |post| %>
+<hr>
+<h3>ID: <%= post.id %></h3>
+<h3>제목: <%= post.title %></h3>
+<p>내용: <%= post.content %>/p>
+<a href="/edit?id=<%= post.id %>">수정하기</a>
+<a href="/delete?id=<%= post.id %>">삭제하기</a>
+<hr>
+<% end %>
+
+[router.rb]
+Rails.application.routes.draw do
+	get '/board', to: 'board#index'
+	post '/create', to: 'board#create'
+	get '/edit', to: 'board#edit'
+	post '/update', to: 'board#update'
+	get '/delete', to: 'board#delete'
+end
 
 
 
@@ -444,37 +696,204 @@ rails g scaffold Post title:string content:string
 [14차시] 세상에서 가장 쉬운 인공지능1 AI 과일도감 제작
 
 
+[요약 정리]
+세상에서 가장 쉬운 인공지능 만들기
+1) 인공지능: 기계가 판단하는 것 (룰 기반 자동화 포함 넓은 개념)
+2) 머신러닝: 병시적인 규칙 없이 데이터를 통해 스스로 기계가 학습
+3) 빅데이터: 데이터가 많은 것
+4) Teachable Machine
+Google에서 만든 누구나 쉽게 인공지능을 활용할 수 있는 서비스
 
+teachablemachine.withgoogle.com
+Get started
+Image / Audio / Pose
+Image : 웹캠 / 이미지 업로드
+사과 / 토마토 학습 구분
+이미지 입력 후 training
+
+export model
+Tensorflow.js  / Tensorflow / Tensorflow Lite
+
+모델 파일 3개
+index.html
+javascript 예시 copy body에 paste
+mymodel folder애 파일을 넣어둠
+netlify deploy
+
+
+// run the webcam image through the image model
+async function predict() {
+// predict can take in an image, video or canvas html element
+const prediction = await model.predict(webcam.canvas);
+if(prediction[0].className == "apple" && prediction[0].probability.toFixed(2) == 1.00) {
+labelContainer.childNodes[0].innerHTML = "사과는 사과나무의 열매이다. 세계적으로 가장 널리 재배되는 육류품종 기
+} else if(prediction[1].className == "tomato" && prediction[1].probability.toFixed(2) == 1.00) {
+labelContainer.childNodes[0].innerHTML = "토마토는 가지목 가지과의 식물, 또는 그 열매를 말한다. 라틴아메리카가
+}else {
+labelContainer.childNodes[0].innerHTML = "알 수없음"
+
+// for (let i = 0; i < maxPredictions; i++) {
+// const classPrediction =
+// prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+// labelContainer.childNodes[i].innerHTML = classPrediction;
+
+netlify deploy 수정사항 반영
+
+export model > uploadshareable model)
+link (cloud) > 스마트폰에서도 가능
 
 
 [15차시] 세상에서 가장 쉬운 인공지능2 AI헬스 트레이너 제작
+Pose Projec + 카카오 음성 합성 API
+Transfer learning : 검증된 유명한 모델을 가져와서 우리가 만든 class를 추가
+       
+Step1. Teachable Machine 으로 Model 만들기
+stand / squat / bent 각각 쵤영
 
+Step2. Kakao 음성 합성 API로 음성 합성하기
+카카오 개발자 공식 홈페이지 developers.kakao.com
+cmd에서 실행할 수 있는 명령어 windows. 한글이 들어가면 전송이 잘 안됨
+MobaXterm > Home edition 이거 사용
 
+index.html
+14차시와 유사하게 진행
 
+async function loop(timestamp) {
+webcam.update(); // update the webcam frame
+await predict();
+window.requestAnimationFrame(loop);
+
+var status = "stand"
+var count = 0
+async function predict() {
+// Prediction #1: run input through posenet
+// estimatePose can take in an image, video or canvas html element
+const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
+// Predition
+const prediction = await model.predict(posenetOutput);
+if(predictlon[0].probability.toFixed(2) == 1.00)
+status = "stand"
+else if(prediction[1].probability.toFixed(2) == 1.00) {
+status = "squat"
+} else if(prediction[2].probability.toFixed(2) == 1.00) {
+status = "bent"
+
+for (let i = 0; i < maxPredictions; i++) {
+const classPrediction =
+prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+labelContainer.childNodes[i].innerHTML = classPrediction;
+
+javascript play audio 구글링
+
+}
+
+var status = "stand"
+var count = 0
+async function predict() {
+// Prediction #1: run input through posenet
+// estimatePose can take in an image, video or canvas html element
+const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
+// Prediction 2: run input through teachable machine classification model
+const prediction = await model.predict(posenetOutput);
+if(prediction[0].probability.toFixed(2) > 0.90) {
+if(status == "squat") {
+count++
+var audio = new Audio( count%10 + '.mp3');
+audio.play();
+
+status = "stand"
+} else if(prediction[1].probability.toFixed(2) == 1.00) {
+status = "squat"
+} else if(prediction[2].probability.toFixed(2) == 1.00) {
+if(status == "squat" | | status == "stand")
+var audio = new Audio('bent..mp3');
+audio.play();
+
+status = "bent"
+
+0.mp3 오류 10.mp3  0.mp3
+
+[요약 정리]
+세상에서 가장 쉬운 인공지능 만들기 2
+1. Transfer Learning
+    기존에 학습된 인공지능 모델을 활용하여 적은 데이터로 높은 성능의 모델
+만드는 것
+
+2. Teachable Machine Pose
+   포즈를 인식할 수 있는 인공지능 모델을 만들 수 있음
 
 
 [16차시] 5분만에 만드는 스마트폰 앱: 웹뷰앱
+1. 네이티브 앱 만들기 
+   안드로이드 : java, kotlin, android studio
+   ios : objective-C, Swift, Xcode
 
+ 2. 하이브리드 앱
+   react native, js, flutter, dart
 
+3. 웹뷰 이용
+   unity, C#, JS
+swing2app 사용
 
+Android  Android studio  / iOS Xcode
 
+조코딩의 요약정리 <5분만에 앱 만들기>
 
+1. 네이티브 앱 - 각각의 OS에 특화된 앱
+안드로이드 앱 : Java, Kotlin 언어로 Android Studio를 사용하여 제작
+아이폰 앱 : Objective-C, Swift 언어로 Xcode를 사용하여 제작
 
+2. 하이브리드 앱 - 하나의 언어로 제작한 여러 OS에 맞는 앱
+React-Native : JavaScript 언어로 Android, iOS 동시에 제작
+Flutter : Dart 언어로 Android, iOS 동시에 제작
+
+3. 웹뷰 앱 - 앱은 껍데기이고 내부적으로 웹을 동작시키는 앱
+웹 URL을 네이티브, 하이브리드, 기타 툴로 제작한 앱에 삽입
+
+실습 요망!!!1
+
+4. 기타 툴 이용
+MIT App Inventor (교육용), Unity (게임), 스윙투앱 (Drag&Drop) ©
 
 
 [17차시] 3분만에 React Native로 만드는 안드로이드/아이폰 앱
 
+별다른 개발없이 url 주소만 넣으면 앱을 완성
+http://animalface.site
+
+<이번 시간에 배울 것 - Android & iOS 앱 만들기 >
+
+1. 환경 설정
+- React-Native & Expo 개발 환경 설정(구름IDE)
+
+2. Android & iOS 앱 코딩하기 (3분)
+- 3분만에 WebView 앱 만들기
+
+3. 앱 마켓 출시 준비
+- 출시를 위한 설정, APK 파일 제작
+
+(다음 시간) 마켓 앱 등록, 스익화, 마케팅 등
+먼처 개발환경을 설정해주고
 
 
+groom, 앱설치 필요
+
+[요약 정리]
+React Native
+1) Android, iOS 앱을 동시에 만들 수 있는 크로스 플랫폼 프레임워크
+2) JavaScript 언어가 사용됨
 
 
 [18차시] 주요 앱 마켓별 특징 비교 및 구글 플레이스토어 앱 출시하기
 
+[요약 정리]
+주요 앱 마켓 특징 비교
+1) Android
+   Google Play Store: 최초 계정 등록비 $25 평생 이용 가능
+   One Store: 등록비 무료
 
-
-
-
-
+2. iOS
+   AppStore: 매년 등록비 $99 지불해야 함
 
 
 
