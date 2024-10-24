@@ -1,54 +1,22 @@
-# -*- coding: utf-8 -*-
-'''
-관련 포스팅
-https://blog.naver.com/zacra/223534417235
-
-위 포스팅을 꼭 참고하세요!!!
-
-하다가 잘 안되시면 계속 내용이 추가되고 있는 아래 FAQ를 꼭꼭 체크하시고
-
-주식/코인 자동매매 FAQ
-https://blog.naver.com/zacra/223203988739
-
-그래도 안 된다면 구글링 해보시고
-그래도 모르겠다면 클래스 댓글, 블로그 댓글, 단톡방( https://blog.naver.com/zacra/223111402375 )에 질문주세요! ^^
-
-
-'''
-import KIS_Common as Common
-import KIS_API_Helper_KR as KisKR
-import json
-import pprint
-import line_alert
-import time
-
-
 Common.SetChangeMode("VIRTUAL")
-
-#시간 정보를 읽는다
 time_info = time.gmtime()
-
 
 #정보리스트와 차수를 받아서 차수 정보(익절기준,진입기준)을 리턴한다!
 def GetSplitMetaInfo(DataList, number):
-    
     PickSplitMeta = None
     for infoData in DataList:
         if number == infoData["number"]:
             PickSplitMeta =  infoData
-            break
-            
+            break 
     return PickSplitMeta
 
 #파일로 저장관리되는 데이터를 읽어온다(진입가,진입수량)
 def GetSplitDataInfo(DataList, number):
-    
     PickSplitData = None
     for saveData in DataList:
         if number == saveData["Number"]:
             PickSplitData =  saveData
-            break
-            
+            break        
     return PickSplitData
 
 
@@ -89,23 +57,15 @@ InvestDataDict['stock_code'] = "329750" # 329750 TIGER 미국달러단기채권�
 InvestDataDict['invest_rate'] = 0.4
 TargetStockList.append(InvestDataDict)
 
-
 DivNum = 10.0 # 분할 수 설정!!!!! 즉 1차수 매수후 2차수부터 10차수까지 9계좌가 존재
-
-
-
-
-
 
 
 #혹시 이 봇을 장 시작하자 마자 돌린다면 20초르 쉬어준다.
 #그 이유는 20초는 지나야 오늘의 일봉 정보를 제대로 가져오는데
-#tm_hour가 0은 9시, 1은 10시를 뜻한다. 수능 등 10시에 장 시작하는 경우르 대비!
+#tm_hour가 0은 9시, 1은 10시를 뜻한다. 수능 등 10시에 장 시작하는 경우를 대비!
 if time_info.tm_hour in [0,1] and time_info.tm_min in [0,1]:
     time.sleep(20.0)
     
-    
-        
 #차수 정보가 들어간 데이터 리스트!
 InvestInfoDataList = list()
 
@@ -300,8 +260,11 @@ if IsMarketOpen == True and IsLP_OK == True:
 
                 break
                   
+
         #현재가
         CurrentPrice = KisKR.GetCurrentPrice(stock_code)
+
+
             
         #종목 데이터
         PickMagicDataInfo = None
@@ -356,10 +319,7 @@ if IsMarketOpen == True and IsLP_OK == True:
             
 
             if MagicDataInfo['StockCode'] == stock_code:
-                
-                
-                
-                
+            
                 df = Common.GetOhlcv("KR",stock_code, 200)  ### 일봉정보를 가져온다 200개!
 
                 #####################################

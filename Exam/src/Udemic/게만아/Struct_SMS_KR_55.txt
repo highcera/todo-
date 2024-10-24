@@ -1,0 +1,83 @@
+48 TargetStockList : 대상종목 code, 비율
+
+50 InvestDataDict = dict()
+78 InvestInfoDataList : 차수 정보 포함, stock_code / split_info_list 
+151 SplitInfoList : Number, EntryPrice, EntryAmt, IsBuy
+
+187 InvestInfoDict = dict()
+207 MagicNumberDataList : 파일로 관리
+	MagicNumberDataList - 대상 기종에 대해 - 기종별 10차수 정보 포함 + 누적 실현 손익
+	MagicNumberDataDict {'MagicDataList', 'RealizedPNL'}
+
+
+ 
+226 MyStockList
+
+281 MagicNumberDataDict = dict()
+    {'MagicDataList', 'IsReady' = True #오늘 장에서 매수 가능한지 플래그! }
+
+296 MagicDataList
+    MagicDataDict {'Number' # 차수, 'EntryPrice' #진입가격, 'EntryAmt' #진입수량, 'IsBuy' = False #매수 상태}
+
+  
+
+#차수 정보가 들어간 데이터 리스트!
+InvestInfoDataList = list()
+
+ InvestInfoDict = dict()
+    InvestInfoDict['stock_code'] = stock_code
+    InvestInfoDict['split_info_list'] = SplitInfoList
+	
+    InvestInfoDataList.append(InvestInfoDict)
+	
+	
+	
+for InvestInfo in InvestInfoDataList:
+
+Number, EntryPrice, EntryAmt, IsBuy
+MagicDataList = list()
+
+#사전에 정의된 데이터!
+for i in range(len(InvestInfo['split_info_list'])):
+	MagicDataDict = dict()
+	MagicDataDict['Number'] = i+1 # 차수
+	MagicDataDict['EntryPrice'] = 0 #진입가격
+	MagicDataDict['EntryAmt'] = 0   #진입수량
+	MagicDataDict['IsBuy'] = False   #매수 상태인지 여부
+	
+	MagicDataList.append(MagicDataDict)
+
+MagicNumberDataDict['MagicDataList'] = MagicDataList
+MagicNumberDataDict['RealizedPNL'] = 0 #종목의 누적 실현손익
+
+
+MagicNumberDataList.append(MagicNumberDataDict) #데이터를 추가 한다!
+	
+BOT_NAME = Common.GetNowDist() + "_SmartMagicSplitBot"	
+bot_file_path = "/var/autobot/KrStock_" + BOT_NAME + ".json"	
+
+매수후 진입시점, 수익률 등을 저장 관리할 파일 ####################
+MagicNumberDataList = list()
+MagicNumberDataList = json.load(json_file)
+
+
+MyStockList
+
+
+#투자할 종목! 예시.. 2개 종목 투자.
+TargetStockList = list()
+
+InvestDataDict = dict()
+InvestDataDict['stock_code'] = "458730" # 458730 TIGER 미국배당다우존스
+InvestDataDict['invest_rate'] = 0.6
+TargetStockList.append(InvestDataDict)
+
+InvestDataDict = dict()
+InvestDataDict['stock_code'] = "329750" # 329750 TIGER 미국달러단기채권액티브
+InvestDataDict['invest_rate'] = 0.4
+TargetStockList.append(InvestDataDict)
+
+
+DivNum = 10.0 # 분할 수 설정!!!!! 즉 1차수 매수후 2차수부터 10차수까지 9계좌가 존재
+
+
