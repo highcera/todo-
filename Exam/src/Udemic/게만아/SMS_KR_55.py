@@ -2,6 +2,8 @@ Common.SetChangeMode("VIRTUAL")
 time_info = time.gmtime()
 
 #정보리스트와 차수를 받아서 차수 정보(익절기준,진입기준)을 리턴한다!
+# InvestInfoDataList [{'stock_code':XX, 'split_info_list':[]}, ...]
+# 'split_info_list' [{"number":XX, "target_rate":XX, "trigger_rate":XX, "invest_money":XX}, ...] #차수, 목표수익률, 매수기준 손실률, 투자금액
 def GetSplitMetaInfo(DataList, number):
     PickSplitMeta = None
     for infoData in DataList:
@@ -11,6 +13,10 @@ def GetSplitMetaInfo(DataList, number):
     return PickSplitMeta
 
 #파일로 저장관리되는 데이터를 읽어온다(진입가,진입수량)
+#MagicNumberDataList→File_MND_List 변경 / MagicDataInfo의 list
+MagicDataInfo {"StockCode":XX, "StockName":XX", "IsReady":XX, "MagicDataList":[{"Number": 1, "EntryPrice":XX, "EntryAmt":XX, "IsBuy":XX}, ...}] 
+, ... ], "RealizedPNL":XX}
+              
 def GetSplitDataInfo(DataList, number):
     PickSplitData = None
     for saveData in DataList:
@@ -76,10 +82,10 @@ for stock_data in TargetStockList:
     print("################################################")
     print(KisKR.GetStockName(stock_code), " ", stock_code)
     
-    TotalInvestMoney = TotalMoney * stock_data['invest_rate']
+    StockInvestMoney = TotalMoney * stock_data['invest_rate']
     
-    FirstInvestMoney = TotalInvestMoney * 0.4 #1차수에 할당된 투자금 (이 금액이 다 투자되지는 않음 가변적으로 조절)
-    RemainInvestMoney = TotalInvestMoney * 0.6 #나머지 차수가 균등하게 쪼개서 투자할 총 금액!
+    FirstInvestMoney = StockInvestMoney * 0.4 #1차수에 할당된 투자금 (이 금액이 다 투자되지는 않음 가변적으로 조절)
+    RemainInvestMoney = StockInvestMoney * 0.6 #나머지 차수가 균등하게 쪼개서 투자할 총 금액!
     
     print("1차수 할당 금액 ", FirstInvestMoney)
     print("나머지 차수 할당 금액 ", RemainInvestMoney)
@@ -135,10 +141,6 @@ for stock_data in TargetStockList:
             now_step = step
             break
     print("현재 구간 ",now_step)
-    
-
-
-
 
     SplitInfoList = list()
     
@@ -182,8 +184,6 @@ for stock_data in TargetStockList:
         else:
             SplitInfoList.append({"number":number, "target_rate":target_rate , "trigger_rate":trigger_rate , "invest_money":round(RemainInvestMoney / (DivNum-1))}) #차수, 목표수익률, 매수기준 손실률 ,투자금액
         
-
-
     InvestInfoDict = dict()
     InvestInfoDict['stock_code'] = stock_code
     InvestInfoDict['split_info_list'] = SplitInfoList
@@ -192,31 +192,24 @@ for stock_data in TargetStockList:
     
 pprint.pprint(InvestInfoDataList)
 
-
-#'''
-#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$#
 ############# 매수후 진입시점, 수익률 등을 저장 관리할 파일 ####################
-MagicNumberDataList = list()
+File_MND_List = list()
 #파일 경로입니다.
 bot_file_path = "/var/autobot/KrStock_" + BOT_NAME + ".json"
 
 try:
     #이 부분이 파일을 읽어서 리스트에 넣어주는 로직입니다. 
     with open(bot_file_path, 'r') as json_file:
-        MagicNumberDataList = json.load(json_file)
+        File_MND_List = json.load(json_file)
 
 except Exception as e:
     print("Exception by First")
-################################################################
-#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$#
-#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$#
-#'''
 
 
 print("--------------내 보유 주식---------------------")
 #그리고 현재 이 계좌에서 보유한 주식 리스트를 가지고 옵니다!
-MyStockList = KisKR.GetMyStockList()
-#pprint.pprint(MyStockList)
+AccStockList = KisKR.GetMyStockList()
+#pprint.pprint(AccStockList)
 print("--------------------------------------------")
     
 
@@ -249,7 +242,7 @@ if IsMarketOpen == True and IsLP_OK == True:
 
 
         #매수된 상태라면 정보를 넣어준다!!!
-        for my_stock in MyStockList:
+        for my_stock in AccStockList:
             if my_stock['StockCode'] == stock_code:
                 stock_name = my_stock['StockName']
                 stock_amt = int(my_stock['StockAmt'])
@@ -257,34 +250,27 @@ if IsMarketOpen == True and IsLP_OK == True:
                 stock_eval_totalmoney = float(my_stock['StockNowMoney'])
                 stock_revenue_rate = float(my_stock['StockRevenueRate'])
                 stock_revenue_money = float(my_stock['StockRevenueMoney'])
-
                 break
-                  
 
         #현재가
         CurrentPrice = KisKR.GetCurrentPrice(stock_code)
-
-
             
         #종목 데이터
         PickMagicDataInfo = None
 
         #저장된 종목 데이터를 찾는다
-        for MagicDataInfo in MagicNumberDataList:
+        for MagicDataInfo in File_MND_List:
             if MagicDataInfo['StockCode'] == stock_code:
                 PickMagicDataInfo = MagicDataInfo
                 break
 
         #PickMagicDataInfo 이게 없다면 매수되지 않은 처음 상태이거나 이전에 손으로 매수한 종목인데 해당 봇으로 돌리고자 할 때!
         if PickMagicDataInfo == None:
-
             MagicNumberDataDict = dict()
-            
             MagicNumberDataDict['StockCode'] = stock_code #종목 코드
             MagicNumberDataDict['StockName'] = stock_name #종목 이름
             MagicNumberDataDict['IsReady'] = True #오늘 장에서 매수 가능한지 플래그!
 
-           
             MagicDataList = list()
             
             #사전에 정의된 데이터!
@@ -300,33 +286,25 @@ if IsMarketOpen == True and IsLP_OK == True:
             MagicNumberDataDict['MagicDataList'] = MagicDataList
             MagicNumberDataDict['RealizedPNL'] = 0 #종목의 누적 실현손익
 
-
-            MagicNumberDataList.append(MagicNumberDataDict) #데이터를 추가 한다!
-
+            File_MND_List.append(MagicNumberDataDict) #데이터를 추가 한다!
 
             msg = stock_code + " 스마트스플릿 투자 준비 완료!!!!!"
             print(msg) 
             line_alert.SendMessage(msg) 
 
-
             #파일에 저장
             with open(bot_file_path, 'w') as outfile:
-                json.dump(MagicNumberDataList, outfile)
+                json.dump(File_MND_List, outfile)
 
 
-        #이제 데이터(MagicNumberDataList)는 확실히 있을 테니 본격적으로 트레이딩을 합니다!
-        for MagicDataInfo in MagicNumberDataList:
-            
-
+        #이제 데이터(File_MND_List)는 확실히 있을 테니 본격적으로 트레이딩을 합니다!
+        for MagicDataInfo in File_MND_List:          
             if MagicDataInfo['StockCode'] == stock_code:
-            
+       
                 df = Common.GetOhlcv("KR",stock_code, 200)  ### 일봉정보를 가져온다 200개!
-
-                #####################################
+                
                 prevOpen = df['open'].iloc[-2] #전일 시가
                 prevClose = df['close'].iloc[-2] #전일 종가
-                
-                ### 이동평균선구하기 ###
                 
                 Ma5_Before = Common.GetMA(df,5,-3) #전전일 기준
                 Ma5 = Common.GetMA(df,5,-2) #전일 기준
@@ -344,14 +322,10 @@ if IsMarketOpen == True and IsLP_OK == True:
                                 MagicDataInfo['RealizedPNL'] = 0
                                 
                                 #1차수를 봇이 매수 안했는데 잔고에 수량이 있다면?
-                                if stock_amt > 0:
-                                    
-                                    
+                                if stock_amt > 0:                 
                                     MagicData['IsBuy'] = True
                                     MagicData['EntryPrice'] = stock_avg_price #현재가로 진입했다고 가정합니다!
                                     MagicData['EntryAmt'] = stock_amt
-
-
 
                                     msg = stock_name + "("+stock_code + ") 스마트스플릿 1차 투자를 하려고 했는데 잔고가 있어서 이를 1차투자로 가정하게 세팅했습니다!"
                                     print(msg) 
@@ -383,9 +357,9 @@ if IsMarketOpen == True and IsLP_OK == True:
                                     
                        
                                     #매매가 일어났으니 보유수량등을 리프레시 한다!
-                                    MyStockList = KisKR.GetMyStockList()
+                                    AccStockList = KisKR.GetMyStockList()
                                     #매수된 상태라면 정보를 넣어준다!!!
-                                    for my_stock in MyStockList:
+                                    for my_stock in AccStockList:
                                         if my_stock['StockCode'] == stock_code:
                                             stock_amt = int(my_stock['StockAmt'])
                                             stock_avg_price = float(my_stock['StockAvgPrice'])
@@ -395,10 +369,9 @@ if IsMarketOpen == True and IsLP_OK == True:
                                             break
                                 #파일에 저장
                                 with open(bot_file_path, 'w') as outfile:
-                                    json.dump(MagicNumberDataList, outfile)   
+                                    json.dump(File_MND_List, outfile)   
                             
                     else:
-         
                         if stock_amt == 0: #잔고가 0이라면 차수 매매는 없는거니깐 초기화!
                             MagicData['IsBuy'] = False
                             MagicData['EntryAmt'] = 0
@@ -406,19 +379,14 @@ if IsMarketOpen == True and IsLP_OK == True:
 
                             #파일에 저장
                             with open(bot_file_path, 'w') as outfile:
-                                json.dump(MagicNumberDataList, outfile)
-            
-            
-                
-                
+                                json.dump(File_MND_List, outfile)     
                  
                 #매수된 차수가 있다면 수익률을 체크해서 매도하고, 매수 안된 차수도 체크해서 매수한다.
                 for MagicData in MagicDataInfo['MagicDataList']:
-                    
                 
                     #해당 차수의 정보를 읽어온다.
                     PickSplitMeta = GetSplitMetaInfo(InvestInfo['split_info_list'],MagicData['Number'])
-                        
+                    #{"Number": 1, "EntryPrice": 12215, "EntryAmt": 37, "IsBuy": true},     
                     #매수된 차수이다.
                     if MagicData['IsBuy'] == True:
                         
@@ -455,7 +423,6 @@ if IsMarketOpen == True and IsLP_OK == True:
                                 
                             print(msg) 
                             line_alert.SendMessage(msg)
-                            
 
                             #1차수 매도라면 레디값을 False로 바꿔서 오늘 1차 매수가 없도록 한다!
                             if MagicData['Number'] == 1:
@@ -463,62 +430,43 @@ if IsMarketOpen == True and IsLP_OK == True:
 
                             #파일에 저장
                             with open(bot_file_path, 'w') as outfile:
-                                json.dump(MagicNumberDataList, outfile)
-                                
-                                
+                                json.dump(File_MND_List, outfile)
                                 
                             #매매가 일어났으니 보유수량등을 리프레시 한다!
-                            MyStockList = KisKR.GetMyStockList()
+                            AccStockList = KisKR.GetMyStockList()
                             #매수된 상태라면 정보를 넣어준다!!!
-                            for my_stock in MyStockList:
+                            for my_stock in AccStockList:
                                 if my_stock['StockCode'] == stock_code:
                                     stock_amt = int(my_stock['StockAmt'])
                                     stock_avg_price = float(my_stock['StockAvgPrice'])
                                     stock_eval_totalmoney = float(my_stock['StockNowMoney'])
                                     stock_revenue_rate = float(my_stock['StockRevenueRate'])
                                     stock_revenue_money = float(my_stock['StockRevenueMoney'])
-                                    break
-                                
-                                
-                                
+                                    break             
                         
                     #매수아직 안한 차수!
                     else:
-                        
                         if MagicData['Number'] > 1:
-                            
                             #이전차수 정보를 읽어온다.
                             PrevMagicData = GetSplitDataInfo(MagicDataInfo['MagicDataList'],MagicData['Number'] - 1)
                   
                             if PrevMagicData['IsBuy'] == True:
-                                
                                 #이전 차수 수익률을 구한다!
                                 prevRate = (CurrentPrice - PrevMagicData['EntryPrice']) / PrevMagicData['EntryPrice'] * 100.0
-                                    
-                                    
                                 print(stock_name,"(",stock_code, ") ", MagicData['Number'], "차 진입을 위한 ",MagicData['Number']-1,"차 수익률 ", round(prevRate,2) , "% 트리거 수익률", PickSplitMeta['trigger_rate'], "%")
 
-
-
-                                AdditionlCondition = True
-                                
-                                if MagicData['Number'] % 2 == 1: #홀수 차수일 경우
-                                    
-                                    if prevOpen < prevClose and (prevClose >= Ma5 or Ma5_Before <= Ma5):
-                                        AdditionlCondition = True
-                                    else:
-                                        AdditionlCondition = False
-                                        
-                                    
-                                else: #짝수 차수일 경우
-                                    AdditionlCondition = True
-                                    
-                                
+                                #AdditionlCondition = True
+                                #if MagicData['Number'] % 2 == 1: #홀수 차수일 경우
+                                #    if prevOpen < prevClose and (prevClose >= Ma5 or Ma5_Before <= Ma5):
+                                #        AdditionlCondition = True
+                                #    else:
+                                #        AdditionlCondition = False
+                                #else: #짝수 차수일 경우
+                                #    AdditionlCondition = True
 
                                 #현재 손실률이 트리거 손실률보다 낮다면
-                                if prevRate <= PickSplitMeta['trigger_rate'] and AdditionlCondition == True:
-                                    
-
+                                if prevRate <= PickSplitMeta['trigger_rate'] # and AdditionlCondition == True:
+                      
                                     #투자금을 현재가로 나눠서 매수 가능한 수량을 정한다.
                                     BuyAmt = int(PickSplitMeta['invest_money'] / CurrentPrice)
                                     
@@ -526,7 +474,6 @@ if IsMarketOpen == True and IsLP_OK == True:
                                     if BuyAmt < 1:
                                         BuyAmt = 1
 
-                                    
                                     #매수주문 들어감!
                                     pprint.pprint(KisKR.MakeBuyLimitOrder(stock_code,BuyAmt,CurrentPrice*1.01))
                                     
@@ -536,20 +483,16 @@ if IsMarketOpen == True and IsLP_OK == True:
 
                                     #파일에 저장
                                     with open(bot_file_path, 'w') as outfile:
-                                        json.dump(MagicNumberDataList, outfile)
-                                        
+                                        json.dump(File_MND_List, outfile)
                                         
                                     msg = stock_name + "("+stock_code + ") 스마트스플릿 "+str(MagicData['Number'])+"차 매수 완료! 이전 차수 손실률" + str(PickSplitMeta['trigger_rate']) +"% 만족" 
                                     print(msg) 
                                     line_alert.SendMessage(msg)
                                     
-                                    
-                                    
-                                    
                                     #매매가 일어났으니 보유수량등을 리프레시 한다!
-                                    MyStockList = KisKR.GetMyStockList()
+                                    AccStockList = KisKR.GetMyStockList()
                                     #매수된 상태라면 정보를 넣어준다!!!
-                                    for my_stock in MyStockList:
+                                    for my_stock in AccStockList:
                                         if my_stock['StockCode'] == stock_code:
                                             stock_amt = int(my_stock['StockAmt'])
                                             stock_avg_price = float(my_stock['StockAvgPrice'])
@@ -557,9 +500,6 @@ if IsMarketOpen == True and IsLP_OK == True:
                                             stock_revenue_rate = float(my_stock['StockRevenueRate'])
                                             stock_revenue_money = float(my_stock['StockRevenueMoney'])
                                             break
-                     
-                     
-                     
 
                 #'''
                 IsFullBuy = True #풀매수 상태!
@@ -572,11 +512,13 @@ if IsMarketOpen == True and IsLP_OK == True:
                         
                 #풀매수 상태라면
                 if IsFullBuy == True:
-                    
-                
                     #마지막 차수 정보를 얻어온다.
                     LastSplitMeta = GetSplitMetaInfo(InvestInfo['split_info_list'],int(DivNum))
+                    #'split_info_list' : [{"number":1, "target_rate":XX, "trigger_rate":XX, "invest_money":XX}, ...]
+                    #차수, 목표수익률, 매수기준 손실률 ,투자금액
+
                     LastMagicData = GetSplitDataInfo(MagicDataInfo['MagicDataList'],int(DivNum))
+                    # File_MND_List → 인출 MagicDataInfo  # "MagicDataList" : [{"Number": 1, "EntryPrice": 12215, "EntryAmt": 37, "IsBuy": true}, ...] 
                 
                     #마지막 차수의 손익률
                     LastRate = (CurrentPrice - LastMagicData['EntryPrice']) / LastMagicData['EntryPrice'] * 100.0
@@ -589,8 +531,6 @@ if IsMarketOpen == True and IsLP_OK == True:
                         line_alert.SendMessage(msg)
                         
                         SecondMagicData = GetSplitDataInfo(MagicDataInfo['MagicDataList'],2)
-                        
-
                         SellAmt = SecondMagicData['EntryAmt']
                         
                         IsOver = False
@@ -599,31 +539,24 @@ if IsMarketOpen == True and IsLP_OK == True:
                             SellAmt = stock_amt
                             IsOver = True
                     
-                        
                         pprint.pprint(KisKR.MakeSellLimitOrder(stock_code,SellAmt,CurrentPrice*0.99))
-                        
                         
                         SecondMagicData['IsBuy'] = False
                         MagicDataInfo['RealizedPNL'] += (stock_revenue_money * SellAmt/stock_amt)
                         
-                        
                         msg = stock_name + "("+stock_code + ") 스마트스플릿 풀매수 상태여서 2차 수량 손절 완료! " + str(SellAmt) + "주 매도!"
                         
                         if IsOver == True:
-                            msg = stock_name + "("+stock_code + ") 스마트스플릿 풀매수 상태여인데 1차수 매도할 수량이 보유 수량보다 많은 상태라 모두 매도함!" + str(SellAmt) + "주 매도!"
+                            msg = stock_name + "("+stock_code + ") 스마트스플릿 풀매수 상태인데 1차수 매도할 수량이 보유 수량보다 많은 상태라 모두 매도함!" + str(SellAmt) + "주 매도!"
                             
                         print(msg) 
                         line_alert.SendMessage(msg)
-                        
-                        
                     
                         for i in range(int(DivNum)):
-                            
                             Number = i + 1
                             
                             if Number >= 2: 
                                 data = MagicDataInfo['MagicDataList'][i]
-        
                                 if Number == int(DivNum):
                                     data['IsBuy'] = False
                                     data['EntryAmt'] = 0
@@ -645,7 +578,7 @@ if IsMarketOpen == True and IsLP_OK == True:
 
                         #파일에 저장
                         with open(bot_file_path, 'w') as outfile:
-                            json.dump(MagicNumberDataList, outfile)
+                            json.dump(File_MND_List, outfile)
                             
                                 
                 #'''                                   
@@ -653,18 +586,18 @@ if IsMarketOpen == True and IsLP_OK == True:
 
 else:
     #장이 끝나고 1차수 매매 가능하게 True로 변경
-    for StockInfo in MagicNumberDataList:
+    for StockInfo in File_MND_List:
         StockInfo['IsReady'] = True
 
 
     #파일에 저장
     with open(bot_file_path, 'w') as outfile:
-        json.dump(MagicNumberDataList, outfile)
+        json.dump(File_MND_List, outfile)
         
     
 
 
-for MagicDataInfo in MagicNumberDataList:
+for MagicDataInfo in File_MND_List:
     print(MagicDataInfo['StockName'],"(",MagicDataInfo['StockCode'] ,") 누적 실현 손익:", MagicDataInfo['RealizedPNL'])
     
-#pprint.pprint(MagicNumberDataList)
+#pprint.pprint(File_MND_List)

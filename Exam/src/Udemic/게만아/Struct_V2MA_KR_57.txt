@@ -1,0 +1,71 @@
+39 InvestStockList - 반영할 기종 정보
+[{"stock_code", "small_ma", "big_ma", "invest_rate"}, ... ]
+
+
+53 StockInvestList - 화일 관리  → FileStockList #'Status' Buy에 해당 stock만 저장
+
+
+
+67 MyPortfolioList ← InvestStockList, 신규 key 항목 포함
+   asset = dict() {'stock_code', 'stock_name', 'small_ma', 'big_ma', 'stock_target_rate', 'stock_rebalance_amt', 'status', }
+
+82 MyStockList = KisKR.GetMyStockList()
+   MyStockList → AccStockList
+88 stock_df_list
+   df = Common.GetOhlcv("KR", stock_code,300) 
+   combined_df
+   # 사용방법 : 최종일, 해당 종목의 df df만 활용
+   stock_data = combined_df[(combined_df.index == date) & (combined_df['stock_code'] == stock_code)] 
+
+141 TodayRebalanceList
+    AccStockList 에서 해당 종목의 매수된 잔고 stock_amt 가져옴
+	NowClosePrice, small_ma, big_ma
+	
+	# 이평선 판단
+	if stock_code in FileStockList and stock_amt > 0:
+            print(stock_name , " " , stock_code, " 보유중... 매도 조건 체크!!")
+            
+            if stock_data[str(small_ma)+'ma_before'].values[0] < stock_data[str(big_ma)+'ma_before'].values[0] and stock_data[str(small_ma)+'ma_before2'].values[0] > stock_data[str(small_ma)+'ma_before'].values[0]:
+                Is_Rebalance_Go = True
+                
+                SellRate = FixRate + (stock_data['Average_Momentum'].values[0] * DynamicRate) 
+                                
+                stock_info['stock_target_rate'] *= SellRate
+                stock_info['status'] = 'SELL'
+                print(stock_name , " " , stock_code, " 매도조건 만족!!!", stock_info['stock_target_rate']*100, "% 비중을 맞춰서 매매해야 함!")
+                
+                TodayRebalanceList.append(stock_code)
+           
+        if stock_code not in FileStockList: 
+            print(stock_name , " " , stock_code, " 전략의 매수 상태가 아님")
+            if stock_data[str(small_ma)+'ma_before'].values[0] > stock_data[str(big_ma)+'ma_before'].values[0] and stock_data[str(small_ma)+'ma_before2'].values[0] < stock_data[str(small_ma)+'ma_before'].values[0]:
+                Is_Rebalance_Go = True
+                stock_info['status'] = 'BUY'
+                print(stock_name , " " , stock_code, " 매수조건 만족!!!", stock_info['stock_target_rate']*100, "% 비중을 맞춰서 매매해야 함!")
+                
+                TodayRebalanceList.append(stock_code)
+				
+				
+				#오늘 리밸런싱 대상이 아닌 종목인데 보유비중이 한개도 없다???
+    if stock_code not in TodayRebalanceList:
+        if stock_amt == 0:
+            stock_target_rate *= FixRate #보유하고자 했던 고정비중은 매수하도록 한다!!
+            stock_info['status'] = 'BUY_S'
+            msg = PortfolioName + " 투자 비중이 없어 "+ stock_name + " " + stock_code+" 종목의 할당 비중의 1/10을 투자하도록 함!"
+            print(msg)
+            line_alert.SendMessage(msg)
+			
+			
+			
+FileStockList 중 TodayRebalanceList 이므로 InvestStockList에 새로 추가된 기종은 해당안됨
+FielStockList에 저장되었지만 잔고가 없음???
+    if stock_code not in TodayRebalanceList:
+        if stock_amt == 0:
+		
+		
+		Sell 삭제, Buy 추가
+		if stock_info['status'] == 'SELL':
+            FileStockList.remove(stock_code)
+            line_alert.SendMessage(PortfolioName + " " + stock_name + " " + stock_code + " 전략 미보유 처리!")
+            
+			
