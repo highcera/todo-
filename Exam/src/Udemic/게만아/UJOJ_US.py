@@ -1,9 +1,10 @@
-Common.SetChangeMode("VIRTUAL")
+#계좌 선택.. "VIRTUAL" 는 모의 계좌!
+Common.SetChangeMode("VIRTUAL") #REAL or VIRTUAL
+
+#시간 정보를 읽는다
 time_info = time.gmtime()
 
 #정보리스트와 차수를 받아서 차수 정보(익절기준,진입기준)을 리턴한다!
-# InvestInfoDataList [{'stock_code':XX, 'split_info_list':[]}, ...]
-# 'split_info_list' [{"number":XX, "target_rate":XX, "trigger_rate":XX, "invest_money":XX}, ...] #차수, 목표수익률, 매수기준 손실률, 투자금액
 def GetSplitMetaInfo(DataList, number):
     PickSplitMeta = None
     for infoData in DataList:
@@ -13,10 +14,6 @@ def GetSplitMetaInfo(DataList, number):
     return PickSplitMeta
 
 #파일로 저장관리되는 데이터를 읽어온다(진입가,진입수량)
-#MagicNumberDataList→File_MND_List 변경 / MagicDataInfo의 list
-MagicDataInfo {"StockCode":XX, "StockName":XX", "IsReady":XX, "MagicDataList":[{"Number": 1, "EntryPrice":XX, "EntryAmt":XX, "IsBuy":XX}, ...}] 
-, ... ], "RealizedPNL":XX}
-              
 def GetSplitDataInfo(DataList, number):
     PickSplitData = None
     for saveData in DataList:
@@ -25,148 +22,46 @@ def GetSplitDataInfo(DataList, number):
             break        
     return PickSplitData
 
-BOT_NAME = Common.GetNowDist() + "_SmartMagicSplitBot"
+BOT_NAME = Common.GetNowDist() + "_UJOJ_US"
 
 #계좌 잔고를 가지고 온다!
-Balance = KisKR.GetBalance()
+Balance = KisUS.GetBalance()
 
 print("--------------내 보유 잔고---------------------")
 pprint.pprint(Balance)
 print("--------------------------------------------")
 
-InvestRate = 0.3
+#총 평가금액에서 해당 봇에게 할당할 총 금액비율 1.0 = 100%  0.5 = 50%
+InvestRate = 0.5
 
-#기준이 되는 내 총 평가금액에서 투자비중을 곱해서 나온 포트폴리오에 할당된 돈!! 
+#기준이 되는 내 총 평가금액에서 투자비중을 곱해서 나온 포트폴리오에 할당된 돈!!
 TotalMoney = float(Balance['TotalMoney']) * InvestRate
-print("총 포트폴리오에 할당된 투자 가능 금액 : ", TotalMoney)
+print("총 포트폴리오에 할당된 투자 가능 금액 : $", TotalMoney)
 
-#투자할 종목! 예시.. 2개 종목 투자.
 TargetStockList = list()
 
-InvestDataDict = dict()
-InvestDataDict['stock_code'] = "458730" # 458730 TIGER 미국배당다우존스
-InvestDataDict['invest_rate'] = 0.6
-TargetStockList.append(InvestDataDict)
+TargetStockList.append({"stock_code":"TQQQ", "small_ma":4 , "big_ma":53, "invest_rate":0.5}) 
+TargetStockList.append({"stock_code":"QLD", "small_ma":5, "big_ma":55, "invest_rate":0.25}) 
+TargetStockList.append({"stock_code":"QQQ", "small_ma":7, "big_ma":165, "invest_rate":0.3}) 
+### invest rate 가변 수정 필요 
 
-InvestDataDict = dict()
-InvestDataDict['stock_code'] = "329750" # 329750 TIGER 미국달러단기채권액티브
-InvestDataDict['invest_rate'] = 0.4
-TargetStockList.append(InvestDataDict)
+DivNum = 4.0
 
-DivNum = 10.0 # 분할 수 설정!!!!! 즉 1차수 매수후 2차수부터 10차수까지 9계좌가 존재
-
-#혹시 이 봇을 장 시작하자 마자 돌린다면 20초르 쉬어준다.
-#그 이유는 20초는 지나야 오늘의 일봉 정보를 제대로 가져오는데
-#tm_hour가 0은 9시, 1은 10시를 뜻한다. 수능 등 10시에 장 시작하는 경우를 대비!
 if time_info.tm_hour in [0,1] and time_info.tm_min in [0,1]:
     time.sleep(20.0)
-    
+
 #차수 정보가 들어간 데이터 리스트!
 InvestInfoDataList = list()
 
 for stock_data in TargetStockList:
-    stock_code = stock_data['stock_code']
-    print(KisKR.GetStockName(stock_code), " ", stock_code)
+    SplitInfoList.append({"number":1, "target_rate":target_rate * 2.0 , "trigger_rate":None , "invest_money":round(FinalFirstMoney)}) #차수, 목표수익률, 매수기준 손실률 (1차수는 이 정보가 필요 없다),투자금액
+    ### 차수별 금액 로직 추가 @home
     
-    StockInvestMoney = TotalMoney * stock_data['invest_rate']
-    FirstInvestMoney = StockInvestMoney * 0.4 #1차수에 할당된 투자금 (이 금액이 다 투자되지는 않음 가변적으로 조절)
-    RemainInvestMoney = StockInvestMoney * 0.6 #나머지 차수가 균등하게 쪼개서 투자할 총 금액!
-    
-    print("1차수 할당 금액 ", FirstInvestMoney)
-    print("나머지 차수 할당 금액 ", RemainInvestMoney)
-
-    df = Common.GetOhlcv("KR",stock_code, 200)  ### 일봉정보를 가져온다 200개!
-
-    #####################################
-    prevClose = df['close'].iloc[-2] #전일 종가
-    
-    ### 이동평균선구하기 ###
-    
-    Ma5_Before = Common.GetMA(df,5,-3) #전전일 기준
-    Ma5 = Common.GetMA(df,5,-2) #전일 기준
-    
-    Ma20_Before = Common.GetMA(df,20,-3) #전전일 기준
-    Ma20 = Common.GetMA(df,20,-2) #전일 기준
-    
-    Ma60_Before = Common.GetMA(df,60,-3) #전전일 기준
-    Ma60 = Common.GetMA(df,60,-2) #전일 기준
-    #####################################
-
-    min_price = df['close'].min()
-    max_price = df['close'].max()
-    
-    gap = max_price - min_price
-    step_gap = gap / DivNum
-
-    percent_gap = round((gap / min_price) * 100,2)
-    
-    print("최근 200개 캔들 최저가 ", min_price)
-    print("최근 200개 캔들 최고가 ", max_price)
-    
-    print("최고 최저가 차이  ", gap)
-    print("각 간격 사이의 갭 ", step_gap)
-    print("분할의 기준이 되는 갭의 크기:",percent_gap ,"%")
-    
-    target_rate = round(percent_gap / DivNum,2)
-    trigger_rate = -round((percent_gap / DivNum),2)
-
-    print("각 차수의 목표 수익률: ",target_rate ,"%")
-    print("각 차수의 진입 기준이 되는 이전 차수 손실률:",trigger_rate ,"%")
-    
-    #현재 구간을 구할 수 있다.
-    now_step = DivNum
-
-    for step in range(1,int(DivNum)+1):
-        if prevClose < min_price + (step_gap * step):
-            now_step = step
-            break
-    print("현재 구간 ",now_step)
-
-    SplitInfoList = list()
-    
-    for i in range(int(DivNum)):
-        number = i+1
-        
-        #1차수라면
-        if number == 1:    
-            FinalInvestRate = 0
-            
-            #이동평균선에 의해 최대 60%!!
-            if prevClose >= Ma5:
-                FinalInvestRate += 10
-            if prevClose >= Ma20:
-                FinalInvestRate += 10  
-            if prevClose >= Ma60:
-                FinalInvestRate += 10
-                
-            if Ma5 >= Ma5_Before:
-                FinalInvestRate += 10
-            if Ma20 >= Ma20_Before:
-                FinalInvestRate += 10
-            if Ma60 >= Ma60_Before:
-                FinalInvestRate += 10
-                
-            print("- 1차수 진입 이동평균선에 의한 비율 ", FinalInvestRate , "%")
-                
-            #현재 분할 위치에 따라 최대 40% 
-            print("- 1차수 진입 현재 구간에 의한 비율 ", ((int(DivNum)+1)-now_step) * (40.0/DivNum) , "%")
-            FinalInvestRate += (((int(DivNum)+1)-now_step) * (40.0/DivNum))
-
-            FinalFirstMoney = FirstInvestMoney * (FinalInvestRate/100.0)
-            print("- 1차수 진입 금액 ", FinalFirstMoney , " 할당 금액 대비 투자 비중:" , FinalInvestRate, "%")
-            
-            SplitInfoList.append({"number":1, "target_rate":target_rate * 2.0 , "trigger_rate":None , "invest_money":round(FinalFirstMoney)}) #차수, 목표수익률, 매수기준 손실률 (1차수는 이 정보가 필요 없다),투자금액
-            
-        #그밖의 차수
-        else:
-            SplitInfoList.append({"number":number, "target_rate":target_rate , "trigger_rate":trigger_rate , "invest_money":round(RemainInvestMoney / (DivNum-1))}) #차수, 목표수익률, 매수기준 손실률 ,투자금액
-        
     InvestInfoDict = dict()
     InvestInfoDict['stock_code'] = stock_code
     InvestInfoDict['split_info_list'] = SplitInfoList
     InvestInfoDataList.append(InvestInfoDict)
-    
-    
+
 pprint.pprint(InvestInfoDataList)
 
 ############# 매수후 진입시점, 수익률 등을 저장 관리할 파일 ####################
@@ -182,13 +77,11 @@ try:
 except Exception as e:
     print("Exception by First")
 
-
 print("--------------내 보유 주식---------------------")
 #그리고 현재 이 계좌에서 보유한 주식 리스트를 가지고 옵니다!
 AccStockList = KisKR.GetMyStockList()
 #pprint.pprint(AccStockList)
 print("--------------------------------------------")
-    
 
 #마켓이 열렸는지 여부~!
 IsMarketOpen = KisKR.IsMarketOpen()
@@ -266,7 +159,11 @@ if IsMarketOpen == True and IsLP_OK == True:
 
             #파일에 저장
             with open(bot_file_path, 'w') as outfile:
-                json.dump(File_MND_List, outfile)
+                json.dump(File_MND_List, outfile)        
+
+
+
+
 
         #이제 데이터(File_MND_List)는 확실히 있을 테니 본격적으로 트레이딩을 합니다!
         for MagicDataInfo in File_MND_List:          
@@ -278,12 +175,23 @@ if IsMarketOpen == True and IsLP_OK == True:
                 
                 Ma5_Before = Common.GetMA(df,5,-3) #전전일 기준
                 Ma5 = Common.GetMA(df,5,-2) #전일 기준
+                
+                CurrentPrice = KisUS.GetCurrentPrice(stock_code)
 
                 #1차수가 매수되지 않은 상태인지를 체크해서 1차수를 일단 매수한다!!
                 for MagicData in MagicDataInfo['MagicDataList']:
-                    if MagicData['Number'] == 1: #1차수를 찾아서!             
+                    if MagicData['Number'] == 1: #1차수를 찾아서!
+
+                            
+                    
                         if MagicData['IsBuy'] == False and MagicDataInfo['IsReady'] == True: #매수하지 않은 상태라면 매수를 진행한다!                            
-                            #전일 양봉이면서 5일선 위에 있거나 5일선이 증가중인 상승추세가 보일 때 매수!
+                            #MA small<big and 120 이평성 아래      
+                            if stock_data[str(small_ma)+'ma_before'].values[0] < stock_data[str(big_ma)+'ma_before'].values[0] and CurrentPrice < Ma120: 
+                                if MACD GC: (sig ref 식으로 수정 @home)
+                                
+                                
+                            
+                            
                             if prevOpen < prevClose and (prevClose >= Ma5 or Ma5_Before <= Ma5):
                                 #새로 시작하는 거니깐 누적 실현손익 0으로 초기화!
                                 MagicDataInfo['RealizedPNL'] = 0
