@@ -18,6 +18,7 @@ PortfolioName = "이동평균자산배분전략_KR"
 
 #리밸런싱이 가능한지 여부를 판단!
 Is_Rebalance_Go = False
+
 #마켓이 열렸는지 여부~!
 IsMarketOpen = KisKR.IsMarketOpen()
 
@@ -28,7 +29,6 @@ print("--------------내 보유 잔고---------------------")
 pprint.pprint(Balance)
 print("--------------------------------------------")
 
-#총 평가금액에서 해당 봇에게 할당할 총 금액비율 1.0 = 100%  0.5 = 50%
 InvestRate = 0.4
 
 FixRate = 0.1 #각 자산별 할당 금액의 10%를 고정비중으로 투자함!
@@ -46,7 +46,6 @@ InvestStockList.append({"stock_code":"132030", "small_ma":14 , "big_ma":99, "inv
 
 #기준이 되는 내 총 평가금액에서 투자비중을 곱해서 나온 포트폴리오에 할당된 돈!!
 TotalMoney = float(Balance['TotalMoney']) * InvestRate
-
 print("총 포트폴리오에 할당된 투자 가능 금액 : ", TotalMoney)
 
 #현재 투자중 상태인 리스트! (모두 파는게 아니라 부분 매도할 경우 매매 기준으로 삼기 위해 이 것이 필요하다.)

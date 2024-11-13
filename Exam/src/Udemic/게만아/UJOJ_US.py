@@ -1,3 +1,11 @@
+import KIS_Common as Common
+import pandas as pd
+import KIS_API_Helper_US as KisUS
+import time
+import pprint
+import json
+import line_alert
+
 #계좌 선택.. "VIRTUAL" 는 모의 계좌!
 Common.SetChangeMode("VIRTUAL") #REAL or VIRTUAL
 
@@ -40,9 +48,9 @@ print("총 포트폴리오에 할당된 투자 가능 금액 : $", TotalMoney)
 
 TargetStockList = list()
 
-TargetStockList.append({"stock_code":"TQQQ", "small_ma":4 , "big_ma":53, "invest_rate":0.5}) 
-TargetStockList.append({"stock_code":"QLD", "small_ma":5, "big_ma":55, "invest_rate":0.25}) 
-TargetStockList.append({"stock_code":"QQQ", "small_ma":7, "big_ma":165, "invest_rate":0.3}) 
+TargetStockList.append({"stock_code":"TQQQ", "small_ma":4 , "big_ma":53, "invest_rate":1}) 
+TargetStockList.append({"stock_code":"QLD", "small_ma":5, "big_ma":55, "invest_rate":0}) 
+TargetStockList.append({"stock_code":"QQQ", "small_ma":7, "big_ma":165, "invest_rate":0}) 
 ### invest rate 가변 수정 필요 
 
 DivNum = 4.0
@@ -54,14 +62,39 @@ if time_info.tm_hour in [0,1] and time_info.tm_min in [0,1]:
 InvestInfoDataList = list()
 
 for stock_data in TargetStockList:
-    SplitInfoList.append({"number":1, "target_rate":target_rate * 2.0 , "trigger_rate":None , "invest_money":round(FinalFirstMoney)}) #차수, 목표수익률, 매수기준 손실률 (1차수는 이 정보가 필요 없다),투자금액
-    ### 차수별 금액 로직 추가 @home
     
+    stock_code = stock_data['stock_code']
+    
+    TotalInvestMoney = TotalMoney * stock_data['invest_rate']
+    
+    FirstInvestMoney = TotalInvestMoney * 0.2  # MACD GD 1차 할당된 투자금
+    RemainInvestMoney = TotalInvestMoney * 0.8 # 추가 하락 시 추가 MACD GC 3차까지 추가 매수
+    
+    print("1차수 할당 금액 ", FirstInvestMoney)
+    print("나머지 차수 할당 금액 ", RemainInvestMoney) 
+    
+    DivNum = 4 # 1차수 매수후 2차수부터 추가하락 후 CDMA GC 4차수까지 추가 매수
+    
+    SplitInfoList = list()
+    
+    for i in range(int(DivNum)):
+        number = i+1
+        
+        #1차수라면
+        if number == 1:    
+            FinalInvestRate = 0
+            print("1차 매수 비율 : ", FinalInvestRate , "%, 1차 매수 금액 : ", round(FirstInvestMoney))
+            SplitInfoList.append({"number":1, "invest_money":round(FirstInvestMoney)}) #차수, 목표수익률, 매수기준 손실률 (1차수는 이 정보가 필요 없다),투자금액
+                
+        #그밖의 차수
+        else:
+            SplitInfoList.append({"number":number, "invest_money":round(RemainInvestMoney*pow(2,i-1)/7)}) #차수,투자금액
+  
     InvestInfoDict = dict()
     InvestInfoDict['stock_code'] = stock_code
     InvestInfoDict['split_info_list'] = SplitInfoList
     InvestInfoDataList.append(InvestInfoDict)
-
+      
 pprint.pprint(InvestInfoDataList)
 
 ############# 매수후 진입시점, 수익률 등을 저장 관리할 파일 ####################
@@ -79,12 +112,12 @@ except Exception as e:
 
 print("--------------내 보유 주식---------------------")
 #그리고 현재 이 계좌에서 보유한 주식 리스트를 가지고 옵니다!
-AccStockList = KisKR.GetMyStockList()
+AccStockList = KisUS.GetMyStockList()
 #pprint.pprint(AccStockList)
 print("--------------------------------------------")
 
 #마켓이 열렸는지 여부~!
-IsMarketOpen = KisKR.IsMarketOpen()
+IsMarketOpen = KisUS.IsMarketOpen()
 
 IsLP_OK = True
 #정각 9시 5분 전에는 LP유동성 공급자가 없으니 매매를 피하고자.
@@ -97,9 +130,58 @@ if IsMarketOpen == True and IsLP_OK == True:
     #투자할 종목을 순회한다!
     for InvestInfo in InvestInfoDataList:
         stock_code = InvestInfo['stock_code'] #종목 코드
+        
+        df = Common.GetOhlcv("US", stock_code,300)
+        df['prevClose'] = df['close'].shift(1)
+        
+        # MACD값을 구해줍니다!
+        macd_before = Common.GetMACD(df,-2) #이전캔들의 MACD
+        macd = Common.GetMACD(df,-1) #현재캔들의 MACD
+    
+        ma_dfs = []
+    
+        ############# 이동평균선! ###############
+
+        # 이동 평균 계산
+        for ma in range(3, 201):
+            ma_df = df['close'].rolling(ma).mean().rename(str(ma) + 'ma_before').shift(1)
+            ma_dfs.append(ma_df)
+            
+            ma_df = df['close'].rolling(ma).mean().rename(str(ma) + 'ma_before2').shift(2)
+            ma_dfs.append(ma_df)
+            
+            # 이동 평균 데이터 프레임을 하나로 결합
+            ma_df_combined = pd.concat(ma_dfs, axis=1)
+            
+            # 원본 데이터 프레임과 결합
+            df = pd.concat([df, ma_df_combined], axis=1)
+            pprint.pprint(df)
+            
+            df.dropna(inplace=True) #데이터 없는건 날린다!
+            
+            date = df.iloc[-1].name
+            stock_data = df[(df.index == date)]
+        
+            stock_amt = 0 #수량
+
+            #내가 보유한 주식 리스트에서 매수된 잔고 정보를 가져온다
+            for my_stock in AccStockList:
+                if my_stock['StockCode'] == stock_code:
+                    stock_amt = int(my_stock['StockAmt'])
+                    break
+            
+            ma1 = stock_info['small_ma']
+            ma2 = stock_info['big_ma']
+
+            small_ma = int(ma1)
+            big_ma = int(ma2)   
+        
+    
+    
+    
 
         #종목 정보~
-        stock_name = KisKR.GetStockName(stock_code)
+        stock_name = KisUS.GetStockName(stock_code)
         stock_amt = 0 #수량
         stock_avg_price = 0 #평단
         stock_eval_totalmoney = 0 #총평가금액!
@@ -118,7 +200,7 @@ if IsMarketOpen == True and IsLP_OK == True:
                 break
 
         #현재가
-        CurrentPrice = KisKR.GetCurrentPrice(stock_code)
+        CurrentPrice = KisUS.GetCurrentPrice(stock_code)
             
         #종목 데이터
         PickMagicDataInfo = None
@@ -217,7 +299,7 @@ if IsMarketOpen == True and IsLP_OK == True:
                                     if BuyAmt < 1:
                                         BuyAmt = 1
                                         
-                                    pprint.pprint(KisKR.MakeBuyLimitOrder(stock_code,BuyAmt,CurrentPrice*1.01))
+                                    pprint.pprint(KisUS.MakeBuyLimitOrder(stock_code,BuyAmt,CurrentPrice*1.01))
                                     
                                     MagicData['IsBuy'] = True
                                     MagicData['EntryPrice'] = CurrentPrice #현재가로 진입했다고 가정합니다!
@@ -228,7 +310,7 @@ if IsMarketOpen == True and IsLP_OK == True:
                                     line_alert.SendMessage(msg)                           
                        
                                     #매매가 일어났으니 보유수량등을 리프레시 한다!
-                                    AccStockList = KisKR.GetMyStockList()
+                                    AccStockList = KisUS.GetMyStockList()
                                     #매수된 상태라면 정보를 넣어준다!!!
                                     for my_stock in AccStockList:
                                         if my_stock['StockCode'] == stock_code:
@@ -275,7 +357,7 @@ if IsMarketOpen == True and IsLP_OK == True:
                                 SellAmt = stock_amt
                                 IsOver = True
 
-                            pprint.pprint(KisKR.MakeSellLimitOrder(stock_code,SellAmt,CurrentPrice*0.99))
+                            pprint.pprint(KisUS.MakeSellLimitOrder(stock_code,SellAmt,CurrentPrice*0.99))
 
                             MagicData['IsBuy'] = False
                             MagicDataInfo['RealizedPNL'] += (stock_revenue_money * SellAmt/stock_amt)
@@ -297,7 +379,7 @@ if IsMarketOpen == True and IsLP_OK == True:
                                 json.dump(File_MND_List, outfile)
                                 
                             #매매가 일어났으니 보유수량등을 리프레시 한다!
-                            AccStockList = KisKR.GetMyStockList()
+                            AccStockList = KisUS.GetMyStockList()
                             #매수된 상태라면 정보를 넣어준다!!!
                             for my_stock in AccStockList:
                                 if my_stock['StockCode'] == stock_code:
@@ -339,7 +421,7 @@ if IsMarketOpen == True and IsLP_OK == True:
                                         BuyAmt = 1
 
                                     #매수주문 들어감!
-                                    pprint.pprint(KisKR.MakeBuyLimitOrder(stock_code,BuyAmt,CurrentPrice*1.01))
+                                    pprint.pprint(KisUS.MakeBuyLimitOrder(stock_code,BuyAmt,CurrentPrice*1.01))
                                     
                                     MagicData['IsBuy'] = True
                                     MagicData['EntryPrice'] = CurrentPrice #현재가로 진입했다고 가정합니다!
@@ -354,7 +436,7 @@ if IsMarketOpen == True and IsLP_OK == True:
                                     line_alert.SendMessage(msg)
                                     
                                     #매매가 일어났으니 보유수량등을 리프레시 한다!
-                                    AccStockList = KisKR.GetMyStockList()
+                                    AccStockList = KisUS.GetMyStockList()
                                     #매수된 상태라면 정보를 넣어준다!!!
                                     for my_stock in AccStockList:
                                         if my_stock['StockCode'] == stock_code:
@@ -403,7 +485,7 @@ if IsMarketOpen == True and IsLP_OK == True:
                             SellAmt = stock_amt
                             IsOver = True
                     
-                        pprint.pprint(KisKR.MakeSellLimitOrder(stock_code,SellAmt,CurrentPrice*0.99))
+                        pprint.pprint(KisUS.MakeSellLimitOrder(stock_code,SellAmt,CurrentPrice*0.99))
                         
                         SecondMagicData['IsBuy'] = False
                         MagicDataInfo['RealizedPNL'] += (stock_revenue_money * SellAmt/stock_amt)
