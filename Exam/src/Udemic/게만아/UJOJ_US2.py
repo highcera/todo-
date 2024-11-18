@@ -61,10 +61,8 @@ if time_info.tm_hour in [0,1] and time_info.tm_min in [0,1]:
 #차수 정보가 들어간 데이터 리스트!
 InvestInfoDataList = list()
 
-for stock_data in TargetStockList:
-    
+for stock_data in TargetStockList: 
     stock_code = stock_data['stock_code']
-    
     TotalInvestMoney = TotalMoney * stock_data['invest_rate']
     
     DivNum = 4 # 1차수 매수후 2차수부터 추가하락 후 CDMA GC 4차수까지 추가 매수
@@ -89,6 +87,7 @@ pprint.pprint(InvestInfoDataList)
 File_MND_List = list()
 #파일 경로입니다.
 bot_file_path = "/var/autobot/" + BOT_NAME + ".json"
+# bot_file_path = BOT_NAME + ".json"
 
 try:
     #이 부분이 파일을 읽어서 리스트에 넣어주는 로직입니다. 
@@ -161,41 +160,43 @@ if IsMarketOpen != True: # and IsLP_OK != True:
             {'name':'ma10_before', 'value':ma10_before},
             {'name':'prev_close', 'value':prev_close}
             ]
-
+        
+        # [이동평균선 대체 고려]
+        # MACD값을 구해줍니다!
+        macd_before = Common.GetMACD(df,-2) #이전캔들의 MACD
+        macd = Common.GetMACD(df,-1) #현재캔들의 MACD
+        print(macd_before, macd)
+        
         # 딕셔너리의 value 키 값을 기준으로 내림차순 정렬
         print("[전일 종가 및 이평선 위치 확인]")
         sorted_dic = sorted(dic, key = lambda x:x['value'], reverse=True) 
         for ma in sorted_dic:
             print(ma['name'], " : ", ma['value']) 
     
+        print("[V2_MA 기준 지표]")
         if small_ma_before > big_ma_before:
             print("매도시점 모니터링")
-            if macd_before["macd"] > macd_before["macd_signal"] and macd["macd"] < macd["macd_signal"]:
+            if macd_before['macd'] > macd_before['macd_siginal'] and macd['macd'] < macd['macd_siginal']:
                 print("MACD DC 발생! 차수별 매도 비율 적용 매도 진행")
             else:
                 print("매도 신호 미발생")    
         else:
             print("매수시점 모니터링")
-            if macd_before["macd"] < macd_before["macd_signal"] and macd["macd"] > macd["macd_signal"]:
+            if macd_before['macd'] < macd_before['macd_siginal'] and macd['macd'] > macd['macd_siginal']: 
                 print("MACD GC 발생! 매수 진행")
             else:
                 print("매수 신호 미발생")    
       
-        
-        # [이동평균선 대체 고려]
-        # MACD값을 구해줍니다!
-        macd_before = Common.GetMACD(df,-2) #이전캔들의 MACD
-        macd = Common.GetMACD(df,-1) #현재캔들의 MACD
-    
+        print("[MACD 기준 지표]")
         if macd_before["macd"] > 0:
             print("매도시점 모니터링")
-            if macd_before["macd"] > macd_before["macd_signal"] and macd["macd"] < macd["macd_signal"]:
+            if macd_before["macd"] > macd_before["macd_siginal"] and macd["macd"] < macd["macd_siginal"]:
                 print("MACD DC 발생! 차수별 매도 비율 적용 매도 진행")
             else:
                 print("매도 신호 미발생")    
         else:
             print("매수시점 모니터링")
-            if macd_before["macd"] < macd_before["macd_signal"] and macd["macd"] > macd["macd_signal"]:
+            if macd_before["macd"] < macd_before["macd_siginal"] and macd["macd"] > macd["macd_siginal"]:
                 print("MACD GC 발생! 매수 진행")
             else:
                 print("매수 신호 미발생")    
@@ -205,6 +206,7 @@ if IsMarketOpen != True: # and IsLP_OK != True:
         rsi_before = Common.GetRSI(df,14,-2) #이전캔들의 RSI
         rsi = Common.GetRSI(df,14,-1) #현재캔들의 RSI
         
+        print("[RSI 지표]")
         if rsi_before < 30:
             print("과매도")
         elif rsi_before >70:
@@ -213,10 +215,10 @@ if IsMarketOpen != True: # and IsLP_OK != True:
             print("정상")
             
         
-        print("small before : ", small_ma_before, "small : ", small_ma, "big before : ", big_ma_before, "big : ", big_ma)
-        print("120 before : ", ma120_before, "60 before : ", ma60_before, "20 before : ", ma20_before)
-        print("120 : ", ma120, "60 : ", ma60, "20 : ", ma20)
-        print("rsi_before : ", rsi_before, "rsi : ", rsi)
+        print("small before : ", small_ma_before, ", small : ", small_ma, ", big before : ", big_ma_before, ", big : ", big_ma)
+        print("120 before : ", ma120_before, ", 60 before : ", ma60_before, ", 20 before : ", ma20_before)
+        print("120 : ", ma120, ", 60 : ", ma60, ", 20 : ", ma20)
+        print("rsi_before : ", rsi_before, ", rsi : ", rsi)
         print("macd : ", macd)
   
         stock_amt = 0 #수량
@@ -247,7 +249,7 @@ if IsMarketOpen != True: # and IsLP_OK != True:
         #현재가
         CurrentPrice = KisUS.GetCurrentPrice(stock_code)
         
-''' 
+
         #종목 데이터
         PickMagicDataInfo = None
 
@@ -261,7 +263,7 @@ if IsMarketOpen != True: # and IsLP_OK != True:
         if PickMagicDataInfo == None:
             MagicNumberDataDict = dict()
             MagicNumberDataDict['StockCode'] = stock_code #종목 코드
-            MagicNumberDataDict['IsReady'] = True #오늘 장에서 매수 가능한지 플래그!
+            MagicNumberDataDict['IsReady'] = bool(True) #오늘 장에서 매수 가능한지 플래그!
 
             MagicDataList = list()
             
@@ -271,7 +273,7 @@ if IsMarketOpen != True: # and IsLP_OK != True:
                 MagicDataDict['Number'] = i+1 # 차수
                 MagicDataDict['EntryPrice'] = 0 #진입가격
                 MagicDataDict['EntryAmt'] = 0   #진입수량
-                MagicDataDict['IsBuy'] = False   #매수 상태인지 여부
+                MagicDataDict['IsBuy'] = bool(False)  #매수 상태인지 여부
                 
                 MagicDataList.append(MagicDataDict)
 
@@ -292,7 +294,7 @@ if IsMarketOpen != True: # and IsLP_OK != True:
         #이제 데이터(File_MND_List)는 확실히 있을 테니 본격적으로 트레이딩을 합니다!
         if macd_before["macd"] > 0:
             print("매도시점 모니터링")
-            if macd_before["macd"] > macd_before["macd_signal"] and macd["macd"] < macd["macd_signal"]:
+            if macd_before["macd"] > macd_before["macd_siginal"] and macd["macd"] < macd["macd_siginal"]:
                 print("MACD DC 발생! 차수별 매도 비율 적용 매도 진행")
                 # 최종 매수된 차수가 부터 매도, 1차수는 남김
          ##################################################################################################       
@@ -321,9 +323,9 @@ if IsMarketOpen != True: # and IsLP_OK != True:
                                 find_step = div
                                 break
                             
-                        # print("현재 차수 : ", find_step) 
+                        print("현재 차수 : ", find_step) 
                        
-                        -------------------------------------------->
+                        #-------------------------------------------->
                         MagicData['IsBuy'] = False
                         MagicDataInfo['RealizedPNL'] += (stock_revenue_money * SellAmt/stock_amt)
 
@@ -337,7 +339,7 @@ if IsMarketOpen != True: # and IsLP_OK != True:
 
                         #1차수 매도라면 레디값을 False로 바꿔서 오늘 1차 매수가 없도록 한다!
                         if MagicData['Number'] == 1:
-                        MagicDataInfo['IsReady'] = False
+                            MagicDataInfo['IsReady'] = False
 
                         #파일에 저장
                         with open(bot_file_path, 'w') as outfile:
@@ -414,15 +416,13 @@ if IsMarketOpen != True: # and IsLP_OK != True:
                                                     stock_revenue_money = float(my_stock['StockRevenueMoney'])
                                                     break
                 #######################################################################                                    
-                                                    
-                                                    
-                                                    
-                                                    
+                                       
             else:
                 print("매도 신호 미발생")    
         else:
             print("매수시점 모니터링")                                        
-            if CurrentPrice < ma120 and macd_before["macd"] < macd_before["macd_signal"] and macd["macd"] > macd["macd_signal"]:
+            if CurrentPrice < ma120 and macd_before["macd"] < macd_before["macd_siginal"] and macd["macd"] > macd["macd_siginal"]:
+                # 120일 이평, 60일 이평 GC 
                 print("현재가 120 이평선 이하, MACD GC 발생!!")  
                 for MagicDataInfo in File_MND_List:          
                     if MagicDataInfo['StockCode'] == stock_code:
@@ -499,9 +499,9 @@ if IsMarketOpen != True: # and IsLP_OK != True:
                         for MagicData in MagicDataInfo['MagicDataList']:
                         
                             #해당 차수의 정보를 읽어온다.
-                            PickSplitMeta = GetSplitMetaInfo(InvestInfo['split_info_list'],MagicData['Number'])
-                            # {"number":XX, "target_rate":XX, "trigger_rate":XX, "invest_money":XX}   
+                            PickSplitMeta = GetSplitMetaInfo(InvestInfo['split_info_list'], MagicData['Number'])
                             
+                            #------------------------------------------------------------------------------------------------------>
                             #매수된 차수이다.
                             if MagicData['IsBuy'] == True:  
                                 #현재 수익률을 구한다!
@@ -533,7 +533,7 @@ if IsMarketOpen != True: # and IsLP_OK != True:
 
                                     #1차수 매도라면 레디값을 False로 바꿔서 오늘 1차 매수가 없도록 한다!
                                     if MagicData['Number'] == 1:
-                                    MagicDataInfo['IsReady'] = False
+                                        MagicDataInfo['IsReady'] = False
 
                                     #파일에 저장
                                     with open(bot_file_path, 'w') as outfile:
@@ -622,7 +622,7 @@ if IsMarketOpen != True: # and IsLP_OK != True:
                 print("매수 신호 미발생")    
                 
                 
-                
+'''               
                 
                 
                 
@@ -846,7 +846,7 @@ if IsMarketOpen != True: # and IsLP_OK != True:
                     #차수, 목표수익률, 매수기준 손실률 ,투자금액
 
                     LastMagicData = GetSplitDataInfo(MagicDataInfo['MagicDataList'],int(DivNum))
-                    # File_MND_List → 인출 MagicDataInfo  # "MagicDataList" : [{"Number": 1, "EntryPrice": 12215, "EntryAmt": 37, "IsBuy": true}, ...] 
+                    # File_MND_List → 인출 MagicDataInfo  # "MagicDataList" : [{"Number": 1, "EntryPrice": 12215, "EntryAmt": 37, "IsBuy": True}, ...] 
                 
                     #마지막 차수의 손익률
                     LastRate = (CurrentPrice - LastMagicData['EntryPrice']) / LastMagicData['EntryPrice'] * 100.0
@@ -972,17 +972,17 @@ def GetRSI(ohlcv,period,st):
 
 #MACD의 12,26,9 각 데이타를 리턴한다 첫번째: 분봉/일봉 정보, 두번째: 기준 날짜
 def GetMACD(ohlcv,st):
-    macd_short, macd_long, macd_signal=12,26,9
+    macd_short, macd_long, macd_siginal=12,26,9
 
     ohlcv["MACD_short"]=ohlcv["close"].ewm(span=macd_short).mean()
     ohlcv["MACD_long"]=ohlcv["close"].ewm(span=macd_long).mean()
     ohlcv["MACD"]=ohlcv["MACD_short"] - ohlcv["MACD_long"]
-    ohlcv["MACD_signal"]=ohlcv["MACD"].ewm(span=macd_signal).mean() 
+    ohlcv["macd_siginal"]=ohlcv["MACD"].ewm(span=macd_siginal).mean() 
 
     dic_macd = dict()
     
     dic_macd['macd'] = ohlcv["MACD"].iloc[st]
-    dic_macd['macd_siginal'] = ohlcv["MACD_signal"].iloc[st]
+    dic_macd['macd_siginal'] = ohlcv["macd_siginal"].iloc[st]
     dic_macd['ocl'] = dic_macd['macd'] - dic_macd['macd_siginal']
 
     return dic_macd
