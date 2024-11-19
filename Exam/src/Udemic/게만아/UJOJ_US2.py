@@ -297,7 +297,7 @@ if IsMarketOpen != True: # and IsLP_OK != True:
             if macd_before["macd"] > macd_before["macd_siginal"] and macd["macd"] < macd["macd_siginal"]:
                 print("MACD DC 발생! 차수별 매도 비율 적용 매도 진행")
                 # 최종 매수된 차수가 부터 매도, 1차수는 남김
-         ##################################################################################################       
+                ##################################################################################################       
                 for MagicDataInfo in File_MND_List:          
                     if MagicDataInfo['StockCode'] == stock_code:
                         # 매수한 최종 차수 구하기
@@ -319,20 +319,20 @@ if IsMarketOpen != True: # and IsLP_OK != True:
                                         SellAmt = stock_amt
                                         IsOver = True
                                 
+                                    # pprint.pprint(KisUS.MakeSellLimitOrder(stock_code,SellAmt,CurrentPrice*0.99))
                                     print("매도처리 : ", SellAmt)
                                 find_step = div
                                 break
                             
                         print("현재 차수 : ", find_step) 
-                       
-                        #-------------------------------------------->
+                        
                         MagicData['IsBuy'] = False
                         MagicDataInfo['RealizedPNL'] += (stock_revenue_money * SellAmt/stock_amt)
 
-                        msg = stock_code + " 스마트스플릿 "+str(MagicData['Number'])+"차 수익 매도 완료! 차수 목표수익률" + str(PickSplitMeta['target_rate']) +"% 만족" 
+                        msg = stock_code + " 옹줍오즐 "+str(find_step)+"차 일부 매도 완료!"   ### 검증 필요!!!
                         
                         if IsOver == True:
-                            msg = stock_code + " 스마트스플릿 "+str(MagicData['Number'])+"차 수익 매도 완료! 차수 목표수익률" + str(PickSplitMeta['target_rate']) +"% 만족 매도할 수량이 보유 수량보다 많은 상태라 모두 매도함!" 
+                            msg = stock_code + " 옹줍오즐 매도할 수량이 보유 수량보다 많은 상태라 모두 매도함!" 
                             
                         print(msg) 
                         line_alert.SendMessage(msg)
@@ -355,74 +355,13 @@ if IsMarketOpen != True: # and IsLP_OK != True:
                                 stock_eval_totalmoney = float(my_stock['StockNowMoney'])
                                 stock_revenue_rate = float(my_stock['StockRevenueRate'])
                                 stock_revenue_money = float(my_stock['StockRevenueMoney'])
-                                break             
-                                
-                            #매수아직 안한 차수!
-                            else:
-                                if MagicData['Number'] > 1:
-                                    #이전차수 정보를 읽어온다.
-                                    PrevMagicData = GetSplitDataInfo(MagicDataInfo['MagicDataList'],MagicData['Number'] - 1)
-                        
-                                    if PrevMagicData['IsBuy'] == True:
-                                        #이전 차수 수익률을 구한다!
-                                        prevRate = (CurrentPrice - PrevMagicData['EntryPrice']) / PrevMagicData['EntryPrice'] * 100.0
-                                        print(stock_code, ") ", MagicData['Number'], "차 진입을 위한 ",MagicData['Number']-1,"차 수익률 ", round(prevRate,2) , "% 트리거 수익률", PickSplitMeta['trigger_rate'], "%")
-
-                                        #AdditionlCondition = True
-                                        #if MagicData['Number'] % 2 == 1: #홀수 차수일 경우
-                                        #    if prevOpen < prevClose and (prevClose >= Ma5 or Ma5_Before <= Ma5):
-                                        #        AdditionlCondition = True
-                                        #    else:
-                                        #        AdditionlCondition = False
-                                        #else: #짝수 차수일 경우
-                                        #    AdditionlCondition = True
-
-                                        #현재 손실률이 트리거 손실률보다 낮다면
-                                        if prevRate <= PickSplitMeta['trigger_rate']:                                # and AdditionlCondition == True:
-                            
-                                            #투자금을 현재가로 나눠서 매수 가능한 수량을 정한다.
-                                            BuyAmt = int(PickSplitMeta['invest_money'] / CurrentPrice)
-                                            
-                                            #1주보다 적다면 투자금이나 투자비중이 작은 상황인데 일단 1주는 매수하게끔 처리 하자!
-                                            if BuyAmt < 1:
-                                                BuyAmt = 1
-
-                                            #매수주문 들어감!
-                                            pprint.pprint(KisUS.MakeBuyLimitOrder(stock_code,BuyAmt,CurrentPrice*1.01))
-                                            
-                                            MagicData['IsBuy'] = True
-                                            MagicData['EntryPrice'] = CurrentPrice #현재가로 진입했다고 가정합니다!
-                                            MagicData['EntryAmt'] = BuyAmt
-                                            
-                                            MagicDataInfo['IsReady'] = False
-
-                                            #파일에 저장
-                                            with open(bot_file_path, 'w') as outfile:
-                                                json.dump(File_MND_List, outfile)
-                                                
-                                            msg = stock_code + " 스마트스플릿 "+str(MagicData['Number'])+"차 매수 완료! 이전 차수 손실률" + str(PickSplitMeta['trigger_rate']) +"% 만족" 
-                                            print(msg) 
-                                            line_alert.SendMessage(msg)
-                                            
-                                            #매매가 일어났으니 보유수량등을 리프레시 한다!
-                                            AccStockList = KisUS.GetMyStockList()
-                                            #매수된 상태라면 정보를 넣어준다!!!
-                                            for my_stock in AccStockList:
-                                                if my_stock['StockCode'] == stock_code:
-                                                    stock_amt = int(my_stock['StockAmt'])
-                                                    stock_avg_price = float(my_stock['StockAvgPrice'])
-                                                    stock_eval_totalmoney = float(my_stock['StockNowMoney'])
-                                                    stock_revenue_rate = float(my_stock['StockRevenueRate'])
-                                                    stock_revenue_money = float(my_stock['StockRevenueMoney'])
-                                                    break
-                #######################################################################                                    
-                                       
+                                break                                                    
             else:
                 print("매도 신호 미발생")    
         else:
             print("매수시점 모니터링")                                        
             if CurrentPrice < ma120 and macd_before["macd"] < macd_before["macd_siginal"] and macd["macd"] > macd["macd_siginal"]:
-                # 120일 이평, 60일 이평 GC 
+                # 120일 이평, 60일 이평 GC 검토 필요
                 print("현재가 120 이평선 이하, MACD GC 발생!!")  
                 for MagicDataInfo in File_MND_List:          
                     if MagicDataInfo['StockCode'] == stock_code:
@@ -458,7 +397,8 @@ if IsMarketOpen != True: # and IsLP_OK != True:
                                         if BuyAmt < 1:
                                             BuyAmt = 1
                                             
-                                        pprint.pprint(KisUS.MakeBuyLimitOrder(stock_code,BuyAmt,CurrentPrice*1.01))
+                                        # pprint.pprint(KisUS.MakeBuyLimitOrder(stock_code,BuyAmt,CurrentPrice*1.01))
+                                        print("매수처리 : ", BuyAmt)
                                                                             
                                         MagicData['IsBuy'] = True
                                         MagicData['EntryPrice'] = CurrentPrice #현재가로 진입했다고 가정합니다!
@@ -495,50 +435,39 @@ if IsMarketOpen != True: # and IsLP_OK != True:
                                     with open(bot_file_path, 'w') as outfile:
                                         json.dump(File_MND_List, outfile)     
                         
-                        #매수된 차수가 있다면 수익률을 체크해서 매도하고, 매수 안된 차수도 체크해서 매수한다.
+                        # 매수 안된 차수도 체크해서 매수한다.
                         for MagicData in MagicDataInfo['MagicDataList']:
-                        
-                            #해당 차수의 정보를 읽어온다.
-                            PickSplitMeta = GetSplitMetaInfo(InvestInfo['split_info_list'], MagicData['Number'])
-                            
-                            #------------------------------------------------------------------------------------------------------>
-                            #매수된 차수이다.
-                            if MagicData['IsBuy'] == True:  
-                                #현재 수익률을 구한다!
-                                CurrentRate = (CurrentPrice - MagicData['EntryPrice']) / MagicData['EntryPrice'] * 100.0
-                                print(stock_code, ") ",  MagicData['Number'], "차 수익률 ", round(CurrentRate,2) , "% 목표수익률", PickSplitMeta['target_rate'], "%")
-                        
-                                #현재 수익률이 목표 수익률보다 높다면
-                                if CurrentRate >= PickSplitMeta['target_rate'] and stock_amt > 0 and (stock_revenue_money + MagicDataInfo['RealizedPNL']) > 0 :    
-                                    SellAmt = MagicData['EntryAmt']
-                                    
-                                    IsOver = False
-                                    #만약 매도할 수량이 수동 매도등에 의해서 보유 수량보다 크다면 보유수량으로 정정해준다!
-                                    if SellAmt > stock_amt:
-                                        SellAmt = stock_amt
-                                        IsOver = True
-
-                                    pprint.pprint(KisUS.MakeSellLimitOrder(stock_code,SellAmt,CurrentPrice*0.99))
-
-                                    MagicData['IsBuy'] = False
-                                    MagicDataInfo['RealizedPNL'] += (stock_revenue_money * SellAmt/stock_amt)
-
-                                    msg = stock_code + " 스마트스플릿 "+str(MagicData['Number'])+"차 수익 매도 완료! 차수 목표수익률" + str(PickSplitMeta['target_rate']) +"% 만족" 
-                                    
-                                    if IsOver == True:
-                                        msg = stock_code + " 스마트스플릿 "+str(MagicData['Number'])+"차 수익 매도 완료! 차수 목표수익률" + str(PickSplitMeta['target_rate']) +"% 만족 매도할 수량이 보유 수량보다 많은 상태라 모두 매도함!" 
+                            #매수아직 안한 차수!
+                            if MagicData['IsBuy'] == False:  
+                                if MagicData['Number'] > 1:
+                                    #해당 차수의 정보를 읽어온다.
+                                    PickSplitMeta = GetSplitMetaInfo(InvestInfo['split_info_list'], MagicData['Number'])
                                         
-                                    print(msg) 
-                                    line_alert.SendMessage(msg)
-
-                                    #1차수 매도라면 레디값을 False로 바꿔서 오늘 1차 매수가 없도록 한다!
-                                    if MagicData['Number'] == 1:
-                                        MagicDataInfo['IsReady'] = False
-
+                                    #투자금을 현재가로 나눠서 매수 가능한 수량을 정한다.
+                                    BuyAmt = int(PickSplitMeta['invest_money'] / CurrentPrice)
+                                    
+                                    #1주보다 적다면 투자금이나 투자비중이 작은 상황인데 일단 1주는 매수하게끔 처리 하자!
+                                    if BuyAmt < 1:
+                                        BuyAmt = 1
+                                    
+                                    #매수주문 들어감!
+                                    # pprint.pprint(KisUS.MakeBuyLimitOrder(stock_code,BuyAmt,CurrentPrice*1.01))
+                                    print("매수처리 : ", BuyAmt)
+                                                                        
+                                    MagicData['IsBuy'] = True
+                                    MagicData['EntryPrice'] = CurrentPrice #현재가로 진입했다고 가정합니다!
+                                    MagicData['EntryAmt'] = BuyAmt
+                                                                        
+                                    MagicDataInfo['IsReady'] = False
+                                    
                                     #파일에 저장
                                     with open(bot_file_path, 'w') as outfile:
                                         json.dump(File_MND_List, outfile)
-                                        
+
+                                    msg = stock_code + " 스마트스플릿 "+str(MagicData['Number'])+"차 매수 완료!" 
+                                    print(msg) 
+                                    line_alert.SendMessage(msg)           
+                    
                                     #매매가 일어났으니 보유수량등을 리프레시 한다!
                                     AccStockList = KisUS.GetMyStockList()
                                     #매수된 상태라면 정보를 넣어준다!!!
@@ -549,78 +478,12 @@ if IsMarketOpen != True: # and IsLP_OK != True:
                                             stock_eval_totalmoney = float(my_stock['StockNowMoney'])
                                             stock_revenue_rate = float(my_stock['StockRevenueRate'])
                                             stock_revenue_money = float(my_stock['StockRevenueMoney'])
-                                            break             
-                                
-                            #매수아직 안한 차수!
-                            else:
-                                if MagicData['Number'] > 1:
-                                    #이전차수 정보를 읽어온다.
-                                    PrevMagicData = GetSplitDataInfo(MagicDataInfo['MagicDataList'],MagicData['Number'] - 1)
-                        
-                                    if PrevMagicData['IsBuy'] == True:
-                                        #이전 차수 수익률을 구한다!
-                                        prevRate = (CurrentPrice - PrevMagicData['EntryPrice']) / PrevMagicData['EntryPrice'] * 100.0
-                                        print(stock_code, ") ", MagicData['Number'], "차 진입을 위한 ",MagicData['Number']-1,"차 수익률 ", round(prevRate,2) , "% 트리거 수익률", PickSplitMeta['trigger_rate'], "%")
-
-                                        #AdditionlCondition = True
-                                        #if MagicData['Number'] % 2 == 1: #홀수 차수일 경우
-                                        #    if prevOpen < prevClose and (prevClose >= Ma5 or Ma5_Before <= Ma5):
-                                        #        AdditionlCondition = True
-                                        #    else:
-                                        #        AdditionlCondition = False
-                                        #else: #짝수 차수일 경우
-                                        #    AdditionlCondition = True
-
-                                        #현재 손실률이 트리거 손실률보다 낮다면
-                                        if prevRate <= PickSplitMeta['trigger_rate']:                                # and AdditionlCondition == True:
-                            
-                                            #투자금을 현재가로 나눠서 매수 가능한 수량을 정한다.
-                                            BuyAmt = int(PickSplitMeta['invest_money'] / CurrentPrice)
-                                            
-                                            #1주보다 적다면 투자금이나 투자비중이 작은 상황인데 일단 1주는 매수하게끔 처리 하자!
-                                            if BuyAmt < 1:
-                                                BuyAmt = 1
-
-                                            #매수주문 들어감!
-                                            pprint.pprint(KisUS.MakeBuyLimitOrder(stock_code,BuyAmt,CurrentPrice*1.01))
-                                            
-                                            MagicData['IsBuy'] = True
-                                            MagicData['EntryPrice'] = CurrentPrice #현재가로 진입했다고 가정합니다!
-                                            MagicData['EntryAmt'] = BuyAmt
-                                            
-                                            MagicDataInfo['IsReady'] = False
-
-                                            #파일에 저장
-                                            with open(bot_file_path, 'w') as outfile:
-                                                json.dump(File_MND_List, outfile)
-                                                
-                                            msg = stock_code + " 스마트스플릿 "+str(MagicData['Number'])+"차 매수 완료! 이전 차수 손실률" + str(PickSplitMeta['trigger_rate']) +"% 만족" 
-                                            print(msg) 
-                                            line_alert.SendMessage(msg)
-                                            
-                                            #매매가 일어났으니 보유수량등을 리프레시 한다!
-                                            AccStockList = KisUS.GetMyStockList()
-                                            #매수된 상태라면 정보를 넣어준다!!!
-                                            for my_stock in AccStockList:
-                                                if my_stock['StockCode'] == stock_code:
-                                                    stock_amt = int(my_stock['StockAmt'])
-                                                    stock_avg_price = float(my_stock['StockAvgPrice'])
-                                                    stock_eval_totalmoney = float(my_stock['StockNowMoney'])
-                                                    stock_revenue_rate = float(my_stock['StockRevenueRate'])
-                                                    stock_revenue_money = float(my_stock['StockRevenueMoney'])
-                                                    break
-
-            
-            
-            
-            
-            
-            
-            
+                                            break
+                                        
                 print("MACD GC 발생! 매수 진행")
             else:
                 print("매수 신호 미발생")    
-                
+
                 
 '''               
                 
