@@ -1,45 +1,5 @@
-#-*-coding:utf-8 -*-
-'''
-
-$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-코드 참고 영상!
-https://youtu.be/YdEdM-oC0kc
-$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-
-$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-해당 컨텐츠는 제가 직접 투자 하기 위해 이 전략을 추가 개선해서 더 좋은 성과를 보여주는 개인 전략이 존재합니다. 
-
-게만아 추가 개선 개인 전략들..
-https://blog.naver.com/zacra/223196497504
-
-관심 있으신 분은 위 포스팅을 참고하세요!
-
-$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-
-
-관련 포스팅
-
-코스닥 코스피 양방향으로 투자하는 전략! 초전도체 LK99에 버금가는 발견!!
-https://blog.naver.com/zacra/223177598281
-
-위 포스팅을 꼭 참고하세요!!!
-
-하다가 잘 안되시면 계속 내용이 추가되고 있는 아래 FAQ를 꼭꼭 체크하시고
-
-주식/코인 자동매매 FAQ
-https://blog.naver.com/zacra/223203988739
-
-그래도 안 된다면 구글링 해보시고
-그래도 모르겠다면 클래스 댓글, 블로그 댓글, 단톡방( https://blog.naver.com/zacra/223111402375 )에 질문주세요! ^^
-
- 
-
-'''
+# https://youtu.be/YdEdM-oC0kc
+# https://blog.naver.com/zacra/223177598281
 
 import KIS_Common as Common
 import KIS_API_Helper_KR as KisKR
@@ -48,25 +8,15 @@ import pprint
 import pandas as pd
 import json
 from datetime import datetime
-
-
 import line_alert
 
-
-
+###################################################################
 #계좌 선택.. "VIRTUAL" 는 모의 계좌!
 Common.SetChangeMode("VIRTUAL") #REAL or VIRTUAL
-
-
 BOT_NAME = Common.GetNowDist() + "_MyKospidaq_Bot"
-
-
-
-
 
 #포트폴리오 이름
 PortfolioName = "게만아 코스피닥 매매 전략!"
-
 
 #시간 정보를 읽는다
 time_info = time.gmtime()
@@ -76,11 +26,6 @@ day_str = str(time_info.tm_mon) + "-" + str(time_info.tm_mday)
 
 print(day_str)
 
-
-
-
-
-###################################################################
 ###################################################################
 #리스트에서 데이터를 리턴!
 def GetKospidaqStrategyData(stock_code,KospidaqStrategyList):
@@ -91,11 +36,8 @@ def GetKospidaqStrategyData(stock_code,KospidaqStrategyList):
             break
     return ResultData
 
-
-
 #투자개수
 def GetKospidaqInvestCnt(KospidaqStrategyList):
-    
     MyStockList = KisKR.GetMyStockList()
 
     InvestCnt = 0
@@ -111,50 +53,23 @@ def GetKospidaqInvestCnt(KospidaqStrategyList):
                 break
             
         if stock_amt > 0:
-            InvestCnt += 1
-            
-        
+            InvestCnt += 1        
     return InvestCnt
 
-
-
-
-
-
-
-#####################################################################################################################################
-
+###################################################################
 #계좌 잔고를 가지고 온다!
 Balance = KisKR.GetBalance()
-#####################################################################################################################################
-
-'''-------통합 증거금 사용자는 아래 코드도 사용할 수 있습니다! -----------'''
-#통합증거금 계좌 사용자 분들중 만약 미국계좌랑 통합해서 총자산을 계산 하고 포트폴리오 비중에도 반영하고 싶으시다면 아래 코드를 사용하시면 되고 나머지는 동일합니다!!!
-#Balance = Common.GetBalanceKrwTotal()
-
-'''-----------------------------------------------------------'''
-#####################################################################################################################################
-
-
 print("--------------내 보유 잔고---------------------")
-
 pprint.pprint(Balance)
-
 print("--------------------------------------------")
-
-
-##########################################################
 
 print("--------------내 보유 주식---------------------")
 #그리고 현재 이 계좌에서 보유한 주식 리스트를 가지고 옵니다!
 MyStockList = KisKR.GetMyStockList()
 pprint.pprint(MyStockList)
 print("--------------------------------------------")
-##########################################################
 
-
-
-
+###################################################################
 #실제 투자 종목!!!
 InvestStockList = ["122630","252670","233740","251340"]
 
@@ -171,14 +86,9 @@ for stock_code in InvestStockList:
             stock_name = my_stock['StockName']
             stock_amt = int(my_stock['StockAmt'])
             stock_avg_price = float(my_stock['StockAvgPrice'])
-
-            
             NowInvestMoney += (stock_amt*stock_avg_price)
             break
 
-
-
-###################################################################
 ###################################################################
 KospidaqStrategyList = list()
 #파일 경로입니다.
@@ -193,7 +103,6 @@ except Exception as e:
     print("Init....")
 
     for stock_code in InvestStockList:
-
         KospidaqStrategyData = dict()
         KospidaqStrategyData['StockCode'] = stock_code #대상 종목 코드
         KospidaqStrategyData['StockName'] = KisKR.GetStockName(stock_code) #종목 이름
@@ -208,8 +117,6 @@ except Exception as e:
     with open(data_file_path, 'w') as outfile:
         json.dump(KospidaqStrategyList, outfile)
 
-
-###################################################################
 ###################################################################
 DateData = dict()
 #파일 경로입니다.
@@ -228,14 +135,8 @@ except Exception as e:
     #파일에 저장
     with open(date_file_path, 'w') as outfile:
         json.dump(DateData, outfile)
-
-###################################################################
-###################################################################
-
-
-
-###################################################################
-
+       
+################################################################### 
 #오늘 코스피 시가매매 로직이 진행되었는지 날짜 저장 관리 하는 파일
 DateSiGaLogicDoneDict = dict()
 
@@ -249,15 +150,6 @@ try:
 except Exception as e:
     #처음에는 파일이 존재하지 않을테니깐 당연히 예외처리가 됩니다!
     print("Exception by First")
-
-###################################################################
-
-
-
-
-
-
-
 
 
 #내 계좌의 총 평가금액에서 해당 봇에게 할당할 총 금액비율 1.0 = 100%  0.5 = 50%
@@ -273,11 +165,7 @@ RemainInvestMoney = TotalMoney - NowInvestMoney
 
 print("현재 남은 금액! (투자금 제외): ", format(round(RemainInvestMoney), ','))
 
-
-
-
 DivNum = len(InvestStockList)
-
 
 #마켓이 열렸는지 여부~!
 IsMarketOpen = KisKR.IsMarketOpen()
@@ -290,26 +178,19 @@ if time_info.tm_hour == 0: #9시인데
         
 #장이 열렸고 LP가 활동할때 매수!!!
 if IsMarketOpen == True and IsLP_OK == True: 
-
-
+    
     #혹시 이 봇을 장 시작하자 마자 돌린다면 20초르 쉬어준다.
     #그 이유는 20초는 지나야 오늘의 일봉 정보를 제대로 가져오는데
     #tm_hour가 0은 9시, 1은 10시를 뜻한다. 수능 등 10시에 장 시작하는 경우르 대비!
     if time_info.tm_hour in [0,1] and time_info.tm_min in [0,1]:
         time.sleep(20.0)
-        
 
     print("Market Is Open!!!!!!!!!!!")
     #영상엔 없지만 리밸런싱이 가능할때만 내게 메시지를 보내자!
-
-
-
+    
     #데이터를 조합한다.
     stock_df_list = []
-    
-            
     gugan_lenth = 7
-
 
     for stock_code in InvestStockList:
         df = Common.GetOhlcv("KR", stock_code,200)
@@ -332,7 +213,6 @@ if IsMarketOpen == True and IsLP_OK == True:
         df['high_'+str(gugan_lenth)+'_max'] = df['high'].rolling(window=gugan_lenth).max().shift(1)
         df['low_'+str(gugan_lenth)+'_min'] = df['low'].rolling(window=gugan_lenth).min().shift(1)
 
-
         df['prevVolume'] = df['volume'].shift(1)
         df['prevVolume2'] = df['volume'].shift(2)
         df['prevVolume3'] = df['volume'].shift(3)
@@ -346,16 +226,12 @@ if IsMarketOpen == True and IsLP_OK == True:
         df['prevLow'] = df['low'].shift(1)
         df['prevLow2'] = df['low'].shift(2)
 
-        df['Disparity20'] = df['prevClose'] / df['prevClose'].rolling(window=20).mean() * 100.0
-        
+        df['Disparity20'] = df['prevClose'] / df['prevClose'].rolling(window=20).mean() * 100.0        
         df['Disparity11'] = df['prevClose'] / df['prevClose'].rolling(window=11).mean() * 100.0
-
 
         df['ma3_before'] = df['close'].rolling(3).mean().shift(1)
         df['ma6_before'] = df['close'].rolling(6).mean().shift(1)
         df['ma19_before'] = df['close'].rolling(19).mean().shift(1)
-
-
         df['ma10_before'] = df['close'].rolling(10).mean().shift(1)
 
         df['ma20_before'] = df['close'].rolling(20).mean().shift(1)
@@ -365,13 +241,8 @@ if IsMarketOpen == True and IsLP_OK == True:
 
         df['ma120_before'] = df['close'].rolling(120).mean().shift(1)
 
-
-
-        df['prevChangeMa'] = df['change'].shift(1).rolling(window=20).mean()
-        
-
-        df['prevChangeMa_S'] = df['change'].shift(1).rolling(window=10).mean()
-        
+        df['prevChangeMa'] = df['change'].shift(1).rolling(window=20).mean()     # ?
+        df['prevChangeMa_S'] = df['change'].shift(1).rolling(window=10).mean()   # ?         
 
         #10일마다 총 100일 평균모멘텀스코어
         specific_days = list()
@@ -385,18 +256,14 @@ if IsMarketOpen == True and IsLP_OK == True:
             df[column_name] = (df['prevClose'] > df['close'].shift(day)).astype(int)
             
         df['Average_Momentum'] = df[[f'Momentum_{day}' for day in specific_days]].sum(axis=1) / 10
-
-
-
+        
         # Define the list of specific trading days to compare
         specific_days = list()
 
         for i in range(1,11):
             st = i * 3
             specific_days.append(st)
-
-
-
+            
         # Iterate over the specific trading days and compare the current market price with the corresponding closing prices
         for day in specific_days:
             # Create a column name for each specific trading day
@@ -407,20 +274,27 @@ if IsMarketOpen == True and IsLP_OK == True:
 
         # Calculate the average momentum score
         df['Average_Momentum3'] = df[[f'Momentum_{day}' for day in specific_days]].sum(axis=1) / 10
-
-
-
+        
         df.dropna(inplace=True) #데이터 없는건 날린다!
-
-
+        
         data_dict = {stock_code: df}
         stock_df_list.append(data_dict)
         print("---stock_code---", stock_code , " len ",len(df))
         pprint.pprint(df)
         
         
-
-
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        # =================================================================================================================
         #시가매매 체크한 기록이 없는 맨 처음이라면 
         if DateSiGaLogicDoneDict.get(stock_code) == None:
 
@@ -444,6 +318,13 @@ if IsMarketOpen == True and IsLP_OK == True:
             #파일에 저장
             with open(siga_logic_file_path, 'w') as outfile:
                 json.dump(DateSiGaLogicDoneDict, outfile)
+
+
+
+
+
+
+
 
 
 
@@ -476,17 +357,9 @@ if IsMarketOpen == True and IsLP_OK == True:
         IsNoWay = True
     #######################################################################################################################################
 
-    
-    
-
     #날짜가 다르다면 날이 바뀐거다
-    if day_str != DateData['Date']:
-            
-            
+    if day_str != DateData['Date']:            
         line_alert.SendMessage(PortfolioName + "  장이 열려서 매매 가능!!")
-
-
-
 
         # 일봉 정보 가지고 오는 모듈이 달라지면 에러가 나므로 예외처리
         date_format = "%Y-%m-%d %H:%M:%S"
@@ -508,11 +381,7 @@ if IsMarketOpen == True and IsLP_OK == True:
         # 요일 가져오기 (0: 월요일, 1: 화요일,2 수요일 3 목요일 4 금요일 5 토요일 ..., 6: 일요일)
         weekday = date_object.weekday()
         print("--weekday--", weekday, time_info.tm_wday)
-
-
-
-
-
+        
         #가장 최근 데이터의 날짜의 요일과 봇이 실행되는 요일은 같아야 한다.
         #이게 다르다면 아직 최근 데이터의 날자가 갱신 안되었단 이야기인데 이는 9시 정각이나..(20초 딜레이가 필요) 수능등으로 장 오픈시간이 지연되었을때 다를 수 있다. 그때는 매매하면 안된다
         if weekday == time_info.tm_wday:
@@ -722,13 +591,11 @@ if IsMarketOpen == True and IsLP_OK == True:
                 with open(data_file_path, 'w') as outfile:
                     json.dump(KospidaqStrategyList, outfile)
         else:
-
             if time_info.tm_min == 0 or time_info.tm_min == 30:
                 msg = "요일이 다르게 나왔어요! 좀 더 기다려봐요!"
                 print(msg)
                 line_alert.SendMessage(msg)
                 
-
     if day_str == DateData['Date']: #오늘 할일을 한다!
 
         ### 매도 파트 ###
@@ -1368,11 +1235,5 @@ else:
 
     #line_alert.SendMessage(PortfolioName + "  장이 열려있지 않아요!")
 
-
 pprint.pprint(DateData)
 pprint.pprint(KospidaqStrategyList)
-
-
-
-
-
