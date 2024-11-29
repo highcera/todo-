@@ -1,41 +1,17 @@
-# -*- coding: utf-8 -*-
-'''
+# https://blog.naver.com/zacra/223244683902
 
-관련 포스팅
-https://blog.naver.com/zacra/223244683902
-
-
-하다가 잘 안되시면 계속 내용이 추가되고 있는 아래 FAQ를 꼭꼭 체크하시고
-
-주식/코인 자동매매 FAQ
-https://blog.naver.com/zacra/223203988739
-
-그래도 안 된다면 구글링 해보시고
-그래도 모르겠다면 클래스 댓글, 블로그 댓글, 단톡방( https://blog.naver.com/zacra/223111402375 )에 질문주세요! ^^
-
- 
-
-위 포스팅을 꼭 참고하세요!!!
-
-'''
 import KIS_Common as Common
 import pandas as pd
 import KIS_API_Helper_US as KisUS
 import time
 import json
 import pprint
-
-
 import line_alert
-
-
 
 #계좌 선택.. "VIRTUAL" 는 모의 계좌!
 Common.SetChangeMode("VIRTUAL") #REAL or VIRTUAL
 
-
 BOT_NAME = Common.GetNowDist() + "_MyXAA_D_BotUs"
-
 
 #시간 정보를 읽는다
 time_info = time.gmtime()
@@ -43,21 +19,11 @@ time_info = time.gmtime()
 strYM = str(time_info.tm_year) + "_" + str(time_info.tm_mon)
 print("ym_st: " , strYM)
 
-
-
 #포트폴리오 이름
 PortfolioName = "XAA-D전략_US"
 
-
-
-#####################################################################################################################################
-#####################################################################################################################################
-#####################################################################################################################################
-
-
 #리밸런싱이 가능한지 여부를 판단!
 Is_Rebalance_Go = False
-
 
 #파일에 저장된 년월 문자열 (ex> 2022_9)를 읽는다
 YMDict = dict()
@@ -72,10 +38,8 @@ try:
 except Exception as e:
     print("Exception by First")
 
-
 #만약 키가 존재 하지 않는다 즉 아직 한번도 매매가 안된 상태라면
 if YMDict.get("ym_st") == None:
-
     #리밸런싱 가능! (리밸런싱이라기보다 첫 매수해야 되는 상황!)
     Is_Rebalance_Go = True
     
@@ -85,12 +49,9 @@ else:
     if YMDict['ym_st'] != strYM:
         #리밸런싱 가능!
         Is_Rebalance_Go = True
-
-
+        
 #강제 리밸런싱 수행!
 #Is_Rebalance_Go = True
-
-
 
 #마켓이 열렸는지 여부~!
 IsMarketOpen = KisUS.IsMarketOpen()
@@ -106,26 +67,15 @@ else:
     if Is_Rebalance_Go == True:
         line_alert.SendMessage(PortfolioName + " (" + strYM + ") 장이 닫혀서 포트폴리오 리밸런싱 불가능!!")
 
-
-
-
-#####################################################################################################################################
-#####################################################################################################################################
-#####################################################################################################################################
-
-
 #계좌 잔고를 가지고 온다!
 Balance = KisUS.GetBalance()
 
-
 print("--------------내 보유 잔고---------------------")
-
 pprint.pprint(Balance)
-
 print("--------------------------------------------")
+
 #총 평가금액에서 해당 봇에게 할당할 총 금액비율 1.0 = 100%  0.5 = 50%
 InvestRate = 0.97
-
 
 #기준이 되는 내 총 평가금액에서 투자비중을 곱해서 나온 포트폴리오에 할당된 돈!!
 TotalMoney = float(Balance['TotalMoney']) * InvestRate
@@ -140,11 +90,6 @@ if TotalMoney == 0:
     #기준이 되는 내 총 평가금액에서 투자비중을 곱해서 나온 포트폴리오에 할당된 돈!!
     TotalMoney = float(Balance['TotalMoney']) * InvestRate
 
-
-##########################################################
-
-
-
 #투자 주식 리스트
 MyPortfolioList = list()
 
@@ -153,44 +98,25 @@ FixInvestList = ["JEPI","JEPQ","SCHD","VT"] #고정자산!
 StockCodeList = ["JEPI","JEPQ","SCHD","VT","QQQ","IYK","VTWO","VWO","VEA","SPTL","VGIT","PDBC","BCI","VNQ","TIP","SGOV","USHY","VCIT","VWOB","BNDX","BWX","PFIX","RISR"]
 
 for stock_code in StockCodeList:
-
     asset = dict()
     asset['stock_code'] = stock_code         #종목코드
     asset['stock_target_rate'] = 0     #비중..
     asset['stock_rebalance_amt'] = 0  #리밸런싱 수량
     MyPortfolioList.append(asset)
 
-
-
-
-
-##########################################################
-
 print("--------------내 보유 주식---------------------")
 #그리고 현재 이 계좌에서 보유한 주식 리스트를 가지고 옵니다!
 MyStockList = KisUS.GetMyStockList()
 pprint.pprint(MyStockList)
 print("--------------------------------------------")
-##########################################################
-
-
 
 print("--------------리밸런싱 계산 ---------------------")
-
-
-
 
 stock_df_list = []
 
 for stock_code in StockCodeList:
-    
-    #################################################################
-    #################################################################
     #df = Common.GetOhlcv("US", stock_code,300) 
     df = Common.GetOhlcv("US", stock_code,300) 
-    #################################################################
-    #################################################################
-
 
     df['prevClose'] = df['close'].shift(1)
 
@@ -208,52 +134,79 @@ for stock_code in StockCodeList:
     #1개월 수익률x12 + 3개월 수익률x4 + 6개월 수익률x2 + 12개월 수익률
     df['Momentum_ga'] = ( ((df['prevClose'] - df['1month'])/df['1month']) * 12 + ((df['prevClose'] - df['3month'])/df['3month']) * 4  + ((df['prevClose'] - df['6month'])/df['6month']) * 2 + ((df['prevClose'] - df['12month'])/df['12month']) ) 
 
-
     df['20ma_Before'] = df['close'].rolling(20).mean().shift(2) 
     df['20ma'] = df['close'].rolling(20).mean().shift(1) 
-
 
     df['5ma_Before'] = df['close'].rolling(5).mean().shift(2) 
     df['5ma'] = df['close'].rolling(5).mean().shift(1) 
 
-
     df.dropna(inplace=True) #데이터 없는건 날린다!
-
     data_dict = {stock_code: df}
-
-
     stock_df_list.append(data_dict)
-        
-    print("---stock_code---", stock_code , " len ",len(df))
-    
+            
+    print("---stock_code---", stock_code , " len ",len(df))    
     pprint.pprint(df)
-
-
-
 
 combined_df = pd.concat([list(data_dict.values())[0].assign(stock_code=stock_code) for data_dict in stock_df_list for stock_code in data_dict])
 combined_df.sort_index(inplace=True)
 pprint.pprint(combined_df)
 print(" len(combined_df) ", len(combined_df))
 
-
-
 date = combined_df.iloc[-1].name
+
 
 
 tip_data = combined_df[(combined_df.index == date) & (combined_df['stock_code'] == "TIP")] 
 sgov_data = combined_df[(combined_df.index == date) & (combined_df['stock_code'] == "SGOV")] 
-
-
 vwo_data = combined_df[(combined_df.index == date) & (combined_df['stock_code'] == "VWO")] 
 vea_data = combined_df[(combined_df.index == date) & (combined_df['stock_code'] == "VEA")] 
 vt_data = combined_df[(combined_df.index == date) & (combined_df['stock_code'] == "VT")] 
 
 DivCount = 4
 
+'''
+고정 자산
+VT : 글로벌 주식 ETF
+SCHD : 배당 성장 ETF
+JEPI : 월배당 고배당 커버드 ETF (S&P500)
+JEPQ : 월배당 고배당 커버드 ETF (나스닥)
+
+공격 자산
+QQQ : 미국 나스닥 ETF
+IYK : 미국 필수 소비재 ETF
+VTWO(IWM X) : 미국 중소형주 ETF
+VWO : 개발도상국 주식 ETF
+VEA : 선진국 주식 ETF
+PDBC : 원자재 ETF 
+BCI : 원자재 ETF
+VNQ : 미국 부동산 ETF
+SPTL(TLT X) : 미국 장기채 ETF
+VGIT(IEF X) : 미국 중기채 ETF
+PFIX : 금리상승 헤지 ETF
+RISR : 금리상승 헤지 ETF
+
+안전 자산
+SPTL(TLT X) : 미국 장기채 ETF
+VGIT(IEF X) : 미국 중기채 ETF
+PFIX : 금리상승 헤지 ETF
+RISR : 금리상승 헤지 ETF
+TIP : 물가연동채 ETF
+USHY(HYG X) : 미국 하이일드 회사채 ETF
+VCIT(LQD X) : 미국 회사채 ETF
+VWOB(EMB X) : 신흥국 채권 ETF
+BNDX : 선진국 채권 ETF
+BWX : 국제 채권 ETF
+SGOV(BIL X): 초단기 채권(현금) ETF
+
+카나리아자산
+TIP : 물가연동채 ETF
+'''
+
 
 #고정 및 안전 자산을 제외한 공격자산의 모멘텀 스코어가 높은거 상위 TOP 4개를 리턴!
 exclude_stock_codes = ["VT","JEPI","JEPQ","SCHD","VCIT","BWX","BNDX","USHY","VWOB","TIP","SGOV"]
+
+
 pick_momentum_top = combined_df.loc[(combined_df.index == date) & (~combined_df['stock_code'].isin(exclude_stock_codes))].groupby('stock_code')['Momentum'].max().nlargest(4)
 
 #고정 및 공격 자산을 제외한 안전자산의 모멘텀 스코어가 높은거 상위 TOP 3를 리턴!

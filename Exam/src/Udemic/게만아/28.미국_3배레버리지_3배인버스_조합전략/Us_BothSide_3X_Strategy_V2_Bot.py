@@ -152,6 +152,12 @@ if IsMarketOpen == True:
                 print(msg) 
                 line_alert.SendMessage(msg) 
                 
+                
+                
+                
+                
+                
+                
             #데이터가 없는데 잔고가 있다? 이미 이 봇으로 트레이딩 하기전에 매수된 종목!
             else:
                 print("Exist")
