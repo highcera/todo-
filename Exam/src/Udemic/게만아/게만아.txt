@@ -1,3 +1,127 @@
+메시저 보내기 line 외
+https://blog.naver.com/zacra/223622479916
+
+5 15 * * 1-5 python3 /var/autobot/Snow_US_Bot.py
+35 15 * * 1-5 python3 /var/autobot/V2_MA_Strategy_US_Bot.py
+40 15 * * 1-5 python3 /var/autobot/V2_MA_Strategy_US_Bot2.py
+
+*/5 12-22 * * 1-5 python3 /var/autobot/Us_BothSide_3X_Strategy_V2_Bot.py
+
+TA-Lib
+https://blog.naver.com/zacra/222633684332
+
+https://ta-lib.org/function.html
+
+sudo yum install python3 -y
+sudo yum install python3-devel -y
+
+sudo /usr/bin/pip3 install --upgrade pip
+
+sudo yum groupinstall "Development Tools" -y
+
+wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
+tar xvzf ta-lib-0.4.0-src.tar.gz
+
+cd ta-lib
+./configure --prefix=/usr
+make
+sudo make install
+
+sudo bash -c "echo "/usr/local/lib64" >> /etc/ld.so.conf"
+sudo /sbin/ldconfig
+
+마지막 설치 명령어가 1개 남았는데 
+
+그 전에 처리해야 될 일이 있습니다.
+
+인스턴스 유형을 t2.micro에서 t2.small로 상향 조정을 해야 되는데요.
+
+인스턴스 유형 변경은 아래 링크를 참고해서 따라해 보세요!
+
+​
+
+아래 링크의 내용은 t2.micro에서 t2.nano로 바꾸는 건데
+
+여기서는 t2.small로 바꾸는 겁니다 ^^
+
+​
+
+https://blog.naver.com/zacra/222549883880
+
+그리고 마지막 명령어를 쳐줍니다!
+
+sudo /usr/local/bin/pip install ta-lib
+​
+
+그러면 서버에 ta-lib가 설치가 되었구요!
+
+​
+
+만약 위 명령어가 잘 안되면... 아래 명령어로 설치해 보세요!!!
+
+pip3 install ta-lib
+​
+
+잊지 마시고 다시 t2.small 에서 t2.micro로 인스턴스 유형을 변경해 주세요 ^^
+
+​
+pip3 install tulipy
+pip3 install wheel
+특히 추가로 서버에 2개의 모듈을 설치해야 되니 영상 보면서 따라해 보시구요
+
+(그냥 지금 서버에 해당 명령어 입력해 설치하셔도 됩니다)
+
+=================================================================================
+
+
+
+미국회계사 EK
+▶메크로트렌즈: https://www.macrotrends.net/ - 15년 data, 그래프
+▶데이터로마: https://www.dataroma.com/m/home.php 1억$ 이상 투자대가 투자패턴, 기관투자자 top 10 most owned stocks
+▶밸류인베스터즈클럽: https://valueinvestorsclub.com/
+
+
+
+
+📌 실전 전 집중 테스트
+
+[미국]
+1. VIRTUAL_MyMaStrategy_US_StockInvestList.json
+"QQQ", "TLT", "GLD"
+
+2. VIRTUAL_MyMaStrategy_US2_StockInvestList2.json ← Simple power
+"TQQQ", "PFIX", "TMF"
+
+3. VIRTUAL_MySnowNBotUS_Mon.json
+"UPRO"
+
+[국내]
+
+1. VIRTUAL_MyMaStrategy_KR_StockInvestList.json
+"418660", "148070", "132030"
+
+TIGER 미국나스닥100레버리지(합성)  ( 418660 )  0.8
+KOSEF 국고채10년  ( 148070 )  0.1
+TIGER 미국채10년선물  ( 305080 )  0.1
+
+2. KrStock_VIRTUAL_SmartMagicSplitBot.json
+"458730",  "329750", "051910", "005930"
+TIGER 미국배당다우존스, TIGER 미국달러단기채권액티브, LG화학, 삼성전자
+
+3. RSI
+[{"StockCode": "192440", "EntryPrice": 22550.0, "RevenuePrice": 22775.5, "CutPrice": 0, "Round": 1, "IsR2Check": "N", "IsDone": "N"}, X
+{"StockCode": "002920", "EntryPrice": 2124.112, "RevenuePrice": 2145.35312, "CutPrice": 0, "Round": 1, "IsR2Check": "N", "IsDone": "N"}, X 
+{"StockCode": "009460", "EntryPrice": 788, "RevenuePrice": 795.88, "CutPrice": 0, "Round": 1, "IsR2Check": "N", "IsDone": "N"}, X
+{"StockCode": "021040", "EntryPrice": 1543.43, "RevenuePrice": 1558.8643000000002, "CutPrice": 0, "Round": 1, "IsR2Check": "N", "IsDone": "N"}]
+
+
+
+
+<개발 - MACD, RSI, Stocastic slow golden/death cross, 과매도/과매수 매수/매도 시점 >
++ 과매도 구간 smart sprit
+TQQQ (QLD) MACD 
+===================================================================================
+
 [
 {
 "StockCode": "458730", 
@@ -46,44 +170,7 @@
 }
 ]
 
-
-📌 실전 전 집중 테스트
-
-[미국]
-1. VIRTUAL_MyMaStrategy_US_StockInvestList.json
-"QQQ", "TLT", "GLD"
-
-2. VIRTUAL_MyMaStrategy_US2_StockInvestList2.json ← Simple power
-"TQQQ", "PFIX", "TMF"
-
-3. VIRTUAL_MySnowNBotUS_Mon.json
-"UPRO"
-
-[국내]
-
-1. VIRTUAL_MyMaStrategy_KR_StockInvestList.json
-"418660", "148070", "132030"
-
-TIGER 미국나스닥100레버리지(합성)  ( 418660 )  0.8
-KOSEF 국고채10년  ( 148070 )  0.1
-TIGER 미국채10년선물  ( 305080 )  0.1
-
-2. KrStock_VIRTUAL_SmartMagicSplitBot.json
-"458730",  "329750", "051910", "005930"
-TIGER 미국배당다우존스, TIGER 미국달러단기채권액티브, LG화학, 삼성전자
-
-3. RSI
-[{"StockCode": "192440", "EntryPrice": 22550.0, "RevenuePrice": 22775.5, "CutPrice": 0, "Round": 1, "IsR2Check": "N", "IsDone": "N"}, X
-{"StockCode": "002920", "EntryPrice": 2124.112, "RevenuePrice": 2145.35312, "CutPrice": 0, "Round": 1, "IsR2Check": "N", "IsDone": "N"}, X 
-{"StockCode": "009460", "EntryPrice": 788, "RevenuePrice": 795.88, "CutPrice": 0, "Round": 1, "IsR2Check": "N", "IsDone": "N"}, X
-{"StockCode": "021040", "EntryPrice": 1543.43, "RevenuePrice": 1558.8643000000002, "CutPrice": 0, "Round": 1, "IsR2Check": "N", "IsDone": "N"}]
-
-
-
-
-<개발 - MACD, RSI, Stocastic slow golden/death cross, 과매도/과매수 매수/매도 시점 >
-+ 과매도 구간 smart sprit
-==========================================================================================================================================
+=======================================================
 
 0) 미국 주식 심플 강력 전략!
 
@@ -835,6 +922,12 @@ APP Secret : PBxQRSF/gKOGXI5YDXKUA5jiYUPuHIdToIbbq3adxisQ4dDMEuR5dnC7AXaTIxQmYJJ
 APP Key : PSnfyPQRjQY6gseCgFzcmTmIAusP8cOgOMjZ
 APP Secret : 
 FWNWvsFVddTEqQDRX8GJOyyST65+RH67QQUgdIofY3MF9prvxpZ4OkkZP0QZA9AcjuTQSKoxsTefUisD3BLPcq4kA09K09/HkHlTmbCdY1bh8zkYG+zVqxWocVp10cIDu6fJp2tZxV3A+UKepzXLoc7/R/0/qEV11jWVyEvOE7HHmD1asK0=
+
+실투 : 63867185
+APP Key : PSroPtRHWJspNwu2kVPxLjr1rIFKgbAjalNr
+APP Secret : sDv0+QfnBaG8PsQ5xE5NBsg4WmWRtKD9rehWGflF7vwUZlhb5PHcwt0WGvEtkhpl8sr7ZyMotppKfBst/j/6DNtPgDYhUkcAgI4nEZCLrh+C+pzEVpgkgbIElihxVp88+VQ+Jr+IdeZTdkIx4oZmLbg14ZzlKy30Jkw+ojar94nBDRxCVK0=
+
+
 
 KIS Developers
 https://apiportal.koreainvestment.com/intro
