@@ -150,13 +150,7 @@ if IsMarketOpen == True:
 
                 msg = stock_code + " 양방향3배전략봇v2 첫 시작!!!!"
                 print(msg) 
-                line_alert.SendMessage(msg) 
-                
-                
-                
-                
-                
-                
+                line_alert.SendMessage(msg)                 
                 
             #데이터가 없는데 잔고가 있다? 이미 이 봇으로 트레이딩 하기전에 매수된 종목!
             else:
@@ -222,15 +216,13 @@ if IsMarketOpen == True:
 
                     InfinityUpgradeDataList.append(InfinityDataDict) #데이터를 추가 한다!
 
-
                 msg = stock_code + " 기존에 매수한 종목을 양방향3배전략봇v2으로 변경해서 트레이딩 첫 시작!!!! " + str(InfinityDataDict['Round']) + "회차로 세팅 완료!"
                 print(msg) 
                 line_alert.SendMessage(msg) 
 
             #파일에 저장
             with open(bot_file_path, 'w') as outfile:
-                json.dump(InfinityUpgradeDataList, outfile)
-                
+                json.dump(InfinityUpgradeDataList, outfile)                
 
         #이제 데이터(InfinityUpgradeDataList)는 확실히 있을 테니 본격적으로 트레이딩을 합니다!
         for StockInfo in InfinityUpgradeDataList:
@@ -385,12 +377,10 @@ if IsMarketOpen == True:
                                         st_disparity = 102.5
                         
                                     #210일선 위에 있다가 아래로 종가가 떨어지면... (추가적으로 이격도 체크)
-                                    if (Ma210_before2 < df['close'].iloc[-3] and Ma210_before > df['close'].iloc[-2]) and Disparity5 < st_disparity:
-                                    
+                                    if (Ma210_before2 < df['close'].iloc[-3] and Ma210_before > df['close'].iloc[-2]) and Disparity5 < st_disparity:                                    
 
                                         #현재가보다 아래에 매도 주문을 넣음으로써 시장가로 매도효과!
                                         pprint.pprint(KisUS.MakeSellLimitOrder(stock_code,stock_amt,CurrentPrice*0.99))
-
 
                                         msg = stock_code + " 양방향3배전략봇v2 하락장 진입!!!!!  [" + str(stock_revenue_money) + "] 손익 확정!! (현재 [" + str(StockInfo['Round']) + "] 라운드까지 진행되었고 모든 수량 매도 처리! )"
                                         print(msg) 
@@ -398,7 +388,6 @@ if IsMarketOpen == True:
 
                                         #전량 매도 모두 초기화! 
                                         StockInfo['Round'] = 0
-
 
                                         #파일에 저장
                                         with open(bot_file_path, 'w') as outfile:
@@ -435,18 +424,12 @@ if IsMarketOpen == True:
                         
                         #1회차 이상 매수된 상황이라면 인버스의 경우 조건 체크해서 매도한다.
                         if StockInfo['Round'] > 0 :
-
-                            IsSellGo = False
-                            
+                            IsSellGo = False                            
                             if  (Disparity5 > 102 or Disparity5 < 98):
-
-                                IsSellGo = True
-                                
+                                IsSellGo = True                                
                             if IsSellGo == True:
-
                                 #현재가보다 아래에 매도 주문을 넣음으로써 시장가로 매도효과!
                                 pprint.pprint(KisUS.MakeSellLimitOrder(stock_code,stock_amt,CurrentPrice*0.99))
-
 
                                 msg = stock_code + " 양방향3배전략봇v2 모두 정리!!!!!  [" + str(stock_revenue_money) + "] 손익 확정!! (현재 [" + str(StockInfo['Round']) + "] 라운드까지 진행되었고 모든 수량 매도 처리! )"
                                 print(msg) 
@@ -455,16 +438,14 @@ if IsMarketOpen == True:
                                 #전량 매도 모두 초기화! 
                                 StockInfo['Round'] = 0
 
-
                                 #파일에 저장
                                 with open(bot_file_path, 'w') as outfile:
-                                    json.dump(InfinityUpgradeDataList, outfile)
-         
+                                    json.dump(InfinityUpgradeDataList, outfile)         
 
                     #레버리지의 경우!
                     if stock_code == 'TQQQ' or stock_code == 'SOXL':
                         IsGoNext = False
-
+                        
                         if StockInfo['Round'] == 0 and (Ma5_before < df['close'].iloc[-2] or Ma3_before2 < Ma3_before): #전일 종가가 5일선 위에 있을 때만
                             IsGoNext = True
 
@@ -514,44 +495,31 @@ if IsMarketOpen == True:
 
                     #인버스의 경우        
                     else:
-
                         IsBuyGo = False
-
-
+                        #60선보다 위에 있거나 20선이 증가중일 때
                         if Ma60_before < df['close'].iloc[-2] or Ma20_before2 < Ma20_before:
-
+                            #저가증가! 이전봉 양봉!
                             if (df['low'].iloc[-3] < df['low'].iloc[-2]) and df['open'].iloc[-2] < df['close'].iloc[-2] :
-
-
-                                if Ma12_before > df['close'].iloc[-2] and Ma3_before< df['close'].iloc[-2]:
+                                
+                                if Ma12_before > df['close'].iloc[-2] and Ma3_before < df['close'].iloc[-2]:
                                     IsBuyGo = True
 
-
                                 if Ma20_before > df['close'].iloc[-2]:
-
                                     if df['open'].iloc[-3] > df['close'].iloc[-3]:
                                         IsBuyGo = True
 
-
                                 if  (Disparity5 > 102 or Disparity5 < 98) :
                                     IsBuyGo = False
-
 
                                 if stock_code == 'SOXS':
                                     if df['volume'].iloc[-3] > df['volume'].iloc[-2]:
                                         IsBuyGo = False
 
-
                         if IsBuyGo == True:    
-
-
                             StockInfo['Round'] = 1 #인버스는 무조건 1이다!
-
             
                             #분할된 투자금!
                             StMoney = StockMoney
-
-
                             BuyAmt = int(StMoney / CurrentPrice)
                             
                             #1주보다 적다면 투자금이나 투자비중이 작은 상황인데 일단 1주는 매수하게끔 처리 하자!
@@ -564,8 +532,7 @@ if IsMarketOpen == True:
 
                             msg = stock_code + " 양방향3배전략봇v2 " + str(StMoney) + "만큼 매수 " + str(BuyAmt) +"개.. 현재가 " + str(CurrentPrice)
                             print(msg) 
-                            line_alert.SendMessage(msg) 
-                            
+                            line_alert.SendMessage(msg)                             
 
                             time.sleep(10.0)
 
@@ -579,21 +546,16 @@ if IsMarketOpen == True:
 
                 #파일에 저장
                 with open(bot_file_path, 'w') as outfile:
-                    json.dump(InfinityUpgradeDataList, outfile) 
-                    
+                    json.dump(InfinityUpgradeDataList, outfile)                     
                 break
-
-else:
-
-        
+            
+else:        
     #장이 끝나고 다음날 다시 매수시도 할수 있게 Y로 바꿔줍니당!
     for StockInfo in InfinityUpgradeDataList:
         StockInfo['IsReady'] = 'Y'
 
-
     #파일에 저장
     with open(bot_file_path, 'w') as outfile:
-        json.dump(InfinityUpgradeDataList, outfile)
-        
+        json.dump(InfinityUpgradeDataList, outfile)        
         
 pprint.pprint(InfinityUpgradeDataList)

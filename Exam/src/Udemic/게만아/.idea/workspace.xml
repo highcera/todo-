@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b2e64eea-b4f3-4d09-9f44-751591339c09" name="변경" comment="">
+      <change beforePath="$PROJECT_DIR$/28.미국_3배레버리지_3배인버스_조합전략/Us_BothSide_3X_Strategy_V2_Bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/28.미국_3배레버리지_3배인버스_조합전략/Us_BothSide_3X_Strategy_V2_Bot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/28.미국_3배레버리지_3배인버스_조합전략/Us_BothSide_3X_Strategy_V2_Test.py" beforeDir="false" afterPath="$PROJECT_DIR$/28.미국_3배레버리지_3배인버스_조합전략/Us_BothSide_3X_Strategy_V2_Test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/30.국내_섹터_변동성돌파전략/SectorKr_Top_Bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/30.국내_섹터_변동성돌파전략/SectorKr_Top_Bot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/37.코스닥피레인전략_양방향끝판왕/Safe_Kosdaqpi_Bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/37.코스닥피레인전략_양방향끝판왕/Safe_Kosdaqpi_Bot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/37.코스닥피레인전략_양방향끝판왕/Safe_Kosdaqpi_Test.py" beforeDir="false" afterPath="$PROJECT_DIR$/37.코스닥피레인전략_양방향끝판왕/Safe_Kosdaqpi_Test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KakaoTalk_20240722_1022_45_120_group.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KakaoTalk_20241113_0636_47_105_group.txt" beforeDir="false" afterPath="$PROJECT_DIR$/KakaoTalk_20241113_0636_47_105_group.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/전략.txt" beforeDir="false" afterPath="$PROJECT_DIR$/전략.txt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 8
+}]]></component>
+  <component name="ProjectId" id="2q3WRp2w3serxzbOtDEmJOfbKWz" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "D:/F 드라이브/Repo_Office/I2 신뢰성 자동화"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-fb887030ada0-aa17d162503b-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-243.21565.199" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="디폴트 작업">
+      <changelist id="b2e64eea-b4f3-4d09-9f44-751591339c09" name="변경" comment="" />
+      <created>1733891733300</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1733891733300</updated>
+    </task>
+    <servers />
+  </component>
+</project>

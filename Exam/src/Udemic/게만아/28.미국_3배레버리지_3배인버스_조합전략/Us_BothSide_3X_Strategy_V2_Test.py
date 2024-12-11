@@ -37,11 +37,8 @@ import matplotlib.pyplot as plt
 import time
 import FinanceDataReader as fdr
 
-
 #계좌 선택.. "VIRTUAL" 는 모의 계좌!
 Common.SetChangeMode("VIRTUAL") #REAL or VIRTUAL
-
-
 
 #이렇게 직접 금액을 지정해도 된다!!
 TotalMoney = 10000000
@@ -50,19 +47,14 @@ fee = 0.0035 #수수료+세금+슬리피지를 매수매도마다 0.2%로 세팅
 
 print("테스트하는 총 금액: $", round(TotalMoney))
 
-########################################################################
-########################################################################
 '''
 아래 코드를  통해 투자 비중을 조절해 보세요.
 지금은 7:3 비중으로 투자한다고 가정한 설정이겠죠?
 
 만약 인버스만 투자한 결과를 보고 싶다면 레버리지의 비중을 0으로 만들거나 잠시 삭제하고(주석처리) 테스트하시면 됩니다!
 '''
-########################################################################
-########################################################################
 
 InvestStockList = list()
-
 
 #3배 레버리지 ETF
 #'''
@@ -90,27 +82,17 @@ InvestStockList.append(InvestDataDict)
 ResultList = list()
 AvgPrice = 0
 
-
 TotalResultDict= dict()
 
-
 for stock_data in InvestStockList:
-
     stock_code = stock_data['ticker']
-
     print("\n----stock_code: ", stock_code)
 
     stock_name = stock_code
-
     InvestMoney = TotalMoney * stock_data['rate']
-    
-
     print(stock_name, " 종목당 할당 투자금:", InvestMoney)
 
-
-
     DivNum = 40.0
-
 
     InvestMoneyCell = InvestMoney / DivNum
     RealInvestMoney = 0
@@ -119,7 +101,6 @@ for stock_data in InvestStockList:
     BuyCnt = 0 #회차
     TotalBuyAmt = 0 #매수 수량
     TotalPureMoney = 0 #매수 금액
-
 
     #일봉 정보를 가지고 온다!
     df = Common.GetOhlcv("US",stock_code, 3500) 
@@ -158,75 +139,50 @@ for stock_data in InvestStockList:
     
     #df = df[:len(df)-100]
 
-
     IsBuy = False #매수 했는지 여부
     SuccesCnt = 0   #익절 숫자
     FailCnt = 0     #손절 숫자
 
-
     IsNoCash = False
-
 
     IsFirstDateSet = False
     FirstDateStr = ""
-    FirstDateIndex = 0
-   
+    FirstDateIndex = 0   
 
     TotalMoneyList = list()
     AvgPrice = 0
 
-
-
     for i in range(len(df)):
-
         #종가 기준으로 테스트 하려면 open 을 close로 변경!!
         #NowOpenPrice = df['close'].iloc[i]  
-        #PrevOpenPrice = df['close'].iloc[i-1]  
-        
+        #PrevOpenPrice = df['close'].iloc[i-1]          
         
         NowOpenPrice = df['open'].iloc[i]  
         PrevOpenPrice = df['open'].iloc[i-1]  
         PrevClosePrice = df['close'].iloc[i-1]
-        
-        
             
         #매수된 상태라면..
         if IsBuy == True:
-
             #투자중이면 매일매일 수익률 반영!
             RealInvestMoney = RealInvestMoney * (1.0 + ((NowOpenPrice - PrevOpenPrice) / PrevOpenPrice))
-
-
-
             TargetRate = 10.0 / 100.0 #목표수익률 10%!!!
-            
-
             TakePrice = AvgPrice * (1.0 + TargetRate) #익절가격
-
-
+            
             #진입(매수)가격 대비 변동률
             Rate = (NowOpenPrice - AvgPrice) / AvgPrice
-
             RevenueRate = (Rate - fee)*100.0 #수익률 계산
         
             #TQQQ, SOXL의 경우
             if stock_code == 'TQQQ' or stock_code == 'SOXL':
-
                 #목표 수익을 달성했거나 회차가 다 찼거나.. 남은 현금이 없을 때..
                 if (TakePrice <= NowOpenPrice) or BuyCnt >= DivNum or IsNoCash == True :
-
-                            
-                    Disparity = (PrevClosePrice/df['5ma'].iloc[i-1])*100.0
-                    
-                    st_disparity = 102
-                    
+                    Disparity = (PrevClosePrice/df['5ma'].iloc[i-1])*100.0                    
+                    st_disparity = 102                    
                     if stock_code == 'TQQQ':
                         st_disparity = 103
-
+                        
                     #목표수익률을 달성했다면 바로 익절! 정리!!
                     if TakePrice <= NowOpenPrice and Disparity > st_disparity :
-
-
                         InvestMoney = RemainInvestMoney + (RealInvestMoney * (1.0 - fee))  #수수료 및 세금, 슬리피지 반영!
 
                         print(stock_code ," ", df.iloc[i].name, " " ,BuyCnt, " >>>>>>>>매도! 누적수량:",TotalBuyAmt,">>>>>>>> 매도! \n투자금 수익률: ", round(RevenueRate,2) , "%", " ,종목 잔고:",round(RemainInvestMoney,2), "+",round(RealInvestMoney,2), "=",round(InvestMoney,2)  , " 현재가:", round(NowOpenPrice,2),"\n\n")
@@ -240,17 +196,13 @@ for stock_data in InvestStockList:
                         RealInvestMoney = 0
                         RemainInvestMoney = InvestMoney
                         AvgPrice = 0
-
-
-
+                        
                         SuccesCnt += 1
                         IsBuy = False #매도했다
 
-
                     #그게 아니라면 돈이 없거나 40회 다 찬거다.. 1/4 쿼터 손절!!!
                     else:
-
-           
+                        # if StockInfo['Round'] >= StockInfo['MaxRound']: #쿼터 손절 들어간다!
                         
                         Test_div = 8.0
                         
@@ -258,9 +210,7 @@ for stock_data in InvestStockList:
                             Test_div = 6.0
                         
                         BuyCnt = BuyCnt - int(BuyCnt / Test_div)
-
                         CutAmt = int(TotalBuyAmt / Test_div)
-
 
                         NowFee = (CutAmt*NowOpenPrice) * fee
 
@@ -282,29 +232,18 @@ for stock_data in InvestStockList:
 
                         FailCnt +=1
                         IsNoCash = False
-                    
-                
-                
-
                 else:
                     #아직 회차가 다 안찼다면! 매일 매수를 진행한다!
                     if BuyCnt < DivNum:
-
-
-                        
                         ###################### 개선된 점 #######################
-                        #########################################################
                         IsBuyGo = False
                         
                         if df['100ma'].iloc[i-1] > df['close'].iloc[i-1]: 
 
                             if df['3ma'].iloc[i-2] < df['3ma'].iloc[i-1]: 
                                 IsBuyGo = True
-
                                 
-
-                        else: #210일선 위에 있는 상승장엔 기존 처럼 매일 매수!
-      
+                        else: #210일선 위에 있는 상승장엔 기존 처럼 매일 매수!      
                             IsBuyGo = True
                         
                         if stock_code == "SOXL":
@@ -312,50 +251,26 @@ for stock_data in InvestStockList:
                             if df['3ma'].iloc[i-2] > df['3ma'].iloc[i-1] and df['5ma'].iloc[i-1] > df['close'].iloc[i-1] and df['3ma'].iloc[i-1] > df['close'].iloc[i-1]  and df['low'].iloc[i-2] > df['low'].iloc[i-1]  and df['high'].iloc[i-2] > df['high'].iloc[i-1]:
                                 IsBuyGo = False
 
-     
-                            
-                            
-                        #########################################################
-                        #########################################################
-
-
                         if df['rsi'].iloc[i-1] >= 80: # 개선된 점 GMA #RSI 80이상의 과매도 구간에선 회차 매수 안함!!
                             IsBuyGo = False
 
-
-
                         ###################### 개선된 점 #######################
-                        #########################################################
-                        
-
-
-                        
                         Disparity = (PrevClosePrice/df['5ma'].iloc[i-1])*100.0
 
-                        if stock_code == 'SOXL':
-                                
-                            if  (Disparity > 110)  :
-
+                        if stock_code == 'SOXL':                                
+                            if  (Disparity > 110):
                                 IsBuyGo = False
 
-
                         if df['3ma'].iloc[i-2] > df['3ma'].iloc[i-1] and df['20ma'].iloc[i-2] > df['20ma'].iloc[i-1] and df['60ma'].iloc[i-2] > df['60ma'].iloc[i-1] and df['5ma'].iloc[i-1] > df['close'].iloc[i-1]  and df['20ma'].iloc[i-1] > df['close'].iloc[i-1] and  df['60ma'].iloc[i-1] > df['close'].iloc[i-1] and  df['210ma'].iloc[i-1] > df['close'].iloc[i-1]:
-                            IsBuyGo = False                         
-
-
-
-
-
+                            IsBuyGo = False       
+                            
                         st_disparity = 93.5
                         
                         if stock_code == 'SOXL':
-                            st_disparity = 102.5
-                            
+                            st_disparity = 102.5                            
                         
                         #210일선 위에 있다가 아래로 종가가 떨어지면... 다음날 시가로 모두 매도!!!
                         if (df['210ma'].iloc[i-2] < df['close'].iloc[i-2]  and df['210ma'].iloc[i-1] > df['close'].iloc[i-1]) and Disparity < st_disparity:
-                        
-
                             InvestMoney = RemainInvestMoney + (RealInvestMoney * (1.0 - fee))  #수수료 및 세금, 슬리피지 반영!
 
                             print("-----> !!!CUT!!!!", stock_code ," ", df.iloc[i].name, " " ,BuyCnt, " >>>>>>>>매도! 누적수량:",TotalBuyAmt,">>>>>>>> 매도! \n투자금 수익률: ", round(RevenueRate,2) , "%", " ,종목 잔고:",round(RemainInvestMoney,2), "+",round(RealInvestMoney,2), "=",round(InvestMoney,2)  , " 현재가:", round(NowOpenPrice,2),"\n\n")
@@ -369,27 +284,17 @@ for stock_data in InvestStockList:
                             RealInvestMoney = 0
                             RemainInvestMoney = InvestMoney
                             AvgPrice = 0
-
-
-
+                            
                             FailCnt +=1
-                            IsBuy = False #매도했다
-                            
-                            
+                            IsBuy = False #매도했다      
                             
                             IsBuyGo = False
                         #########################################################
-                        #########################################################
                         
-                        
-                        
-                        if IsBuyGo == True:
-                            
+                        if IsBuyGo == True:                            
                             Rate = 1.0
           
                             BuyAmt = float(int(InvestMoneyCell* Rate /  NowOpenPrice)) #매수 가능 수량을 구한다!
-
-
 
                             NowFee = (BuyAmt*NowOpenPrice) * fee
 
@@ -408,8 +313,6 @@ for stock_data in InvestStockList:
 
                                 BuyCnt += 1
 
-
-
                                 AvgPrice = ((AvgPrice * (TotalBuyAmt-BuyAmt)) + (BuyAmt*NowOpenPrice)) / TotalBuyAmt
                                 
                                 print(stock_code ," ", df.iloc[i].name, " " ,BuyCnt, "회차 >>>>>>>매수수량:", BuyAmt ,"누적수량:",TotalBuyAmt," 평단: ",round(AvgPrice,2),">>>>>>>> 매수!  \n투자금 수익률: ", round(RevenueRate,2) , "% ,종목 잔고:",round(RemainInvestMoney,2), "+",round(RealInvestMoney,2), "=",round(InvestMoney,2)  , " 현재가:", round(NowOpenPrice,2),"\n")
@@ -425,17 +328,13 @@ for stock_data in InvestStockList:
                             
             # SQQQ, SOXL의 인버스의 경우
             else:
-
-                IsSellGo = False
-                
+                IsSellGo = False                
                 Disparity = (PrevClosePrice/df['5ma'].iloc[i-1])*100.0
 
                 if  (Disparity > 102 or Disparity < 98) :
-
                     IsSellGo = True
                     
                 if IsSellGo == True:
-
                     InvestMoney = RemainInvestMoney + (RealInvestMoney * (1.0 - fee))  #수수료 및 세금, 슬리피지 반영!
 
                     print("-----> !!!CUT!!!!", stock_code ," ", df.iloc[i].name, " " ,BuyCnt, " >>>>>>>>매도! 누적수량:",TotalBuyAmt,">>>>>>>> 매도! \n투자금 수익률: ", round(RevenueRate,2) , "%", " ,종목 잔고:",round(RemainInvestMoney,2), "+",round(RealInvestMoney,2), "=",round(InvestMoney,2)  , " 현재가:", round(NowOpenPrice,2),"\n\n")
@@ -449,78 +348,57 @@ for stock_data in InvestStockList:
                     RealInvestMoney = 0
                     RemainInvestMoney = InvestMoney
                     AvgPrice = 0
-
-
+                    
                     if RevenueRate > 0:
                         SuccesCnt += 1
                     else:
                         FailCnt +=1
                     IsBuy = False #매도했다
-                    
-                    
-            
                                      
         #첫 매수가 진행이 안되었다!
         if IsBuy == False and i > 1:
-
             if IsFirstDateSet == False:
                 FirstDateStr = df.iloc[i].name
                 FirstDateIndex = i-1
                 IsFirstDateSet = True
                 
-            if stock_code == 'TQQQ' or stock_code == 'SOXL':
-
-                    
+            if stock_code == 'TQQQ' or stock_code == 'SOXL':                    
                 if df['5ma'].iloc[i-1] < df['close'].iloc[i-1] or df['3ma'].iloc[i-2] < df['3ma'].iloc[i-1]: 
-                #########################################################
                 #########################################################
 
                     if df['210ma'].iloc[i-1] > df['close'].iloc[i-1]: #210일선 아래에 있을 땐 40분할
                         DivNum = 35
-                    else: # 개선된 점 GMA  # 210일선 위에 있을 땐 이평선에 따라 분할 차등!
-                        
+                    else: # 개선된 점 GMA  # 210일선 위에 있을 땐 이평선에 따라 분할 차등!                        
                         st_num = 55
-                        
+                                                
                         if stock_code == 'TQQQ':
-                            st_num = 54
-                            
+                            st_num = 54                            
                                 
                         DivNum = st_num
-
                         
                         if df['100ma'].iloc[i-1] <= df['close'].iloc[i-1]:
                             DivNum -= 15
 
-
                         if df['60ma'].iloc[i-1] <= df['close'].iloc[i-1]:
                             DivNum -= 8
 
-
                         if df['20ma'].iloc[i-1] <= df['close'].iloc[i-1]:
-                            DivNum -= 7    
-                            
+                            DivNum -= 7                                
                             
                         if DivNum == st_num:
                             DivNum = 35    
                     #########################################################
-                    #########################################################
                     
-                    
-
-
                     #첫 매수를 진행한다!!!!
                     InvestMoneyCell = InvestMoney / DivNum
 
-
                     BuyAmt = float(int(InvestMoneyCell /  NowOpenPrice)) #매수 가능 수량을 구한다!
-
                     NowFee = (BuyAmt*NowOpenPrice) * fee
 
                     TotalBuyAmt += BuyAmt
                     TotalPureMoney += (BuyAmt*NowOpenPrice)
 
                     RealInvestMoney += (BuyAmt*NowOpenPrice) #실제 들어간 투자금
-
 
                     RemainInvestMoney -= (BuyAmt*NowOpenPrice) #남은 투자금!
                     RemainInvestMoney -= NowFee
@@ -532,18 +410,9 @@ for stock_data in InvestStockList:
                     AvgPrice = NowOpenPrice
 
                     print(stock_code ," ", df.iloc[i].name, " " ,BuyCnt, "회차 >>>> 매수수량:", BuyAmt ,"누적수량:",TotalBuyAmt," 평단: ",round(NowOpenPrice,2)," >>>>>>> 매수시작! \n투자금 수익률: 0% ,종목 잔고:",round(RemainInvestMoney,2), "+",round(RealInvestMoney,2), "=",round(InvestMoney,2)  , " 현재가:", round(NowOpenPrice,2),"\n")
-                    IsBuy = True #매수했다
-
-                
-            else:
-                
-
-
+                    IsBuy = True #매수했다                
+            else:   
                 IsBuyGo = False
-
-                
-                
-
                 Disparity = (PrevClosePrice/df['5ma'].iloc[i-1])*100.0
 
                 #60선보다 위에 있거나 20선이 증가중일 때
@@ -556,31 +425,20 @@ for stock_data in InvestStockList:
                             if df['12ma'].iloc[i-1] > df['close'].iloc[i-1] and df['3ma'].iloc[i-1] < df['close'].iloc[i-1]:
                                 IsBuyGo = True
 
-
                         if df['20ma'].iloc[i-1] > df['close'].iloc[i-1]:
                             if df['open'].iloc[i-2] > df['close'].iloc[i-2]:
                                 IsBuyGo = True
-
 
                         if stock_code == 'SOXS':
                             if df['volume'].iloc[i-2] > df['volume'].iloc[i-1]:
                                 IsBuyGo = False
 
-
-
-
-                if  (Disparity > 102 or Disparity < 98) :
-                    IsBuyGo = False
-
-
-                                
+                    if  (Disparity > 102 or Disparity < 98) :
+                        IsBuyGo = False
+                                                    
                 if IsBuyGo == True:
-                    
-
                     #첫 매수를 진행한다!!!!
                     InvestMoneyCell = InvestMoney * (1.0 - fee)
-
-
                     BuyAmt = float(int(InvestMoneyCell /  NowOpenPrice)) #매수 가능 수량을 구한다!
 
                     NowFee = (BuyAmt*NowOpenPrice) * fee
@@ -590,25 +448,20 @@ for stock_data in InvestStockList:
 
                     RealInvestMoney += (BuyAmt*NowOpenPrice) #실제 들어간 투자금
 
-
                     RemainInvestMoney -= (BuyAmt*NowOpenPrice) #남은 투자금!
                     RemainInvestMoney -= NowFee
 
                     InvestMoney = RealInvestMoney + RemainInvestMoney  #실제 잔고는 실제 들어간 투자금 + 남은 투자금!
 
-                    BuyCnt += 1
-                    
+                    BuyCnt += 1                    
                     AvgPrice = NowOpenPrice
 
                     print(stock_code ," ", df.iloc[i].name, " " ,BuyCnt, "회차 >>>> 매수수량:", BuyAmt ,"누적수량:",TotalBuyAmt," 평단: ",round(NowOpenPrice,2)," >>>>>>> 매수시작! \n투자금 수익률: 0% ,종목 잔고:",round(RemainInvestMoney,2), "+",round(RealInvestMoney,2), "=",round(InvestMoney,2)  , " 현재가:", round(NowOpenPrice,2),"\n")
 
                     IsBuy = True #매수했다
-
-            
+                                
         TotalMoneyList.append(InvestMoney)
 
-    #####################################################
-    #####################################################
     #####################################################
     #'''
   
@@ -616,15 +469,10 @@ for stock_data in InvestStockList:
 
     #결과 정리 및 데이터 만들기!!
     if len(TotalMoneyList) > 0:
-
         TotalResultDict[stock_code] = TotalMoneyList
-
-        resultData = dict()
-
         
+        resultData = dict()        
         resultData['Ticker'] = stock_code
-
-
         result_df = pd.DataFrame({ "Total_Money" : TotalMoneyList}, index = df.index)
 
         result_df['Ror'] = result_df['Total_Money'].pct_change() + 1
@@ -648,11 +496,8 @@ for stock_data in InvestStockList:
 
         resultData['SuccesCnt'] = SuccesCnt
         resultData['FailCnt'] = FailCnt
-
         
         ResultList.append(resultData)
-
-
 
         for idx, row in result_df.iterrows():
             print(idx, " " , row['Total_Money'], " "  , row['Cum_Ror'])
