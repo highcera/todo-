@@ -102,49 +102,28 @@ else:
     if Is_Rebalance_Go == True:
         line_alert.SendMessage(PortfolioName + " (" + strYM + ") 장이 닫혀서 포트폴리오 리밸런싱 불가능!!")
 
-
-
-
-#####################################################################################################################################
-#####################################################################################################################################
-#####################################################################################################################################
-
-
 #계좌 잔고를 가지고 온다!
 Balance = KisKR.GetBalance()
 
-
 print("--------------내 보유 잔고---------------------")
-
 pprint.pprint(Balance)
-
 print("--------------------------------------------")
+
 #총 평가금액에서 해당 봇에게 할당할 총 금액비율 1.0 = 100%  0.5 = 50%
 InvestRate = 0.5
 
-
 #기준이 되는 내 총 평가금액에서 투자비중을 곱해서 나온 포트폴리오에 할당된 돈!!
 TotalMoney = float(Balance['TotalMoney']) * InvestRate
-
 print("총 포트폴리오에 할당된 투자 가능 금액 : $", TotalMoney)
-
-
-##########################################################
-
-
 
 #투자 주식 리스트
 MyPortfolioList = list()
-
 
 StockCodeList =  ["409820","402970","261240","304660"]
 DivStock = ["402970"] #배당
 DollorStock = "261240" #달러ETTF
 
-
-
 for stock_code in StockCodeList:
-
     asset = dict()
     asset['stock_code'] = stock_code         #종목코드
     
@@ -160,12 +139,6 @@ for stock_code in StockCodeList:
     asset['stock_rebalance_amt'] = 0  #리밸런싱 수량
     MyPortfolioList.append(asset)
 
-
-
-
-
-##########################################################
-
 print("--------------내 보유 주식---------------------")
 #그리고 현재 이 계좌에서 보유한 주식 리스트를 가지고 옵니다!
 MyStockList = KisKR.GetMyStockList()
@@ -173,105 +146,60 @@ pprint.pprint(MyStockList)
 print("--------------------------------------------")
 ##########################################################
 
-
-
 print("--------------리밸런싱 계산 ---------------------")
-
-
-
-
 stock_df_list = []
 
 for stock_code in StockCodeList:
-    
-    #################################################################
-    #################################################################
     df = Common.GetOhlcv("KR", stock_code,300) 
 
-
-
     df['prevClose'] = df['close'].shift(1)
-    df['prevClose2'] = df['close'].shift(2)
-    
+    df['prevClose2'] = df['close'].shift(2)    
 
     df['ma_Before2'] = df['close'].rolling(120).mean().shift(3) 
     df['ma_Before'] = df['close'].rolling(120).mean().shift(2) 
     df['ma'] = df['close'].rolling(120).mean().shift(1) 
 
-
     df['change_ma'] = df['change'].rolling(20).mean().shift(1) #20일 등락률의 평균
     
     df.dropna(inplace=True) #데이터 없는건 날린다!
-
-
     data_dict = {stock_code: df}
-
-
     stock_df_list.append(data_dict)
         
-    print("---stock_code---", stock_code , " len ",len(df))
-    
+    print("---stock_code---", stock_code , " len ",len(df))    
     pprint.pprint(df)
     
-    
-    
-    
-
-
-
-
 combined_df = pd.concat([list(data_dict.values())[0].assign(stock_code=stock_code) for data_dict in stock_df_list for stock_code in data_dict])
 combined_df.sort_index(inplace=True)
 pprint.pprint(combined_df)
 print(" len(combined_df) ", len(combined_df))
 
-
-
 date = combined_df.iloc[-1].name
-
-
 Top_stocks = combined_df.loc[combined_df.index == date].groupby('stock_code')['change_ma'].max().nlargest(1)
-
-
 
 #월 중 감산 리밸런싱!    
 if Is_Rebalance_Go == False and IsMarketOpen == True:
         
     #내가 보유한 주식 리스트에서 매수된 잔고 정보를 가져온다
-    for my_stock in MyStockList:
-    
+    for my_stock in MyStockList:    
         for stock_info in MyPortfolioList:
             #내주식 코드
             stock_code = stock_info['stock_code']
             
             if my_stock['StockCode'] == stock_code:
                 stock_data = combined_df[(combined_df.index == date) & (combined_df['stock_code'] == stock_code)] 
-
                 if len(stock_data) == 1:
-
                     if  stock_code not in DivStock and ((stock_data['ma_Before2'].values[0] < stock_data['ma_Before'].values[0]  and stock_data['ma_Before'].values[0] > stock_data['ma'].values[0])  or (stock_data['ma_Before'].values[0] < stock_data['prevClose2'].values[0]  and stock_data['ma'].values[0] > stock_data['prevClose'].values[0]) ):
-                                        
-                   
                         #현재가!
-                        CurrentPrice = KisKR.GetCurrentPrice(stock_code)
-                        
+                        CurrentPrice = KisKR.GetCurrentPrice(stock_code)                        
                         stock_amt = int(my_stock['StockAmt'])
-
                         SellAmt = int(stock_amt * 0.5)
             
                         if SellAmt <= 4:
-
                             pprint.pprint(KisKR.MakeSellMarketOrder(stock_code,abs(stock_amt)))
-
-                            line_alert.SendMessage(stock_code + "이평선 기준 모두 손절을 했어요!")
-        
-                        else:
-            
-                            pprint.pprint(KisKR.MakeSellMarketOrder(stock_code,abs(SellAmt)))
-                            
-                            
+                            line_alert.SendMessage(stock_code + "이평선 기준 모두 손절을 했어요!")        
+                        else:            
+                            pprint.pprint(KisKR.MakeSellMarketOrder(stock_code,abs(SellAmt)))     
                             line_alert.SendMessage(stock_code + "이평선 기준 일부 손절을 했어요!")
-
                 break
 
 
